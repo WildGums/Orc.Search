@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search", "Orc.Search\Orc.Search.csproj", "{589A582A-9995-4293-B5DF-5B95F10CB1FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A335AA39-10A9-4269-ADDC-780022AE1C16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F6EAB599-01E6-45F4-96AC-717DF1E5D1BF}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+		Orc.Search.sln.DotSettings = Orc.Search.sln.DotSettings
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{7112AD6A-3AF8-4F3C-B31E-3AA3CC29763F}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\repositories.config = ..\lib\repositories.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Tests", "Orc.Search.Tests\Orc.Search.Tests.csproj", "{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{589A582A-9995-4293-B5DF-5B95F10CB1FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589A582A-9995-4293-B5DF-5B95F10CB1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589A582A-9995-4293-B5DF-5B95F10CB1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589A582A-9995-4293-B5DF-5B95F10CB1FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{589A582A-9995-4293-B5DF-5B95F10CB1FB} = {A335AA39-10A9-4269-ADDC-780022AE1C16}
+		{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2} = {A335AA39-10A9-4269-ADDC-780022AE1C16}
+	EndGlobalSection
+EndGlobal

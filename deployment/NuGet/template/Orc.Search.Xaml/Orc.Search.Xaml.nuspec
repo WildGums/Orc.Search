@@ -1,0 +1,32 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Orc.Search.Xaml</id>
+    <version>[VERSION]</version>
+    <title>Orc.Search.Xaml</title>
+    <authors>OrchestraDevs</authors>
+    <owners>OrchestraDevs</owners>
+
+	<description>
+	  This library allows you to easily add searching to your apps.
+	</description>
+	<summary>
+	</summary>
+
+	<tags>orc search xaml</tags>
+
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright Wild Gums 2010 - 2015</copyright>
+
+	<language>en-US</language>
+	<projectUrl>https://github.com/WildGums/Orc.Search</projectUrl>
+	<!--<licenseUrl>http://catel.codeplex.com/license</licenseUrl>-->
+	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
+    
+    <dependencies>
+      <dependency id="Orc.Search" version="[VERSION]" />
+    
+      <dependency id="Catel.MVVM" version="[replaced]" />
+    </dependencies>
+  </metadata>
+</package>
