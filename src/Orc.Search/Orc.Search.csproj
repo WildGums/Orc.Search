@@ -51,6 +51,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Catel.Fody.2.5.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\lib\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\lib\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -91,9 +97,17 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Attributes\SearchablePropertyAttribute.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Models\SearchableProperty.cs" />
     <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="Services\Extensions\ISearchServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\ISearchService.cs" />
-    <Compile Include="Services\SearchService.cs" />
+    <Compile Include="Services\InMemorySearchService.cs" />
+    <Compile Include="Services\Interfaces\ISearchableParser.cs" />
+    <Compile Include="Services\Interfaces\ISearchableAdapter.cs" />
+    <Compile Include="Services\ReflectionSearchableAdapter.cs" />
+    <Compile Include="Services\AttributeSearchableParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -106,7 +120,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Models\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />

@@ -1,16 +1,55 @@
 ﻿<catel:Window x:Class="Orc.Search.Example.Views.MainWindow"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:catel="http://catel.codeplex.com">
-    
-     <catel:StackGrid x:Name="LayoutRoot">
-        <catel:StackGrid.RowDefinitions>
+              xmlns:catel="http://catel.codeplex.com"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+
+    <catel:StackGrid>
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </catel:StackGrid.RowDefinitions>
-        
-        <Label Content="{Binding Title}" />
-        <Label Content="Here goes your real content" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Content="Filter: " />
+        <TextBox Text="{Binding Filter}">
+            <i:Interaction.Behaviors>
+                <catel:UpdateBindingOnTextChanged UpdateDelay="500" />
+            </i:Interaction.Behaviors>
+        </TextBox>
+
+        <ListView Grid.ColumnSpan="2" ItemsSource="{Binding AllObjects}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView Grid.ColumnSpan="2" ItemsSource="{Binding FilteredObjects}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.ColumnSpan="2">
+            <Label Content="{Binding IndexedObjectCount, StringFormat=Indexed object count}" />
+            <Label Content="Updating search..." Visibility="{Binding IsUpdatingSearch, Converter={catel:BooleanToHidingVisibilityConverter}}" />
+            <Label Content="Searching..." Visibility="{Binding IsSearching, Converter={catel:BooleanToHidingVisibilityConverter}}" />
+        </StackPanel>
+       
     </catel:StackGrid>
-    
+
 </catel:Window>

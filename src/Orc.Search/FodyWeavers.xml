@@ -3,6 +3,9 @@
   <ModuleInit/>
   <Costura>
     <IncludeAssemblies>
+      ICSharpCode.SharpZipLib
+      Lucene.Net
+      RestSharp
     </IncludeAssemblies>
   </Costura>
   <Catel/>
