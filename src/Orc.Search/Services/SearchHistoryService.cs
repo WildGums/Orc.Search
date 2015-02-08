@@ -113,7 +113,7 @@ namespace Orc.Search
                         return;
                     }
 
-                    using (var fileStream = new FileStream(_fileName, FileMode.Create))
+                    using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
                     {
                         _xmlSerializer.Deserialize(_searchHistory, fileStream);
                     }
