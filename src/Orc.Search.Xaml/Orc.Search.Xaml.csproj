@@ -91,6 +91,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Behaviors\SearchableBehavior.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -122,7 +123,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Behaviors\" />
     <Folder Include="Models\" />
     <Folder Include="Services\Interfaces\" />
   </ItemGroup>

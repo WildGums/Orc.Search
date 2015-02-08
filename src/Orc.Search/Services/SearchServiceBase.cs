@@ -9,8 +9,6 @@ namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using Catel;
     using Catel.Logging;
     using Lucene.Net.Analysis.Standard;
@@ -19,7 +17,6 @@ namespace Orc.Search
     using Lucene.Net.QueryParsers;
     using Lucene.Net.Search;
     using Lucene.Net.Store;
-    using Version = Lucene.Net.Util.Version;
 
     public abstract class SearchServiceBase : ISearchService
     {
@@ -41,7 +38,7 @@ namespace Orc.Search
         private bool _initialized;
 
         private readonly Dictionary<string, SearchableProperty> _searchFields = new Dictionary<string, SearchableProperty>();
-        private Lucene.Net.Store.Directory _indexDirectory;
+        private Directory _indexDirectory;
         #endregion
 
         #region Constructors
@@ -75,7 +72,7 @@ namespace Orc.Search
 
         public event EventHandler<EventArgs> Updated;
 
-        public event EventHandler<EventArgs> Searching;
+        public event EventHandler<SearchEventArgs> Searching;
 
         public event EventHandler<SearchEventArgs> Searched;
         #endregion
@@ -178,18 +175,21 @@ namespace Orc.Search
                 return results;
             }
 
+            var searching = false;
+
             lock (_lockObject)
             {
                 try
                 {
-                    Searching.SafeInvoke(this);
-
                     using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                     {
                         var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableProperties());
 
                         var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
                         var query = parser.Parse(queryAsText);
+
+                        Searching.SafeInvoke(this, new SearchEventArgs(filter, results));
+                        searching = true;
 
                         using (var searcher = new IndexSearcher(_indexDirectory))
                         {
@@ -212,7 +212,10 @@ namespace Orc.Search
                 }
                 finally
                 {
-                    Searched.SafeInvoke(this, new SearchEventArgs(filter, results));
+                    if (searching)
+                    {
+                        Searched.SafeInvoke(this, new SearchEventArgs(filter, results));
+                    }
                 }
             }
 
@@ -240,7 +243,7 @@ namespace Orc.Search
             }
         }
 
-        protected abstract Lucene.Net.Store.Directory GetDirectory();
+        protected abstract Directory GetDirectory();
         #endregion
     }
 }

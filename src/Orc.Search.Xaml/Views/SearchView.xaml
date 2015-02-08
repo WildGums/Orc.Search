@@ -10,16 +10,15 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
+            <!--<ColumnDefinition Width="Auto" />-->
         </Grid.ColumnDefinitions>
         
         <TextBox Grid.Column="0" Text="{Binding Filter}" >
             <i:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged UpdateDelay="500" />
+                <catel:AutoCompletion ItemsSource="{Binding FilterHistory}" PropertyName="Text" />
             </i:Interaction.Behaviors>
         </TextBox>
-
-        <Button Grid.Column="1" Content="..." />
     </Grid>
 
 </catel:UserControl>

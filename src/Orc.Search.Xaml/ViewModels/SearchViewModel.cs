@@ -7,6 +7,8 @@
 
 namespace Orc.Search
 {
+    using System.Collections.ObjectModel;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;
     using Catel.Services;
@@ -16,20 +18,26 @@ namespace Orc.Search
         private readonly ISearchService _searchService;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly ISearchHistoryService _searchHistoryService;
 
         #region Fields
         #endregion
 
         #region Constructors
-        public SearchViewModel(ISearchService searchService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
+        public SearchViewModel(ISearchService searchService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory,
+            ISearchHistoryService searchHistoryService)
         {
             Argument.IsNotNull(() => searchService);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => viewModelFactory);
+            Argument.IsNotNull(() => searchHistoryService);
 
             _searchService = searchService;
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
+            _searchHistoryService = searchHistoryService;
+
+            FilterHistory = new ObservableCollection<string>();
 
             BuildFilter = new Command(OnBuildFilterExecute);
         }
@@ -37,6 +45,8 @@ namespace Orc.Search
 
         #region Properties
         public string Filter { get; set; }
+
+        public ObservableCollection<string> FilterHistory { get; private set; } 
         #endregion
 
         #region Commands
@@ -53,6 +63,16 @@ namespace Orc.Search
         #endregion
 
         #region Methods
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+        }
+
+        protected override async  Task Close()
+        {
+            await base.Close();
+        }
+
         private async void OnFilterChanged()
         {
             await _searchService.SearchAsync(Filter);

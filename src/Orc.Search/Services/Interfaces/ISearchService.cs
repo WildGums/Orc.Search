@@ -17,7 +17,7 @@ namespace Orc.Search
         event EventHandler<EventArgs> Updating;
         event EventHandler<EventArgs> Updated;
 
-        event EventHandler<EventArgs> Searching;
+        event EventHandler<SearchEventArgs> Searching;
         event EventHandler<SearchEventArgs> Searched;
 
         void AddObjects(IEnumerable<object> searchables);
