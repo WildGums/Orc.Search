@@ -17,7 +17,6 @@ namespace Orc.Search.Example.Views
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
         public MainWindow()
-            : base()
         {
             InitializeComponent();
         }

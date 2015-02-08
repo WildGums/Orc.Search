@@ -11,5 +11,17 @@ namespace Orc.Search
 
     public class SearchViewModel : ViewModelBase
     {
+        #region Fields
+        #endregion
+
+        #region Constructors
+        #endregion
+
+        #region Properties
+        public string Filter { get; set; }
+        #endregion
+
+        #region Methods
+        #endregion
     }
 }

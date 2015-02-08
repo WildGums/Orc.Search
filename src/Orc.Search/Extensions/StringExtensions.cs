@@ -30,6 +30,7 @@ namespace Orc.Search
                 return false;
             }
 
+            filter = filter.Trim();
             if (filter.EndsWith(":"))
             {
                 return false;

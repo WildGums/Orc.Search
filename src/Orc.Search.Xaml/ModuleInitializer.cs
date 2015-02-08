@@ -12,9 +12,5 @@ public static class ModuleInitializer
     /// </summary>
     public static void Initialize()
     {
-        var serviceLocator = ServiceLocator.Default;
-
-        var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
-        uiVisualizerService.Register<SearchViewModel, SearchWindow>();
     }
 }

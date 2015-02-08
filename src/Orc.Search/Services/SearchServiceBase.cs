@@ -39,7 +39,7 @@ namespace Orc.Search
 
         private bool _initialized;
 
-        private readonly HashSet<string> _searchFields = new HashSet<string>();
+        private readonly Dictionary<string, SearchableProperty> _searchFields = new Dictionary<string, SearchableProperty>();
         private Lucene.Net.Store.Directory _indexDirectory;
         #endregion
 
@@ -78,6 +78,16 @@ namespace Orc.Search
         #endregion
 
         #region Methods
+        public virtual IEnumerable<SearchableProperty> GetSearchableProperties()
+        {
+            lock (_lockObject)
+            {
+                var searchableProperties = new List<SearchableProperty>(_searchFields.Values);
+
+                return searchableProperties;
+            }
+        }
+
         public virtual void AddObjects(IEnumerable<object> searchables)
         {
             Initialize();
@@ -108,9 +118,9 @@ namespace Orc.Search
 
                                 document.Add(field);
 
-                                if (!_searchFields.Contains(searchableProperty.Name))
+                                if (!_searchFields.ContainsKey(searchableProperty.Name))
                                 {
-                                    _searchFields.Add(searchableProperty.Name);
+                                    _searchFields.Add(searchableProperty.Name, searchableProperty);
                                 }
                             }
 
@@ -165,32 +175,52 @@ namespace Orc.Search
                 return results;
             }
 
-            using (var analyzer = new StandardAnalyzer(Version.LUCENE_30))
+            lock (_lockObject)
             {
-                var parser = new MultiFieldQueryParser(Version.LUCENE_30, _searchFields.ToArray(), analyzer);
-                parser.DefaultOperator = QueryParser.Operator.OR;
-
-                filter = filter.PrepareOrcSearchFilter();
-                var query = parser.Parse(filter);
-
-                lock (_lockObject)
+                try
                 {
                     Searching.SafeInvoke(this);
 
-                    using (var searcher = new IndexSearcher(_indexDirectory))
+                    using (var analyzer = new StandardAnalyzer(Version.LUCENE_30))
                     {
-                        var search = searcher.Search(query, maxResults);
-                        foreach (var scoreDoc in search.ScoreDocs)
-                        {
-                            var score = scoreDoc.Score;
-                            var docId = scoreDoc.Doc;
-                            var doc = searcher.Doc(docId);
+                        Query query;
 
-                            var index = int.Parse(doc.Get(IndexId));
-                            results.Add(_indexedObjects[index]);
+                        if (filter.Contains(":"))
+                        {
+                            // Assume that the query is already right
+                            var parser = new QueryParser(Version.LUCENE_30, string.Empty, analyzer);
+                            query = parser.Parse(filter);
+                        }
+                        else
+                        {
+                            var parser = new MultiFieldQueryParser(Version.LUCENE_30, _searchFields.Keys.ToArray(), analyzer);
+                            parser.DefaultOperator = QueryParser.Operator.OR;
+
+                            filter = filter.PrepareOrcSearchFilter();
+                            query = parser.Parse(filter);
+                        }
+
+                        using (var searcher = new IndexSearcher(_indexDirectory))
+                        {
+                            var search = searcher.Search(query, maxResults);
+                            foreach (var scoreDoc in search.ScoreDocs)
+                            {
+                                var score = scoreDoc.Score;
+                                var docId = scoreDoc.Doc;
+                                var doc = searcher.Doc(docId);
+
+                                var index = int.Parse(doc.Get(IndexId));
+                                results.Add(_indexedObjects[index]);
+                            }
                         }
                     }
-
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "An error occurred while searching, returning default reuslts");
+                }
+                finally
+                {
                     Searched.SafeInvoke(this);
                 }
             }

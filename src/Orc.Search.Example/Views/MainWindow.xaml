@@ -2,7 +2,8 @@
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:catel="http://catel.codeplex.com"
-              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+              xmlns:search="clr-namespace:Orc.Search;assembly=Orc.Search.Xaml">
 
     <catel:StackGrid>
         <Grid.RowDefinitions>
@@ -18,11 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Content="Filter: " />
-        <TextBox Text="{Binding Filter}">
-            <i:Interaction.Behaviors>
-                <catel:UpdateBindingOnTextChanged UpdateDelay="500" />
-            </i:Interaction.Behaviors>
-        </TextBox>
+        <search:SearchView Filter="{Binding Filter}" />
 
         <GroupBox Grid.ColumnSpan="2" Header="Source objects">
             <catel:StackGrid>
