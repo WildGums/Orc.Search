@@ -12,7 +12,7 @@ namespace Orc.Search.Example.Services
 
     public static class IDataGenerationServiceExtensions
     {
-        public static async Task<IEnumerable<object>> GenerateObjectsAsync(this IDataGenerationService dataGenerationService, int objectCount = 10000)
+        public static async Task<IEnumerable<object>> GenerateObjectsAsync(this IDataGenerationService dataGenerationService, int objectCount = ExampleDefaults.GeneratedObjectCount)
         {
             return await Task.Factory.StartNew(() => dataGenerationService.GenerateObjects(objectCount));
         }

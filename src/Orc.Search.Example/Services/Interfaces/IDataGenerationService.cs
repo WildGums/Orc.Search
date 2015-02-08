@@ -12,7 +12,7 @@ namespace Orc.Search.Example.Services
     public interface IDataGenerationService
     {
         #region Methods
-        IEnumerable<object> GenerateObjects(int objectCount = 10000);
+        IEnumerable<object> GenerateObjects(int objectCount = ExampleDefaults.GeneratedObjectCount);
         object GenerateObject();
         #endregion
     }

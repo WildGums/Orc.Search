@@ -16,7 +16,7 @@ namespace Orc.Search.Example.Services
     {
         private readonly Random _random = new Random();
 
-        public IEnumerable<object> GenerateObjects(int objectCount = 5000)
+        public IEnumerable<object> GenerateObjects(int objectCount = ExampleDefaults.GeneratedObjectCount)
         {
             var objects = new List<object>();
 
