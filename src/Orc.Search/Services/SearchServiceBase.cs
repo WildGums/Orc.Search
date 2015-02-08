@@ -160,7 +160,7 @@ namespace Orc.Search
 
             var results = new List<object>();
 
-            if (string.IsNullOrWhiteSpace(filter))
+            if (!filter.IsValidOrcSearchFilter())
             {
                 return results;
             }
@@ -169,15 +169,8 @@ namespace Orc.Search
             {
                 var parser = new MultiFieldQueryParser(Version.LUCENE_30, _searchFields.ToArray(), analyzer);
                 parser.DefaultOperator = QueryParser.Operator.OR;
-                if (!filter.Contains("*") &&
-                    !filter.Contains(":") &&
-                    !filter.Contains(" ") &&
-                    !filter.Contains("AND") &&
-                    !filter.Contains("OR"))
-                {
-                    filter += "*";
-                }
 
+                filter = filter.PrepareOrcSearchFilter();
                 var query = parser.Parse(filter);
 
                 lock (_lockObject)

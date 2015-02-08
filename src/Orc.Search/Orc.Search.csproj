@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Attributes\SearchablePropertyAttribute.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\SearchableProperty.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Services\Extensions\ISearchServiceExtensions.cs" />
