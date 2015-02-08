@@ -99,12 +99,16 @@
     </Compile>
     <Compile Include="Attributes\SearchablePropertyAttribute.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="EventArgs\SearchEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\SearchableProperty.cs" />
+    <Compile Include="Models\SearchablePropertyValue.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Services\Extensions\ISearchServiceExtensions.cs" />
     <Compile Include="Services\InMemorySearchService.cs" />
     <Compile Include="Services\Interfaces\ISearchService.cs" />
+    <Compile Include="Services\Interfaces\ISearchQueryService.cs" />
+    <Compile Include="Services\SearchQueryService.cs" />
     <Compile Include="Services\SearchServiceBase.cs" />
     <Compile Include="Services\Interfaces\ISearchableParser.cs" />
     <Compile Include="Services\Interfaces\ISearchableAdapter.cs" />

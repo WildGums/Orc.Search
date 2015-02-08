@@ -83,7 +83,7 @@
                 <Label>
                     <TextBlock Text="{Binding LastSearchDuration, StringFormat=Last search duration: \{0\}}" />
                 </Label>                
-                <Label Content="Updating search..." Visibility="{Binding IsUpdatingSearch, Converter={catel:BooleanToHidingVisibilityConverter}}" />
+                <Label Content="Updating search index..." Visibility="{Binding IsUpdatingSearch, Converter={catel:BooleanToHidingVisibilityConverter}}" />
                 <Label Content="Searching..." Visibility="{Binding IsSearching, Converter={catel:BooleanToHidingVisibilityConverter}}" />
             </StackPanel>
         </GroupBox>

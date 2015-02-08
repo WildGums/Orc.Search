@@ -12,8 +12,8 @@ namespace Orc.Search
     public class InMemorySearchService : SearchServiceBase
     {
         #region Constructors
-        public InMemorySearchService(ISearchableParser searchableParser, ISearchableAdapter searchableAdapter)
-            : base(searchableParser, searchableAdapter)
+        public InMemorySearchService(ISearchQueryService searchQueryService, ISearchableParser searchableParser, ISearchableAdapter searchableAdapter)
+            : base(searchQueryService, searchableParser, searchableAdapter)
         {
         }
         #endregion

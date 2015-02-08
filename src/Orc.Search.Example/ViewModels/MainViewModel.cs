@@ -48,8 +48,6 @@ namespace Orc.Search.Example.ViewModels
 
         public bool IsSearching { get; private set; }
 
-        public string Filter { get; set; }
-
         public FastObservableCollection<object> AllObjects { get; private set; }
 
         public int AllObjectCount { get; private set; }
@@ -81,8 +79,6 @@ namespace Orc.Search.Example.ViewModels
 
                 await _searchService.AddObjectsAsync(generatedObjects);
             }
-
-            UpdateFilter();
         }
 
         protected override async Task Close()
@@ -115,28 +111,18 @@ namespace Orc.Search.Example.ViewModels
             _searchStopwatch.Restart();
         }
 
-        private void OnSearchServiceSearched(object sender, EventArgs e)
+        private void OnSearchServiceSearched(object sender, SearchEventArgs e)
         {
             _searchStopwatch.Stop();
             LastSearchDuration = _searchStopwatch.Elapsed;
 
-            IsSearching = false;
-        }
-
-        private void OnFilterChanged()
-        {
-            UpdateFilter();
-        }
-
-        private async void UpdateFilter()
-        {
             using (FilteredObjects.SuspendChangeNotifications())
             {
-                var searchResults = await _searchService.SearchAsync(Filter);
-
-                FilteredObjects.ReplaceRange(searchResults);
+                FilteredObjects.ReplaceRange(e.Results);
                 FilteredObjectCount = FilteredObjects.Count;
             }
+
+            IsSearching = false;
         }
         #endregion
     }

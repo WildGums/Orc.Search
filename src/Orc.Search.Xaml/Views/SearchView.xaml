@@ -8,11 +8,18 @@
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid>
-        <TextBox Text="{Binding Filter}" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <TextBox Grid.Column="0" Text="{Binding Filter}" >
             <i:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged UpdateDelay="500" />
             </i:Interaction.Behaviors>
         </TextBox>
+
+        <Button Grid.Column="1" Content="..." />
     </Grid>
 
 </catel:UserControl>

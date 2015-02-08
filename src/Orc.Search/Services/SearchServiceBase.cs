@@ -32,6 +32,7 @@ namespace Orc.Search
 
         private readonly object _lockObject = new object();
 
+        private readonly ISearchQueryService _searchQueryService;
         private readonly ISearchableParser _searchableParser;
         private readonly ISearchableAdapter _searchableAdapter;
 
@@ -44,11 +45,13 @@ namespace Orc.Search
         #endregion
 
         #region Constructors
-        protected SearchServiceBase(ISearchableParser searchableParser, ISearchableAdapter searchableAdapter)
+        protected SearchServiceBase(ISearchQueryService searchQueryService, ISearchableParser searchableParser, ISearchableAdapter searchableAdapter)
         {
+            Argument.IsNotNull(() => searchQueryService);
             Argument.IsNotNull(() => searchableParser);
             Argument.IsNotNull(() => searchableAdapter);
 
+            _searchQueryService = searchQueryService;
             _searchableParser = searchableParser;
             _searchableAdapter = searchableAdapter;
         }
@@ -74,7 +77,7 @@ namespace Orc.Search
 
         public event EventHandler<EventArgs> Searching;
 
-        public event EventHandler<EventArgs> Searched;
+        public event EventHandler<SearchEventArgs> Searched;
         #endregion
 
         #region Methods
@@ -96,7 +99,7 @@ namespace Orc.Search
             {
                 Updating.SafeInvoke(this);
 
-                using (var analyzer = new StandardAnalyzer(Version.LUCENE_30))
+                using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                 {
                     using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
                     {
@@ -146,7 +149,7 @@ namespace Orc.Search
             //{
             //    Updating.SafeInvoke(this);
 
-            //    using (var analyzer = new StandardAnalyzer(Version.LUCENE_30))
+            //    using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
             //    {
             //        using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
             //        {
@@ -181,24 +184,12 @@ namespace Orc.Search
                 {
                     Searching.SafeInvoke(this);
 
-                    using (var analyzer = new StandardAnalyzer(Version.LUCENE_30))
+                    using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                     {
-                        Query query;
+                        var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableProperties());
 
-                        if (filter.Contains(":"))
-                        {
-                            // Assume that the query is already right
-                            var parser = new QueryParser(Version.LUCENE_30, string.Empty, analyzer);
-                            query = parser.Parse(filter);
-                        }
-                        else
-                        {
-                            var parser = new MultiFieldQueryParser(Version.LUCENE_30, _searchFields.Keys.ToArray(), analyzer);
-                            parser.DefaultOperator = QueryParser.Operator.OR;
-
-                            filter = filter.PrepareOrcSearchFilter();
-                            query = parser.Parse(filter);
-                        }
+                        var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
+                        var query = parser.Parse(queryAsText);
 
                         using (var searcher = new IndexSearcher(_indexDirectory))
                         {
@@ -221,7 +212,7 @@ namespace Orc.Search
                 }
                 finally
                 {
-                    Searched.SafeInvoke(this);
+                    Searched.SafeInvoke(this, new SearchEventArgs(filter, results));
                 }
             }
 
@@ -240,7 +231,7 @@ namespace Orc.Search
             _indexDirectory = GetDirectory();
 
             // Required to create empty index, which is required for our reader
-            using (var analyzer = new StandardAnalyzer(Version.LUCENE_30))
+            using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
             {
                 using (var indexWriter = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
                 {
