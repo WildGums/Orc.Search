@@ -24,32 +24,72 @@
             </i:Interaction.Behaviors>
         </TextBox>
 
-        <ListView Grid.ColumnSpan="2" ItemsSource="{Binding AllObjects}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                    <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
-                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <GroupBox Grid.ColumnSpan="2" Header="Source objects">
+            <catel:StackGrid>
+                <catel:StackGrid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </catel:StackGrid.RowDefinitions>
 
-        <ListView Grid.ColumnSpan="2" ItemsSource="{Binding FilteredObjects}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                    <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
-                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                <catel:StackGrid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </catel:StackGrid.ColumnDefinitions>
 
-        <StackPanel Grid.ColumnSpan="2">
-            <Label Content="{Binding IndexedObjectCount, StringFormat=Indexed object count}" />
-            <Label Content="Updating search..." Visibility="{Binding IsUpdatingSearch, Converter={catel:BooleanToHidingVisibilityConverter}}" />
-            <Label Content="Searching..." Visibility="{Binding IsSearching, Converter={catel:BooleanToHidingVisibilityConverter}}" />
-        </StackPanel>
-       
+                <Label Content="No. of objects:" />
+                <Label Content="{Binding AllObjectCount}" />
+
+                <ListView Grid.ColumnSpan="2" ItemsSource="{Binding AllObjects}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                            <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
+                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </catel:StackGrid>
+        </GroupBox>
+
+        <GroupBox Grid.ColumnSpan="2" Header="Filtered results">
+            <catel:StackGrid>
+                <catel:StackGrid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </catel:StackGrid.RowDefinitions>
+
+                <catel:StackGrid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </catel:StackGrid.ColumnDefinitions>
+
+                <Label Content="No. of filtered objects:" />
+                <Label Content="{Binding FilteredObjectCount}" />
+
+                <ListView Grid.ColumnSpan="2" ItemsSource="{Binding FilteredObjects}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                            <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
+                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </catel:StackGrid>
+        </GroupBox>
+
+        <GroupBox Grid.ColumnSpan="2" Header="Details / status">
+            <StackPanel>
+                <Label>
+                    <TextBlock Text="{Binding IndexedObjectCount, StringFormat=Indexed object count: \{0\}}" />
+                </Label>
+                <Label>
+                    <TextBlock Text="{Binding LastSearchDuration, StringFormat=Last search duration: \{0\}}" />
+                </Label>                
+                <Label Content="Updating search..." Visibility="{Binding IsUpdatingSearch, Converter={catel:BooleanToHidingVisibilityConverter}}" />
+                <Label Content="Searching..." Visibility="{Binding IsSearching, Converter={catel:BooleanToHidingVisibilityConverter}}" />
+            </StackPanel>
+        </GroupBox>
     </catel:StackGrid>
 
 </catel:Window>

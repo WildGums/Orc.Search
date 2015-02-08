@@ -102,8 +102,9 @@
     <Compile Include="Models\SearchableProperty.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Services\Extensions\ISearchServiceExtensions.cs" />
-    <Compile Include="Services\Interfaces\ISearchService.cs" />
     <Compile Include="Services\InMemorySearchService.cs" />
+    <Compile Include="Services\Interfaces\ISearchService.cs" />
+    <Compile Include="Services\SearchServiceBase.cs" />
     <Compile Include="Services\Interfaces\ISearchableParser.cs" />
     <Compile Include="Services\Interfaces\ISearchableAdapter.cs" />
     <Compile Include="Services\ReflectionSearchableAdapter.cs" />

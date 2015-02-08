@@ -8,6 +8,7 @@
 namespace Orc.Search.Example.ViewModels
 {
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
@@ -18,6 +19,8 @@ namespace Orc.Search.Example.ViewModels
     {
         private readonly IDataGenerationService _dataGenerationService;
         private readonly ISearchService _searchService;
+
+        private readonly Stopwatch _searchStopwatch = new Stopwatch();
 
         #region Constructors
         public MainViewModel(IDataGenerationService dataGenerationService, ISearchService searchService)
@@ -49,7 +52,13 @@ namespace Orc.Search.Example.ViewModels
 
         public FastObservableCollection<object> AllObjects { get; private set; }
 
+        public int AllObjectCount { get; private set; }
+
         public FastObservableCollection<object> FilteredObjects { get; private set; }
+
+        public int FilteredObjectCount { get; private set; }
+
+        public TimeSpan LastSearchDuration { get; private set; }
         #endregion
 
         #region Methods
@@ -68,6 +77,7 @@ namespace Orc.Search.Example.ViewModels
                 var generatedObjects = await _dataGenerationService.GenerateObjectsAsync();
 
                 AllObjects.ReplaceRange(generatedObjects);
+                AllObjectCount = AllObjects.Count;
 
                 await _searchService.AddObjectsAsync(generatedObjects);
             }
@@ -101,10 +111,15 @@ namespace Orc.Search.Example.ViewModels
         private void OnSearchServiceSearching(object sender, EventArgs e)
         {
             IsSearching = true;
+
+            _searchStopwatch.Restart();
         }
 
         private void OnSearchServiceSearched(object sender, EventArgs e)
         {
+            _searchStopwatch.Stop();
+            LastSearchDuration = _searchStopwatch.Elapsed;
+
             IsSearching = false;
         }
 
@@ -120,6 +135,7 @@ namespace Orc.Search.Example.ViewModels
                 var searchResults = await _searchService.SearchAsync(Filter);
 
                 FilteredObjects.ReplaceRange(searchResults);
+                FilteredObjectCount = FilteredObjects.Count;
             }
         }
         #endregion
