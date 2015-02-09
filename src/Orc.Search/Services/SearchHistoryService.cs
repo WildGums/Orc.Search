@@ -52,7 +52,15 @@ namespace Orc.Search
         {
             var elements = new List<string>();
 
-            // TODO: implement
+            lock (_lock)
+            {
+                prefix = prefix.ToLower();
+
+                elements.AddRange((from element in _searchHistory.SearchHistoryElements
+                                   where element.FilterLowerCase.StartsWith(prefix)
+                                   orderby element.Count
+                                   select element.Filter).Take(count));
+            }
 
             return elements;
         }

@@ -19,6 +19,8 @@ namespace Orc.Search
         {
             if (!filter.Contains(":"))
             {
+                filter = filter.PrepareOrcSearchFilter();
+
                 using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                 {
                     var fields = new List<string>();

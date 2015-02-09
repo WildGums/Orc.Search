@@ -15,8 +15,8 @@
         
         <TextBox Grid.Column="0" Text="{Binding Filter}" >
             <i:Interaction.Behaviors>
-                <catel:UpdateBindingOnTextChanged UpdateDelay="500" />
-                <catel:AutoCompletion ItemsSource="{Binding FilterHistory}" PropertyName="Text" />
+                <catel:UpdateBindingOnTextChanged UpdateDelay="200" />
+                <catel:AutoCompletion ItemsSource="{Binding FilterHistory}" PropertyName="Text" UseAutoCompletionService="false" />
             </i:Interaction.Behaviors>
         </TextBox>
     </Grid>

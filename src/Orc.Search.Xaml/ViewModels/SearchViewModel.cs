@@ -7,20 +7,26 @@
 
 namespace Orc.Search
 {
+    using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows.Threading;
     using Catel;
+    using Catel.Collections;
     using Catel.MVVM;
     using Catel.Services;
 
     public class SearchViewModel : ViewModelBase
     {
+        #region Fields
         private readonly ISearchService _searchService;
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
         private readonly ISearchHistoryService _searchHistoryService;
 
-        #region Fields
+        private readonly DispatcherTimer _dispatcherTimer;
         #endregion
 
         #region Constructors
@@ -37,7 +43,10 @@ namespace Orc.Search
             _viewModelFactory = viewModelFactory;
             _searchHistoryService = searchHistoryService;
 
-            FilterHistory = new ObservableCollection<string>();
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
+
+            FilterHistory = new FastObservableCollection<string>();
 
             BuildFilter = new Command(OnBuildFilterExecute);
         }
@@ -46,7 +55,7 @@ namespace Orc.Search
         #region Properties
         public string Filter { get; set; }
 
-        public ObservableCollection<string> FilterHistory { get; private set; } 
+        public FastObservableCollection<string> FilterHistory { get; private set; }
         #endregion
 
         #region Commands
@@ -66,14 +75,42 @@ namespace Orc.Search
         protected override async Task Initialize()
         {
             await base.Initialize();
+
+            _dispatcherTimer.Tick += OnDispatcherTimerTick;
         }
 
-        protected override async  Task Close()
+        protected override async Task Close()
         {
+            _dispatcherTimer.Stop();
+            _dispatcherTimer.Tick -= OnDispatcherTimerTick;
+
             await base.Close();
         }
 
-        private async void OnFilterChanged()
+        private async void OnDispatcherTimerTick(object sender, EventArgs e)
+        {
+            _dispatcherTimer.Stop();
+
+            await Search();
+        }
+
+        private void OnFilterChanged()
+        {
+            var filter = Filter;
+
+            if (!IsClosed)
+            {
+                _dispatcherTimer.Stop();
+                _dispatcherTimer.Start();
+            }
+
+            using (FilterHistory.SuspendChangeNotifications())
+            {
+                FilterHistory.ReplaceRange(_searchHistoryService.GetLastSearchQueries(filter));
+            }
+        }
+
+        private async Task Search()
         {
             await _searchService.SearchAsync(Filter);
         }
