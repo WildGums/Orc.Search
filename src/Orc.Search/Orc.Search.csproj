@@ -109,12 +109,14 @@
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Providers\Interfaces\ISearchHighlightProvider.cs" />
     <Compile Include="Providers\SearchHighlightProviderBase.cs" />
+    <Compile Include="Services\Extensions\ISearchHighlightService.cs" />
     <Compile Include="Services\Extensions\ISearchServiceExtensions.cs" />
     <Compile Include="Services\InMemorySearchService.cs" />
     <Compile Include="Services\Interfaces\ISearchService.cs" />
     <Compile Include="Services\Interfaces\ISearchQueryService.cs" />
     <Compile Include="Services\Interfaces\ISearchHistoryService.cs" />
     <Compile Include="Services\Interfaces\ISearchNavigationService.cs" />
+    <Compile Include="Services\Interfaces\ISearchHighlightService.cs" />
     <Compile Include="Services\SearchHighlightService.cs" />
     <Compile Include="Services\SearchHistoryService.cs" />
     <Compile Include="Services\DummySearchNavigationService.cs" />

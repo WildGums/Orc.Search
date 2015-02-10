@@ -169,38 +169,33 @@ namespace Orc.Search
 
             var results = new List<object>();
 
-            if (!filter.IsValidOrcSearchFilter())
-            {
-                return results;
-            }
-
-            var searching = false;
-
             lock (_lockObject)
             {
                 try
                 {
-                    using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
+                    Searching.SafeInvoke(this, new SearchEventArgs(filter, results));
+
+                    if (filter.IsValidOrcSearchFilter())
                     {
-                        var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableMetadata());
-
-                        var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
-                        var query = parser.Parse(queryAsText);
-
-                        Searching.SafeInvoke(this, new SearchEventArgs(filter, results));
-                        searching = true;
-
-                        using (var searcher = new IndexSearcher(_indexDirectory))
+                        using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                         {
-                            var search = searcher.Search(query, maxResults);
-                            foreach (var scoreDoc in search.ScoreDocs)
-                            {
-                                var score = scoreDoc.Score;
-                                var docId = scoreDoc.Doc;
-                                var doc = searcher.Doc(docId);
+                            var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableMetadata());
 
-                                var index = int.Parse(doc.Get(IndexId));
-                                results.Add(_indexedObjects[index]);
+                            var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
+                            var query = parser.Parse(queryAsText);
+
+                            using (var searcher = new IndexSearcher(_indexDirectory))
+                            {
+                                var search = searcher.Search(query, maxResults);
+                                foreach (var scoreDoc in search.ScoreDocs)
+                                {
+                                    var score = scoreDoc.Score;
+                                    var docId = scoreDoc.Doc;
+                                    var doc = searcher.Doc(docId);
+
+                                    var index = int.Parse(doc.Get(IndexId));
+                                    results.Add(_indexedObjects[index]);
+                                }
                             }
                         }
                     }
@@ -211,10 +206,7 @@ namespace Orc.Search
                 }
                 finally
                 {
-                    if (searching)
-                    {
-                        Searched.SafeInvoke(this, new SearchEventArgs(filter, results));
-                    }
+                    Searched.SafeInvoke(this, new SearchEventArgs(filter, results));
                 }
             }
 

@@ -15,6 +15,7 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<ISearchService, InMemorySearchService>();
         serviceLocator.RegisterType<ISearchHistoryService, SearchHistoryService>();
+        serviceLocator.RegisterType<ISearchHighlightService, SearchHighlightService>();
         serviceLocator.RegisterType<ISearchNavigationService, DummySearchNavigationService>();
         serviceLocator.RegisterType<ISearchQueryService, SearchQueryService>();
         serviceLocator.RegisterType<ISearchableParser, AttributeSearchableParser>();
