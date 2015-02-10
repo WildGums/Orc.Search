@@ -9,10 +9,10 @@ namespace Orc.Search.Example.Models
 {
     public class Person
     {
-        [SearchableProperty(Name = "firstname")]
+        [SearchableProperty(SearchName = "firstname")]
         public string FirstName { get; set; }
 
-        [SearchableProperty(Name = "lastname")]
+        [SearchableProperty(SearchName = "lastname")]
         public string LastName { get; set; }
 
         public int Age { get; set; }

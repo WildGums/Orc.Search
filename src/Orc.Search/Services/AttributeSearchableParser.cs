@@ -15,14 +15,14 @@ namespace Orc.Search
 
     public class AttributeSearchableParser : ISearchableParser
     {
-        private readonly ICacheStorage<Type, List<SearchableProperty>> _propertiesCache = new CacheStorage<Type, List<SearchableProperty>>(); 
+        private readonly ICacheStorage<Type, List<SearchableMetadata>> _propertiesCache = new CacheStorage<Type, List<SearchableMetadata>>(); 
 
         public AttributeSearchableParser()
         {
             
         }
 
-        public virtual IEnumerable<SearchableProperty> GetSearchableProperties(object searchable)
+        public virtual IEnumerable<SearchableMetadata> GetSearchableMetadata(object searchable)
         {
             Argument.IsNotNull(() => searchable);
 
@@ -30,7 +30,7 @@ namespace Orc.Search
 
             return _propertiesCache.GetFromCacheOrFetch(type, () =>
             {
-                var searchableProperties = new List<SearchableProperty>();
+                var searchableProperties = new List<SearchableMetadata>();
 
                 var properties = type.GetPropertiesEx();
                 foreach (var property in properties)
@@ -38,10 +38,10 @@ namespace Orc.Search
                     var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof (SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
                     if (searchablePropertyAttribute != null)
                     {
-                        var searchableProperty = new SearchableProperty(property.Name);
-                        if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.Name))
+                        var searchableProperty = new SearchableMetadata(property.Name);
+                        if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
                         {
-                            searchableProperty.Name = searchablePropertyAttribute.Name;
+                            searchableProperty.SearchName = searchablePropertyAttribute.SearchName;
                         }
                         searchableProperty.Analyze = searchablePropertyAttribute.Analyze;
 

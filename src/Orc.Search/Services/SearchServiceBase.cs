@@ -37,7 +37,7 @@ namespace Orc.Search
 
         private bool _initialized;
 
-        private readonly Dictionary<string, SearchableProperty> _searchFields = new Dictionary<string, SearchableProperty>();
+        private readonly Dictionary<string, SearchableMetadata> _searchableMetadata = new Dictionary<string, SearchableMetadata>();
         private Directory _indexDirectory;
         #endregion
 
@@ -78,13 +78,12 @@ namespace Orc.Search
         #endregion
 
         #region Methods
-        public virtual IEnumerable<SearchableProperty> GetSearchableProperties()
+        public virtual IEnumerable<SearchableMetadata> GetSearchableMetadata()
         {
             lock (_lockObject)
             {
-                var searchableProperties = new List<SearchableProperty>(_searchFields.Values);
-
-                return searchableProperties;
+                var searchableMetadata = new List<SearchableMetadata>(_searchableMetadata.Values);
+                return searchableMetadata;
             }
         }
 
@@ -108,19 +107,19 @@ namespace Orc.Search
                             var document = new Document();
                             document.Add(new Field(IndexId, index.ToString(), Field.Store.YES, Field.Index.NO));
 
-                            var searchableProperties = _searchableParser.GetSearchableProperties(searchable);
-                            foreach (var searchableProperty in searchableProperties)
+                            var searchableMetadatas = _searchableParser.GetSearchableMetadata(searchable);
+                            foreach (var searchableMetadata in searchableMetadatas)
                             {
-                                var searchablePropertyValue = _searchableAdapter.GetValue(searchable, searchableProperty);
-                                var searchablePropertyValueAsString = ObjectToStringHelper.ToString(searchablePropertyValue);
+                                var searchableMetadataValue = _searchableAdapter.GetValue(searchable, searchableMetadata);
+                                var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
 
-                                var field = new Field(searchableProperty.Name, searchablePropertyValueAsString, Field.Store.YES, searchableProperty.Analyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED, Field.TermVector.NO);
+                                var field = new Field(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES, searchableMetadata.Analyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED, Field.TermVector.NO);
 
                                 document.Add(field);
 
-                                if (!_searchFields.ContainsKey(searchableProperty.Name))
+                                if (!_searchableMetadata.ContainsKey(searchableMetadata.SearchName))
                                 {
-                                    _searchFields.Add(searchableProperty.Name, searchableProperty);
+                                    _searchableMetadata.Add(searchableMetadata.SearchName, searchableMetadata);
                                 }
                             }
 
@@ -183,7 +182,7 @@ namespace Orc.Search
                 {
                     using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                     {
-                        var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableProperties());
+                        var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableMetadata());
 
                         var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
                         var query = parser.Parse(queryAsText);

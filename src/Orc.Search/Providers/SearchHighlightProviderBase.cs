@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISearchableAdapter.cs" company="Wild Gums">
+// <copyright file="SearchHighlightProviderBase.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,10 +7,7 @@
 
 namespace Orc.Search
 {
-    public interface ISearchableAdapter
+    public abstract class SearchHighlightProviderBase : ISearchHighlightProvider
     {
-        #region Methods
-        object GetValue(object searchable, SearchableMetadata searchableMetadata);
-        #endregion
     }
 }

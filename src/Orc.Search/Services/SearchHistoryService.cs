@@ -14,6 +14,7 @@ namespace Orc.Search
     using Catel;
     using Catel.Logging;
     using Catel.Runtime.Serialization.Xml;
+    using System.Threading.Tasks;
 
     public class SearchHistoryService : ISearchHistoryService
     {
@@ -65,9 +66,13 @@ namespace Orc.Search
             return elements;
         }
 
-        private void OnSearchServiceSearched(object sender, SearchEventArgs e)
+        private async void OnSearchServiceSearched(object sender, SearchEventArgs e)
         {
-            var filter = e.Filter;
+            await Task.Factory.StartNew(() => AddSearchFilterToHistory(e.Filter, e.Results));
+        }
+
+        private void AddSearchFilterToHistory(string filter, IEnumerable<object> results)
+        {
             if (string.IsNullOrWhiteSpace(filter))
             {
                 return;
@@ -98,7 +103,7 @@ namespace Orc.Search
 
                 searchHistoryElement.Count++;
 
-                if (!searchHistoryElement.EverFoundResults && e.Results.Any())
+                if (!searchHistoryElement.EverFoundResults && results.Any())
                 {
                     searchHistoryElement.EverFoundResults = true;
                 }

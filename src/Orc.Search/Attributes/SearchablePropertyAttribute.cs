@@ -21,10 +21,10 @@ namespace Orc.Search
         }
 
         /// <summary>
-        /// Gets or sets the name. If not specified, this will equal the property name.
+        /// Gets or sets the search name. If not specified, this will equal the property name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public string SearchName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this property must be analyzed. Set this value to <c>true</c> for common text 

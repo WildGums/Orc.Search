@@ -23,6 +23,6 @@ namespace Orc.Search
         void AddObjects(IEnumerable<object> searchables);
         void RemoveObjects(IEnumerable<object> searchables);
         IEnumerable<object> Search(string filter, int maxResults = SearchDefaults.DefaultResults);
-        IEnumerable<SearchableProperty> GetSearchableProperties();
+        IEnumerable<SearchableMetadata> GetSearchableMetadata();
     }
 }

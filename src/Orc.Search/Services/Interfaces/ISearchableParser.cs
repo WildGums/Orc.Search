@@ -11,6 +11,6 @@ namespace Orc.Search
 
     public interface ISearchableParser
     {
-        IEnumerable<SearchableProperty> GetSearchableProperties(object searchable);
+        IEnumerable<SearchableMetadata> GetSearchableMetadata(object searchable);
     }
 }

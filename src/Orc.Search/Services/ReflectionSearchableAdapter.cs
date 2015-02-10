@@ -11,9 +11,9 @@ namespace Orc.Search
 
     public class ReflectionSearchableAdapter : ISearchableAdapter
     {
-        public virtual object GetValue(object searchable, SearchableProperty searchableProperty)
+        public virtual object GetValue(object searchable, SearchableMetadata searchableMetadata)
         {
-            return PropertyHelper.GetPropertyValue(searchable, searchableProperty.PropertyName);
+            return PropertyHelper.GetPropertyValue(searchable, searchableMetadata.Name);
         }
     }
 }

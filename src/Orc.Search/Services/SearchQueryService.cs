@@ -15,7 +15,7 @@ namespace Orc.Search
 
     public class SearchQueryService : ISearchQueryService
     {
-        public string GetSearchQuery(string filter, IEnumerable<SearchableProperty> searchableProperties)
+        public string GetSearchQuery(string filter, IEnumerable<SearchableMetadata> searchableMetadatas)
         {
             if (!filter.Contains(":"))
             {
@@ -24,9 +24,9 @@ namespace Orc.Search
                 using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                 {
                     var fields = new List<string>();
-                    foreach (var searchableProperty in searchableProperties)
+                    foreach (var searchableMetadata in searchableMetadatas)
                     {
-                        fields.Add(searchableProperty.Name);
+                        fields.Add(searchableMetadata.SearchName);
                     }
 
                     var parser = new MultiFieldQueryParser(LuceneDefaults.Version, fields.ToArray(), analyzer);
@@ -38,18 +38,18 @@ namespace Orc.Search
             return filter;
         }
 
-        public string GetSearchQuery(params SearchablePropertyValue[] searchablePropertyValues)
+        public string GetSearchQuery(params SearchableMetadataValue[] searchableMetadataValues)
         {
             var query = new PhraseQuery();
 
-            foreach (var searchablePropertyValue in searchablePropertyValues)
+            foreach (var searchableMetadataValue in searchableMetadataValues)
             {
-                query.Add(new Term(searchablePropertyValue.SearchableProperty.Name, searchablePropertyValue.Value));
+                query.Add(new Term(searchableMetadataValue.SearchableMetadata.SearchName, searchableMetadataValue.Value));
             }
 
             var filter = query.ToString();
 
-            return GetSearchQuery(filter, new SearchableProperty[] { });
+            return GetSearchQuery(filter, new SearchableMetadata[] { });
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchablePropertyValue.cs" company="Wild Gums">
+// <copyright file="SearchableMetadataValue.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -9,16 +9,16 @@ namespace Orc.Search
 {
     using Catel;
 
-    public class SearchablePropertyValue
+    public class SearchableMetadataValue
     {
-        public SearchablePropertyValue(SearchableProperty searchableProperty)
+        public SearchableMetadataValue(SearchableMetadata searchableMetadata)
         {
-            Argument.IsNotNull(() => searchableProperty);
+            Argument.IsNotNull(() => searchableMetadata);
 
-            SearchableProperty = searchableProperty;
+            SearchableMetadata = searchableMetadata;
         }
 
-        public SearchableProperty SearchableProperty { get; private set; }
+        public SearchableMetadata SearchableMetadata { get; private set; }
 
         public string Value { get; set; }
     }
