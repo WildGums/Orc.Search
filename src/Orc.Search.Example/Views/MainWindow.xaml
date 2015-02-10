@@ -39,7 +39,11 @@
                 <ListView Grid.ColumnSpan="2" ItemsSource="{Binding AllObjects}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="First Name">
+                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                            <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
+                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}" />
+
+                            <!--<GridViewColumn Header="First Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding FirstName}">
@@ -91,7 +95,7 @@
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>                                
-                            </GridViewColumn>
+                            </GridViewColumn>-->
                         </GridView>
                     </ListView.View>
                 </ListView>
