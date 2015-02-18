@@ -1,16 +1,11 @@
 ﻿<catel:DataWindow x:Class="Orc.Search.SearchWindow"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:catel="http://catel.codeplex.com">
+                  xmlns:catel="http://catel.codeplex.com"
+                  xmlns:search="clr-namespace:Orc.Search">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <TextBlock Text="{Binding Title}" />
-        <TextBlock Text="Here goes your real content" />
+        <search:SearchView />
     </Grid>
 
 </catel:DataWindow>
