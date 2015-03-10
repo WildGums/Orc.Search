@@ -61,10 +61,10 @@ namespace Orc.Search
         #region Commands
         public Command BuildFilter { get; private set; }
 
-        private async void OnBuildFilterExecute()
+        private void OnBuildFilterExecute()
         {
             var vm = _viewModelFactory.CreateViewModel<SearchFilterBuilderViewModel>(null);
-            if (await _uiVisualizerService.ShowDialog(vm) ?? false)
+            if (_uiVisualizerService.ShowDialog(vm) ?? false)
             {
                 Filter = vm.Filter;
             }
