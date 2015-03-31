@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers VerifyAssembly="true">
+  <ModuleInit/>
+  <Costura>
+    <IncludeAssemblies>
+      ICSharpCode.SharpZipLib
+      Lucene.Net
+      RestSharp
+    </IncludeAssemblies>
+  </Costura>
+  <Catel/>
+</Weavers>

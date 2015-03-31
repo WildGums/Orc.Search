@@ -2,5 +2,4 @@
 <Weavers VerifyAssembly="true">
   <ModuleInit/>
   <Catel/>
-  <LoadAssembliesOnStartup/>
 </Weavers>

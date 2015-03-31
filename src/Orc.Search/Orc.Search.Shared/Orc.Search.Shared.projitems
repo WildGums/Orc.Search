@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>63216fbd-3bcf-49f5-b38d-1198bf0b0710</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.Search.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\SearchablePropertyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\SearchEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\PathHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SearchableMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SearchableMetadataValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SearchHistory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SearchHistoryElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Providers\Interfaces\ISearchHighlightProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Providers\SearchHighlightProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\AttributeSearchableParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DummySearchNavigationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ISearchHighlightService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ISearchServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\InMemorySearchService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchableAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchableParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchHighlightService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchHistoryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchNavigationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchQueryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISearchService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ReflectionSearchableAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SearchHighlightService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SearchHistoryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SearchQueryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SearchServiceBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\Interfaces\" />
+  </ItemGroup>
+</Project>
