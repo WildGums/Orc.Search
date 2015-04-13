@@ -5,3 +5,19 @@ Easily add searching to any application.
 Uses [Lucene](http://lucenenet.apache.org/) in the background.
 
 Search Syntax: [http://www.lucenetutorial.com/lucene-query-syntax.html](http://www.lucenetutorial.com/lucene-query-syntax.html)
+
+
+## Downloads
+
+* **[Orc.Search](https://www.nuget.org/packages/Orc.Search/)** => The core of **Orc.Search**.  Containt main services, base classes and attributes.
+* **[Orc.Search.Xaml](https://www.nuget.org/packages/Orc.Search.Xaml/)** => Containt basic Ui elements, which could be used for provide serch into your applicetion.
+
+## Features
+
+* used [Lucene](http://lucenenet.apache.org/) for the indexing and searching
+* properties, which need to be indexed should be decorated with the **SearchablePropertyAttribute** 
+* for support highlighting you sould create your own search highlight providers, by inheriting from **SearchHighlightProviderBase** 
+* you can redefine implementation of **ISearchService**, for doing that create class, inherited from **SearchServiceBase** and register it usring **[Catel.IoC.IServiceLocator](http://www.nudoq.org/#!/Packages/Catel.Core/Catel.Core/IServiceLocator)**
+
+## Quick start
+
