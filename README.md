@@ -18,6 +18,27 @@ Search Syntax: [http://www.lucenetutorial.com/lucene-query-syntax.html](http://w
 * properties, which need to be indexed should be decorated with the **SearchablePropertyAttribute** 
 * for support highlighting you sould create your own search highlight providers, by inheriting from **SearchHighlightProviderBase** 
 * you can redefine implementation of **ISearchService**, for doing that create class, inherited from **SearchServiceBase** and register it usring **[Catel.IoC.IServiceLocator](http://www.nudoq.org/#!/Packages/Catel.Core/Catel.Core/IServiceLocator)**
+* support of asynchronos searching (use **ISearchServiceExtensions**)
 
 ## Quick start
+
+* create POCO class for using in search
+
+and decorate properties with **SearchablePropertyAttribute**
+
+	public class Person
+    {
+    	[SearchableProperty(SearchName = "firstname")]
+    	public string FirstName { get; set; }
+    
+    	[SearchableProperty(SearchName = "lastname")]
+    	public string LastName { get; set; }
+    
+    	public int Age { get; set; }
+	}
+
+* Fill **ISearchService** with the data by using **AddObjects()** method. As an argument use collection of *Person*.
+* Use **Search()** method for getting search results. As an argument use *string filter*
+
+For using asynchronous version of search. Just use Async suffix at the name of methods (SearchAsync(), AddObjectsAsync(), RemoveObjectsAsync())
 
