@@ -1,4 +1,5 @@
-# Orc.Search
+Orc.Search
+==============
 
 Easily add searching to any application.
 
@@ -7,27 +8,29 @@ Uses [Lucene](http://lucenenet.apache.org/) in the background.
 Search Syntax: [http://www.lucenetutorial.com/lucene-query-syntax.html](http://www.lucenetutorial.com/lucene-query-syntax.html)
 
 
-## Downloads
+Nuget Packages
+-----------------
 
-* **[Orc.Search](https://www.nuget.org/packages/Orc.Search/)** => The core of **Orc.Search**.  Containt main services, base classes and attributes.
-* **[Orc.Search.Xaml](https://www.nuget.org/packages/Orc.Search.Xaml/)** => Containt basic Ui elements, which could be used for provide serch into your applicetion.
+- **[Orc.Search](https://www.nuget.org/packages/Orc.Search/)** => The core of **Orc.Search**.  Contains the main services, base classes and attributes.
+- **[Orc.Search.Xaml](https://www.nuget.org/packages/Orc.Search.Xaml/)** => Containt basic Ui elements, which can be used to add seach functionality to your application.
 
-## Features
+Features
+--------
 
-* used [Lucene](http://lucenenet.apache.org/) for the indexing and searching
-* properties, which need to be indexed should be decorated with the **SearchablePropertyAttribute** 
-* for support highlighting you sould create your own search highlight providers, by inheriting from **SearchHighlightProviderBase** 
-* you can redefine implementation of **ISearchService**, for doing that create class, inherited from **SearchServiceBase** and register it usring **[Catel.IoC.IServiceLocator](http://www.nudoq.org/#!/Packages/Catel.Core/Catel.Core/IServiceLocator)**
-* support of asynchronos searching (use **ISearchServiceExtensions**)
+- Uses [Lucene](http://lucenenet.apache.org/) for the indexing and searching
+- Properties, which need to be indexed should be decorated with the **SearchablePropertyAttribute** 
+- To support highlighting you should create your own search highlight provider, by inheriting from **SearchHighlightProviderBase** 
+- You can redefine the implementation of **ISearchService**, by creating your own class which will inherit **SearchServiceBase** and register it using **[Catel.IoC.IServiceLocator](http://www.nudoq.org/#!/Packages/Catel.Core/Catel.Core/IServiceLocator)**
+- Supports asynchronos searching (uses **ISearchServiceExtensions**)
 
-## Quick start
+Quick start
+---------------
 
-* create POCO class for using in search
+- Create a POCO class to use in your search and decorate the properties with **SearchablePropertyAttribute**
 
-and decorate properties with **SearchablePropertyAttribute**
-
-	public class Person
-    {
+```C#
+public class Person
+{
     	[SearchableProperty(SearchName = "firstname")]
     	public string FirstName { get; set; }
     
@@ -35,10 +38,11 @@ and decorate properties with **SearchablePropertyAttribute**
     	public string LastName { get; set; }
     
     	public int Age { get; set; }
-	}
+}
+```
 
-* Fill **ISearchService** with the data by using **AddObjects()** method. As an argument use collection of *Person*.
-* Use **Search()** method for getting search results. As an argument use *string filter*
+- Fill the **ISearchService** with the appropirate "Person" data using the **AddObjects()** method.
+- Use the **Search()** method for getting search results. Use the *string filter* as an argument.
 
-For using asynchronous version of search. Just use Async suffix at the name of methods (SearchAsync(), AddObjectsAsync(), RemoveObjectsAsync())
+In order to use the asynchronous version of search. Just usethe Async suffix method names (i.e. SearchAsync(), AddObjectsAsync(), RemoveObjectsAsync())
 
