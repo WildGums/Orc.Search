@@ -1,6 +1,8 @@
 Orc.Search
 ==============
 
+[![Join the chat at https://gitter.im/WildGums/Orc.Search](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WildGums/Orc.Search?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Easily add searching to any application.
 
 Uses [Lucene](http://lucenenet.apache.org/) in the background.
