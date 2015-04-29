@@ -119,7 +119,7 @@ namespace Orc.Search.Example.ViewModels
 
             using (FilteredObjects.SuspendChangeNotifications())
             {
-                FilteredObjects.ReplaceRange(e.Results);
+                FilteredObjects.ReplaceRange(e.Results.Select(x => x.Instance));
                 FilteredObjectCount = FilteredObjects.Count;
             }
 

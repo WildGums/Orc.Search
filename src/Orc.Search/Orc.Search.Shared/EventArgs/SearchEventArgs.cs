@@ -12,7 +12,7 @@ namespace Orc.Search
 
     public class SearchEventArgs : EventArgs
     {
-        public SearchEventArgs(string filter, IEnumerable<object> results)
+        public SearchEventArgs(string filter, IEnumerable<ISearchable> results)
         {
             Filter = filter;
             Results = results;
@@ -20,6 +20,6 @@ namespace Orc.Search
 
         public string Filter { get; private set; }
 
-        public IEnumerable<object> Results { get; private set; }
+        public IEnumerable<ISearchable> Results { get; private set; }
     }
 }

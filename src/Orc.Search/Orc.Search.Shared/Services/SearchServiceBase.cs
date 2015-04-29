@@ -33,8 +33,8 @@ namespace Orc.Search
 
         private readonly ISearchQueryService _searchQueryService;
 
-        private readonly Dictionary<int, object> _indexedObjects = new Dictionary<int, object>();
-        private readonly Dictionary<string, SearchableMetadata> _searchableMetadata = new Dictionary<string, SearchableMetadata>();
+        private readonly Dictionary<int, ISearchable> _indexedObjects = new Dictionary<int, ISearchable>();
+        private readonly Dictionary<string, ISearchableMetadata> _searchableMetadata = new Dictionary<string, ISearchableMetadata>();
 
         private bool _initialized;
 
@@ -78,7 +78,7 @@ namespace Orc.Search
         {
             lock (_lockObject)
             {
-                var searchableMetadata = new List<SearchableMetadata>(_searchableMetadata.Values);
+                var searchableMetadata = new List<ISearchableMetadata>(_searchableMetadata.Values);
                 return searchableMetadata;
             }
         }
@@ -103,12 +103,12 @@ namespace Orc.Search
                             var document = new Document();
                             document.Add(new Field(IndexId, index.ToString(), Field.Store.YES, Field.Index.NO));
 
-                            var metadata = new AttributeMetadataCollection(searchable.GetType());
-                            var searchableMetadatas = metadata.GetSearchableMetadata();
+                            var metadata = searchable.MetadataCollection;
+                            var searchableMetadatas = metadata.All.OfType<ISearchableMetadata>();
 
                             foreach (var searchableMetadata in searchableMetadatas)
                             {
-                                var searchableMetadataValue = searchableMetadata.GetValue(searchable);
+                                var searchableMetadataValue = searchableMetadata.GetValue(searchable.Instance);
                                 var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
 
                                 var field = new Field(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES, searchableMetadata.Analyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED, Field.TermVector.NO);
@@ -161,11 +161,11 @@ namespace Orc.Search
             //}
         }
 
-        public virtual IEnumerable<object> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
+        public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
         {
             Initialize();
 
-            var results = new List<object>();
+            var results = new List<ISearchable>();
 
             lock (_lockObject)
             {

@@ -22,7 +22,7 @@ namespace Orc.Search
             await Task.Factory.StartNew(() => searchService.RemoveObjects(searchables));
         }
 
-        public static async Task<IEnumerable<object>> SearchAsync(this ISearchService searchService, string filter, int maxResults = SearchDefaults.DefaultResults)
+        public static async Task<IEnumerable<ISearchable>> SearchAsync(this ISearchService searchService, string filter, int maxResults = SearchDefaults.DefaultResults)
         {
             return await Task.Factory.StartNew(() => searchService.Search(filter, maxResults));
         }

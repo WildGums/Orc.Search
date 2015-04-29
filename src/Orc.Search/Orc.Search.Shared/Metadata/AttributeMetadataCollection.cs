@@ -26,36 +26,34 @@ namespace Orc.Search
             _targetType = targetType;
         }
 
-        public IEnumerable<SearchableMetadata> GetSearchableMetadata()
-        {
-            return _propertiesCache.GetFromCacheOrFetch(_targetType, () =>
-            {
-                var searchableProperties = new List<SearchableMetadata>();
-
-                var properties = _targetType.GetPropertiesEx();
-                foreach (var property in properties)
-                {
-                    var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof (SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
-                    if (searchablePropertyAttribute != null)
-                    {
-                        var searchableProperty = new SearchableMetadata(property);
-                        if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
-                        {
-                            searchableProperty.SearchName = searchablePropertyAttribute.SearchName;
-                        }
-                        searchableProperty.Analyze = searchablePropertyAttribute.Analyze;
-
-                        searchableProperties.Add(searchableProperty);
-                    }
-                }
-
-                return searchableProperties;
-            });
-        }
-
         public override IEnumerable<IMetadata> All
         {
-            get { return GetSearchableMetadata(); }
+            get
+            {
+                return _propertiesCache.GetFromCacheOrFetch(_targetType, () =>
+                {
+                    var searchableProperties = new List<SearchableMetadata>();
+
+                    var properties = _targetType.GetPropertiesEx();
+                    foreach (var property in properties)
+                    {
+                        var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof(SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
+                        if (searchablePropertyAttribute != null)
+                        {
+                            var searchableProperty = new SearchableMetadata(property);
+                            if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
+                            {
+                                searchableProperty.SearchName = searchablePropertyAttribute.SearchName;
+                            }
+                            searchableProperty.Analyze = searchablePropertyAttribute.Analyze;
+
+                            searchableProperties.Add(searchableProperty);
+                        }
+                    }
+
+                    return searchableProperties;
+                });
+            }
         }
     }
 }
