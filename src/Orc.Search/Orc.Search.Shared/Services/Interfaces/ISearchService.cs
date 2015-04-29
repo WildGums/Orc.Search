@@ -20,9 +20,10 @@ namespace Orc.Search
         event EventHandler<SearchEventArgs> Searching;
         event EventHandler<SearchEventArgs> Searched;
 
-        void AddObjects(IEnumerable<object> searchables);
-        void RemoveObjects(IEnumerable<object> searchables);
-        IEnumerable<object> Search(string filter, int maxResults = SearchDefaults.DefaultResults);
-        IEnumerable<SearchableMetadata> GetSearchableMetadata();
+        void AddObjects(IEnumerable<ISearchable> searchables);
+        void RemoveObjects(IEnumerable<ISearchable> searchables);
+
+        IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults);
+        IEnumerable<ISearchableMetadata> GetSearchableMetadata();
     }
 }

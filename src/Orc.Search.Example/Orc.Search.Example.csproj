@@ -64,6 +64,10 @@
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
       <HintPath>..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
     </Reference>
+    <Reference Include="Orc.Metadata, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Orc.Metadata.1.0.0-unstable0009\lib\net40\Orc.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RandomNameGenerator">
       <HintPath>..\..\lib\RandomNameGenerator.1.0.4\lib\RandomNameGenerator.dll</HintPath>
     </Reference>

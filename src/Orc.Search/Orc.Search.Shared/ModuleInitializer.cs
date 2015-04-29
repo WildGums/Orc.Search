@@ -1,4 +1,5 @@
 ﻿using Catel.IoC;
+using Orc.Metadata;
 using Orc.Search;
 
 /// <summary>
@@ -18,7 +19,5 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ISearchHighlightService, SearchHighlightService>();
         serviceLocator.RegisterType<ISearchNavigationService, DummySearchNavigationService>();
         serviceLocator.RegisterType<ISearchQueryService, SearchQueryService>();
-        serviceLocator.RegisterType<ISearchableParser, AttributeSearchableParser>();
-        serviceLocator.RegisterType<ISearchableAdapter, ReflectionSearchableAdapter>();
     }
 }

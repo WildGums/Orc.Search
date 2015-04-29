@@ -7,15 +7,15 @@
 
 namespace Orc.Search
 {
-    public class SearchableMetadata
-    {
-        public SearchableMetadata(string name)
-        {
-            Name = name;
-            SearchName = name;
-        }
+    using System.Reflection;
+    using Metadata;
 
-        public string Name { get; private set; }
+    public class SearchableMetadata : ReflectionMetadata, ISearchableMetadata
+    {
+        public SearchableMetadata(PropertyInfo propertyInfo)
+            : base(propertyInfo)
+        {
+        }
 
         public string SearchName { get; set; }
 

@@ -18,6 +18,7 @@ namespace Orc.Search
         #region Methods
         void AddProvider(ISearchHighlightProvider provider);
         void RemoveProvider(ISearchHighlightProvider provider);
+
         void ResetHighlights();
         void HighlightSearchables(IEnumerable<object> searchables);
         #endregion

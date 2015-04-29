@@ -7,19 +7,16 @@
 
 namespace Orc.Search
 {
-    using Catel;
-
-    public class SearchableMetadataValue
+    public class SearchableMetadataValue : ISearchableMetadataValue
     {
-        public SearchableMetadataValue(SearchableMetadata searchableMetadata)
+        public SearchableMetadataValue(ISearchableMetadata metadata, string value)
         {
-            Argument.IsNotNull(() => searchableMetadata);
-
-            SearchableMetadata = searchableMetadata;
+            Metadata = metadata;
+            Value = value;
         }
 
-        public SearchableMetadata SearchableMetadata { get; private set; }
+        public ISearchableMetadata Metadata { get; private set; }
 
-        public string Value { get; set; }
+        public string Value { get; private set; }
     }
 }

@@ -46,6 +46,10 @@
     <Reference Include="Catel.MVVM">
       <HintPath>..\..\..\lib\Catel.MVVM.4.1.0\lib\net45\Catel.MVVM.dll</HintPath>
     </Reference>
+    <Reference Include="Orc.Metadata, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Orc.Metadata.1.0.0-unstable0009\lib\net40\Orc.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />

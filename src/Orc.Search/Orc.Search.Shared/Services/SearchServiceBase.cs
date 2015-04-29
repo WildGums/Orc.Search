@@ -9,6 +9,7 @@ namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Catel;
     using Catel.Logging;
     using Lucene.Net.Analysis.Standard;
@@ -17,6 +18,7 @@ namespace Orc.Search
     using Lucene.Net.QueryParsers;
     using Lucene.Net.Search;
     using Lucene.Net.Store;
+    using Orc.Metadata;
 
     public abstract class SearchServiceBase : ISearchService
     {
@@ -30,27 +32,21 @@ namespace Orc.Search
         private readonly object _lockObject = new object();
 
         private readonly ISearchQueryService _searchQueryService;
-        private readonly ISearchableParser _searchableParser;
-        private readonly ISearchableAdapter _searchableAdapter;
 
-        private readonly Dictionary<int, object> _indexedObjects = new Dictionary<int, object>();
+        private readonly Dictionary<int, ISearchable> _indexedObjects = new Dictionary<int, ISearchable>();
+        private readonly Dictionary<string, ISearchableMetadata> _searchableMetadata = new Dictionary<string, ISearchableMetadata>();
 
         private bool _initialized;
 
-        private readonly Dictionary<string, SearchableMetadata> _searchableMetadata = new Dictionary<string, SearchableMetadata>();
         private Directory _indexDirectory;
         #endregion
 
         #region Constructors
-        protected SearchServiceBase(ISearchQueryService searchQueryService, ISearchableParser searchableParser, ISearchableAdapter searchableAdapter)
+        protected SearchServiceBase(ISearchQueryService searchQueryService)
         {
             Argument.IsNotNull(() => searchQueryService);
-            Argument.IsNotNull(() => searchableParser);
-            Argument.IsNotNull(() => searchableAdapter);
 
             _searchQueryService = searchQueryService;
-            _searchableParser = searchableParser;
-            _searchableAdapter = searchableAdapter;
         }
         #endregion
 
@@ -78,16 +74,16 @@ namespace Orc.Search
         #endregion
 
         #region Methods
-        public virtual IEnumerable<SearchableMetadata> GetSearchableMetadata()
+        public virtual IEnumerable<ISearchableMetadata> GetSearchableMetadata()
         {
             lock (_lockObject)
             {
-                var searchableMetadata = new List<SearchableMetadata>(_searchableMetadata.Values);
+                var searchableMetadata = new List<ISearchableMetadata>(_searchableMetadata.Values);
                 return searchableMetadata;
             }
         }
 
-        public virtual void AddObjects(IEnumerable<object> searchables)
+        public virtual void AddObjects(IEnumerable<ISearchable> searchables)
         {
             Initialize();
 
@@ -107,10 +103,12 @@ namespace Orc.Search
                             var document = new Document();
                             document.Add(new Field(IndexId, index.ToString(), Field.Store.YES, Field.Index.NO));
 
-                            var searchableMetadatas = _searchableParser.GetSearchableMetadata(searchable);
+                            var metadata = searchable.MetadataCollection;
+                            var searchableMetadatas = metadata.All.OfType<ISearchableMetadata>();
+
                             foreach (var searchableMetadata in searchableMetadatas)
                             {
-                                var searchableMetadataValue = _searchableAdapter.GetValue(searchable, searchableMetadata);
+                                var searchableMetadataValue = searchableMetadata.GetValue(searchable.Instance);
                                 var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
 
                                 var field = new Field(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES, searchableMetadata.Analyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED, Field.TermVector.NO);
@@ -135,7 +133,7 @@ namespace Orc.Search
             }
         }
 
-        public virtual void RemoveObjects(IEnumerable<object> searchables)
+        public virtual void RemoveObjects(IEnumerable<ISearchable> searchables)
         {
             Initialize();
 
@@ -163,11 +161,11 @@ namespace Orc.Search
             //}
         }
 
-        public virtual IEnumerable<object> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
+        public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
         {
             Initialize();
 
-            var results = new List<object>();
+            var results = new List<ISearchable>();
 
             lock (_lockObject)
             {

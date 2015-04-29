@@ -15,7 +15,7 @@ namespace Orc.Search
 
     public class SearchQueryService : ISearchQueryService
     {
-        public string GetSearchQuery(string filter, IEnumerable<SearchableMetadata> searchableMetadatas)
+        public string GetSearchQuery(string filter, IEnumerable<ISearchableMetadata> searchableMetadatas)
         {
             if (!filter.Contains(":"))
             {
@@ -38,13 +38,13 @@ namespace Orc.Search
             return filter;
         }
 
-        public string GetSearchQuery(params SearchableMetadataValue[] searchableMetadataValues)
+        public string GetSearchQuery(params ISearchableMetadataValue[] searchableMetadataValues)
         {
             var query = new PhraseQuery();
 
             foreach (var searchableMetadataValue in searchableMetadataValues)
             {
-                query.Add(new Term(searchableMetadataValue.SearchableMetadata.SearchName, searchableMetadataValue.Value));
+                query.Add(new Term(searchableMetadataValue.Metadata.SearchName, searchableMetadataValue.Value));
             }
 
             var filter = query.ToString();

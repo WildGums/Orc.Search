@@ -9,6 +9,7 @@ namespace Orc.Search.Example.ViewModels
 {
     using System;
     using System.Diagnostics;
+    using System.Linq;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
@@ -72,12 +73,12 @@ namespace Orc.Search.Example.ViewModels
 
             using (AllObjects.SuspendChangeNotifications())
             {
-                var generatedObjects = await _dataGenerationService.GenerateObjectsAsync();
+                var generatedSearchables = await _dataGenerationService.GenerateSearchablesAsync();
 
-                AllObjects.ReplaceRange(generatedObjects);
+                AllObjects.ReplaceRange(generatedSearchables.Select(x => x.Instance));
                 AllObjectCount = AllObjects.Count;
 
-                await _searchService.AddObjectsAsync(generatedObjects);
+                await _searchService.AddObjectsAsync(generatedSearchables);
             }
         }
 
@@ -118,7 +119,7 @@ namespace Orc.Search.Example.ViewModels
 
             using (FilteredObjects.SuspendChangeNotifications())
             {
-                FilteredObjects.ReplaceRange(e.Results);
+                FilteredObjects.ReplaceRange(e.Results.Select(x => x.Instance));
                 FilteredObjectCount = FilteredObjects.Count;
             }
 
