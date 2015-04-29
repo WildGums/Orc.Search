@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISearchableParser.cs" company="Wild Gums">
+// <copyright file="ISearchable.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,10 +7,13 @@
 
 namespace Orc.Search
 {
-    using System.Collections.Generic;
+    using Metadata;
 
-    public interface ISearchableParser
+    public interface ISearchable
     {
-        IEnumerable<SearchableMetadata> GetSearchableMetadata(object searchable);
+        #region Properties
+        object Instance { get; }
+        IMetadataCollection MetadataCollection { get; }
+        #endregion
     }
 }

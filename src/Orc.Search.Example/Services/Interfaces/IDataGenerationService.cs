@@ -12,8 +12,8 @@ namespace Orc.Search.Example.Services
     public interface IDataGenerationService
     {
         #region Methods
-        IEnumerable<object> GenerateObjects(int objectCount = ExampleDefaults.GeneratedObjectCount);
-        object GenerateObject();
+        IEnumerable<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount);
+        ISearchable GenerateSearchable();
         #endregion
     }
 }

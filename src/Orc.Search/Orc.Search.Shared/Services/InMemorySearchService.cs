@@ -8,12 +8,13 @@
 namespace Orc.Search
 {
     using Lucene.Net.Store;
+using Orc.Metadata;
 
     public class InMemorySearchService : SearchServiceBase
     {
         #region Constructors
-        public InMemorySearchService(ISearchQueryService searchQueryService, ISearchableParser searchableParser, ISearchableAdapter searchableAdapter)
-            : base(searchQueryService, searchableParser, searchableAdapter)
+        public InMemorySearchService(ISearchQueryService searchQueryService)
+            : base(searchQueryService)
         {
         }
         #endregion

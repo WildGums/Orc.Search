@@ -49,6 +49,10 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\..\..\lib\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Orc.Metadata, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Orc.Metadata.1.0.0-unstable0009\lib\net40\Orc.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\..\..\lib\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>

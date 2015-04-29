@@ -12,8 +12,8 @@ namespace Orc.Search
     public interface ISearchQueryService
     {
         #region Methods
-        string GetSearchQuery(string filter, IEnumerable<SearchableMetadata> searchableMetadatas);
-        string GetSearchQuery(params SearchableMetadataValue[] searchableMetadataValues);
+        string GetSearchQuery(string filter, IEnumerable<ISearchableMetadata> searchableMetadatas);
+        string GetSearchQuery(params ISearchableMetadataValue[] searchableMetadataValues);
         #endregion
     }
 }

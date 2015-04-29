@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AttributeSearchableParser.cs" company="Wild Gums">
+// <copyright file="AttributeMetadataCollection.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,38 +7,38 @@
 
 namespace Orc.Search
 {
-    using System;
     using System.Collections.Generic;
-    using Catel;
     using Catel.Caching;
+    using Metadata;
+    using System;
+    using Catel;
     using Catel.Reflection;
 
-    public class AttributeSearchableParser : ISearchableParser
+    public class AttributeMetadataCollection : ReflectionMetadataCollection
     {
-        private readonly ICacheStorage<Type, List<SearchableMetadata>> _propertiesCache = new CacheStorage<Type, List<SearchableMetadata>>(); 
+        private static readonly ICacheStorage<Type, List<SearchableMetadata>> _propertiesCache = new CacheStorage<Type, List<SearchableMetadata>>();
 
-        public AttributeSearchableParser()
+        private readonly Type _targetType;
+
+        public AttributeMetadataCollection(Type targetType) 
+            : base(targetType)
         {
-            
+            _targetType = targetType;
         }
 
-        public virtual IEnumerable<SearchableMetadata> GetSearchableMetadata(object searchable)
+        public IEnumerable<SearchableMetadata> GetSearchableMetadata()
         {
-            Argument.IsNotNull(() => searchable);
-
-            var type = searchable.GetType();
-
-            return _propertiesCache.GetFromCacheOrFetch(type, () =>
+            return _propertiesCache.GetFromCacheOrFetch(_targetType, () =>
             {
                 var searchableProperties = new List<SearchableMetadata>();
 
-                var properties = type.GetPropertiesEx();
+                var properties = _targetType.GetPropertiesEx();
                 foreach (var property in properties)
                 {
                     var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof (SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
                     if (searchablePropertyAttribute != null)
                     {
-                        var searchableProperty = new SearchableMetadata(property.Name);
+                        var searchableProperty = new SearchableMetadata(property);
                         if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
                         {
                             searchableProperty.SearchName = searchablePropertyAttribute.SearchName;
@@ -51,6 +51,11 @@ namespace Orc.Search
 
                 return searchableProperties;
             });
+        }
+
+        public override IEnumerable<IMetadata> All
+        {
+            get { return GetSearchableMetadata(); }
         }
     }
 }

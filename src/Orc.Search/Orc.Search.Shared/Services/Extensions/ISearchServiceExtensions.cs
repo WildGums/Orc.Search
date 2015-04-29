@@ -12,12 +12,12 @@ namespace Orc.Search
 
     public static class ISearchServiceExtensions
     {
-        public static async Task AddObjectsAsync(this ISearchService searchService, IEnumerable<object> searchables)
+        public static async Task AddObjectsAsync(this ISearchService searchService, IEnumerable<ISearchable> searchables)
         {
             await Task.Factory.StartNew(() => searchService.AddObjects(searchables));
         }
 
-        public static async Task RemoveObjectsAsync(this ISearchService searchService, IEnumerable<object> searchables)
+        public static async Task RemoveObjectsAsync(this ISearchService searchService, IEnumerable<ISearchable> searchables)
         {
             await Task.Factory.StartNew(() => searchService.RemoveObjects(searchables));
         }

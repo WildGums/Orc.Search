@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchableAdapter.cs" company="Wild Gums">
+// <copyright file="ReflectionSearchable.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,13 +7,11 @@
 
 namespace Orc.Search
 {
-    using Catel.Reflection;
-
-    public class ReflectionSearchableAdapter : ISearchableAdapter
+    public class ReflectionSearchable : Searchable
     {
-        public virtual object GetValue(object searchable, SearchableMetadata searchableMetadata)
+        public ReflectionSearchable(object instance) 
+            : base(instance, new AttributeMetadataCollection(instance.GetType()))
         {
-            return PropertyHelper.GetPropertyValue(searchable, searchableMetadata.Name);
         }
     }
 }

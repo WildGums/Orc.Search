@@ -16,19 +16,19 @@ namespace Orc.Search.Example.Services
     {
         private readonly Random _random = new Random();
 
-        public IEnumerable<object> GenerateObjects(int objectCount = ExampleDefaults.GeneratedObjectCount)
+        public IEnumerable<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount)
         {
-            var objects = new List<object>();
+            var objects = new List<ISearchable>();
 
             for (var i = 0; i < objectCount; i++)
             {
-                objects.Add(GenerateObject());
+                objects.Add(GenerateSearchable());
             }
 
             return objects;
         }
 
-        public object GenerateObject()
+        public ISearchable GenerateSearchable()
         {
             var person = new Person();
 
@@ -36,7 +36,7 @@ namespace Orc.Search.Example.Services
             person.LastName = NameGenerator.GenerateLastName();
             person.Age = _random.Next(18, 65);
 
-            return person;
+            return new ReflectionSearchable(person);
         }
     }
 }
