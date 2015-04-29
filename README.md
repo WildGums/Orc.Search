@@ -28,21 +28,24 @@ Features
 Quick start
 ---------------
 
-- Create a POCO class to use in your search and decorate the properties with **SearchablePropertyAttribute**
+1. Create a POCO class to use in your search and decorate the properties with *SearchablePropertyAttribute*
  
-	public class Person
-	{
-		[SearchableProperty(SearchName = "firstname")]
-		public string FirstName { get; set; }
-		
-		[SearchableProperty(SearchName = "lastname")]
-		public string LastName { get; set; }
-		
-		public int Age { get; set; }
-	}
+		public class Person
+		{
+			[SearchableProperty(SearchName = "firstname")]
+			public string FirstName { get; set; }
+			
+			[SearchableProperty(SearchName = "lastname")]
+			public string LastName { get; set; }
+			
+			public int Age { get; set; }
+		}
 
 
-- Fill the **ISearchService** with the appropriate "Person" data using the **AddObjects()** method.
-- Use the **Search()** method for getting search results. Use the *string filter* as an argument.
+2. Fill the *ISearchService* with the appropriate "Person" data using the *AddObjects()* method. The objects must be wrapped inside an *ISearchable* implementation, for example the *ReflectionSearchable*:
+
+		searchService.AddObjects(persons.Select(x => new ReflectionSearchable(x));
+
+- Use the *Search()* method for getting search results. Use the *string filter* as an argument. Note that you will receive the *ISearchable* instances that have a hit. This means you can still retrieve the metadata after a search has been completed.
 
 In order to use the asynchronous version of search. Just use the Async suffix method names (i.e. SearchAsync(), AddObjectsAsync(), RemoveObjectsAsync())
