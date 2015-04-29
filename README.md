@@ -29,22 +29,20 @@ Quick start
 ---------------
 
 - Create a POCO class to use in your search and decorate the properties with **SearchablePropertyAttribute**
+ 
+	public class Person
+	{
+		[SearchableProperty(SearchName = "firstname")]
+		public string FirstName { get; set; }
+		
+		[SearchableProperty(SearchName = "lastname")]
+		public string LastName { get; set; }
+		
+		public int Age { get; set; }
+	}
 
-```C#
-public class Person
-{
-    	[SearchableProperty(SearchName = "firstname")]
-    	public string FirstName { get; set; }
-    
-    	[SearchableProperty(SearchName = "lastname")]
-    	public string LastName { get; set; }
-    
-    	public int Age { get; set; }
-}
-```
 
-- Fill the **ISearchService** with the appropirate "Person" data using the **AddObjects()** method.
+- Fill the **ISearchService** with the appropriate "Person" data using the **AddObjects()** method.
 - Use the **Search()** method for getting search results. Use the *string filter* as an argument.
 
-In order to use the asynchronous version of search. Just usethe Async suffix method names (i.e. SearchAsync(), AddObjectsAsync(), RemoveObjectsAsync())
-
+In order to use the asynchronous version of search. Just use the Async suffix method names (i.e. SearchAsync(), AddObjectsAsync(), RemoveObjectsAsync())
