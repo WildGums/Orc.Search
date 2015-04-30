@@ -9,16 +9,11 @@ namespace Orc.Search
 {
     using Metadata;
 
-    public class Searchable : ISearchable
+    public class Searchable : ObjectWithMetadata, ISearchable
     {
-        public Searchable(object instance, IMetadataCollection metadataCollection)
+        public Searchable(object instance, IMetadataCollection metadataCollection) 
+            : base(instance, metadataCollection)
         {
-            Instance = instance;
-            MetadataCollection = metadataCollection;
         }
-
-        public object Instance { get; private set; }
-
-        public IMetadataCollection MetadataCollection { get; private set; }
     }
 }

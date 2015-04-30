@@ -9,11 +9,7 @@ namespace Orc.Search
 {
     using Metadata;
 
-    public interface ISearchable
+    public interface ISearchable : IObjectWithMetadata
     {
-        #region Properties
-        object Instance { get; }
-        IMetadataCollection MetadataCollection { get; }
-        #endregion
     }
 }
