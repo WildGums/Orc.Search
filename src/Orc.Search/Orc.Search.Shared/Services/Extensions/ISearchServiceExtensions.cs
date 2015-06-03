@@ -9,22 +9,23 @@ namespace Orc.Search
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Catel.Threading;
 
     public static class ISearchServiceExtensions
     {
-        public static async Task AddObjectsAsync(this ISearchService searchService, IEnumerable<ISearchable> searchables)
+        public static Task AddObjectsAsync(this ISearchService searchService, IEnumerable<ISearchable> searchables)
         {
-            await Task.Factory.StartNew(() => searchService.AddObjects(searchables));
+            return TaskHelper.Run(() => searchService.AddObjects(searchables));
         }
 
-        public static async Task RemoveObjectsAsync(this ISearchService searchService, IEnumerable<ISearchable> searchables)
+        public static Task RemoveObjectsAsync(this ISearchService searchService, IEnumerable<ISearchable> searchables)
         {
-            await Task.Factory.StartNew(() => searchService.RemoveObjects(searchables));
+            return TaskHelper.Run(() => searchService.RemoveObjects(searchables));
         }
 
-        public static async Task<IEnumerable<ISearchable>> SearchAsync(this ISearchService searchService, string filter, int maxResults = SearchDefaults.DefaultResults)
+        public static Task<IEnumerable<ISearchable>> SearchAsync(this ISearchService searchService, string filter, int maxResults = SearchDefaults.DefaultResults)
         {
-            return await Task.Factory.StartNew(() => searchService.Search(filter, maxResults));
+            return TaskHelper.Run(() => searchService.Search(filter, maxResults));
         }
     }
 }

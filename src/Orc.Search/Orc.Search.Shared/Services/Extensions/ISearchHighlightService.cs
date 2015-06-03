@@ -10,21 +10,22 @@ namespace Orc.Search
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Threading;
 
     public static class ISearchHighlightServiceExtensions
     {
-        public static async Task ResetHighlightsAsync(this ISearchHighlightService searchHighlightService)
+        public static Task ResetHighlightsAsync(this ISearchHighlightService searchHighlightService)
         {
             Argument.IsNotNull(() => searchHighlightService);
 
-            await Task.Factory.StartNew(() => searchHighlightService.ResetHighlights());
+            return TaskHelper.Run(() => searchHighlightService.ResetHighlights());
         }
 
-        public static async Task HighlightSearchablesAsync(this ISearchHighlightService searchHighlightService, IEnumerable<object> searchables)
+        public static Task HighlightSearchablesAsync(this ISearchHighlightService searchHighlightService, IEnumerable<object> searchables)
         {
             Argument.IsNotNull(() => searchHighlightService);
 
-            await Task.Factory.StartNew(() => searchHighlightService.HighlightSearchables(searchables));
+            return TaskHelper.Run(() => searchHighlightService.HighlightSearchables(searchables));
         }
     }
 }

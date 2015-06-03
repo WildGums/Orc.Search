@@ -15,6 +15,7 @@ namespace Orc.Search
     using Catel.Logging;
     using Catel.Runtime.Serialization.Xml;
     using System.Threading.Tasks;
+    using Catel.Threading;
 
     public class SearchHistoryService : ISearchHistoryService
     {
@@ -68,7 +69,7 @@ namespace Orc.Search
 
         private async void OnSearchServiceSearched(object sender, SearchEventArgs e)
         {
-            await Task.Factory.StartNew(() => AddSearchFilterToHistory(e.Filter, e.Results));
+            await TaskHelper.Run(() => AddSearchFilterToHistory(e.Filter, e.Results));
         }
 
         private void AddSearchFilterToHistory(string filter, IEnumerable<object> results)
