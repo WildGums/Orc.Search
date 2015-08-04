@@ -14,7 +14,6 @@ namespace Orc.Search
     using Catel;
     using Catel.Logging;
     using Catel.Runtime.Serialization.Xml;
-    using System.Threading.Tasks;
     using Catel.Threading;
 
     public class SearchHistoryService : ISearchHistoryService

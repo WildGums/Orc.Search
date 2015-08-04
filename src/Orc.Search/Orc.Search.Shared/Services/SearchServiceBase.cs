@@ -18,7 +18,6 @@ namespace Orc.Search
     using Lucene.Net.QueryParsers;
     using Lucene.Net.Search;
     using Lucene.Net.Store;
-    using Orc.Metadata;
 
     public abstract class SearchServiceBase : ISearchService
     {

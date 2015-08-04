@@ -11,6 +11,7 @@ namespace Orc.Search
     using System.Collections.Generic;
     using Catel;
     using Catel.Logging;
+    using Catel.Threading;
 
     public class SearchHighlightService : ISearchHighlightService
     {
@@ -93,7 +94,7 @@ namespace Orc.Search
 
         private async void OnSearched(object sender, SearchEventArgs e)
         {
-            await this.HighlightSearchablesAsync(e.Results);
+            await TaskHelper.Run(() => HighlightSearchables(e.Results));
         }
         #endregion
     } 

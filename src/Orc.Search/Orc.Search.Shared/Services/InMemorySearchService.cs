@@ -8,7 +8,6 @@
 namespace Orc.Search
 {
     using Lucene.Net.Store;
-using Orc.Metadata;
 
     public class InMemorySearchService : SearchServiceBase
     {

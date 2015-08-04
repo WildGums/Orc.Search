@@ -14,6 +14,7 @@ namespace Orc.Search.Example.ViewModels
     using Catel;
     using Catel.Collections;
     using Catel.MVVM;
+    using Catel.Threading;
     using Services;
 
     public class MainViewModel : ViewModelBase
@@ -61,9 +62,9 @@ namespace Orc.Search.Example.ViewModels
         #endregion
 
         #region Methods
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            await base.Initialize();
+            await base.InitializeAsync();
 
             _searchService.Updating += OnSearchServiceUpdating;
             _searchService.Updated += OnSearchServiceUpdated;
@@ -73,16 +74,16 @@ namespace Orc.Search.Example.ViewModels
 
             using (AllObjects.SuspendChangeNotifications())
             {
-                var generatedSearchables = await _dataGenerationService.GenerateSearchablesAsync();
+                var generatedSearchables = (await TaskHelper.Run(() => _dataGenerationService.GenerateSearchables())).ToList();
 
                 AllObjects.ReplaceRange(generatedSearchables.Select(x => x.Instance));
                 AllObjectCount = AllObjects.Count;
 
-                await _searchService.AddObjectsAsync(generatedSearchables);
+                await TaskHelper.Run(() => _searchService.AddObjects(generatedSearchables));
             }
         }
 
-        protected override async Task Close()
+        protected override async Task CloseAsync()
         {
             _searchService.Updating -= OnSearchServiceUpdating;
             _searchService.Updated -= OnSearchServiceUpdated;
@@ -90,7 +91,7 @@ namespace Orc.Search.Example.ViewModels
             _searchService.Searching -= OnSearchServiceSearching;
             _searchService.Searched -= OnSearchServiceSearched;
 
-            await base.Close();
+            await base.CloseAsync();
         }
 
         private void OnSearchServiceUpdating(object sender, EventArgs e)
@@ -117,10 +118,12 @@ namespace Orc.Search.Example.ViewModels
             _searchStopwatch.Stop();
             LastSearchDuration = _searchStopwatch.Elapsed;
 
-            using (FilteredObjects.SuspendChangeNotifications())
+            var filteredObjects = FilteredObjects;
+
+            using (filteredObjects.SuspendChangeNotifications())
             {
-                FilteredObjects.ReplaceRange(e.Results.Select(x => x.Instance));
-                FilteredObjectCount = FilteredObjects.Count;
+                filteredObjects.ReplaceRange(e.Results.Select(x => x.Instance));
+                FilteredObjectCount = filteredObjects.Count;
             }
 
             IsSearching = false;

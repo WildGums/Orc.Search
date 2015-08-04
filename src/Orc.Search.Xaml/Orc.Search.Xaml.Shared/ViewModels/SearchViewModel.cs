@@ -8,9 +8,6 @@
 namespace Orc.Search
 {
     using System;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Threading;
     using Catel;
@@ -72,26 +69,26 @@ namespace Orc.Search
         #endregion
 
         #region Methods
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            await base.Initialize();
+            await base.InitializeAsync();
 
             _dispatcherTimer.Tick += OnDispatcherTimerTick;
         }
 
-        protected override async Task Close()
+        protected override async Task CloseAsync()
         {
             _dispatcherTimer.Stop();
             _dispatcherTimer.Tick -= OnDispatcherTimerTick;
 
-            await base.Close();
+            await base.CloseAsync();
         }
 
         private async void OnDispatcherTimerTick(object sender, EventArgs e)
         {
             _dispatcherTimer.Stop();
 
-            await Search();
+            await SearchAsync();
         }
 
         private void OnFilterChanged()
@@ -110,9 +107,9 @@ namespace Orc.Search
             }
         }
 
-        private async Task Search()
+        private async Task SearchAsync()
         {
-            await _searchService.SearchAsync(Filter);
+            await Task.Factory.StartNew(() => _searchService.Search(Filter));
         }
         #endregion
     }
