@@ -94,7 +94,7 @@ namespace Orc.Search
 
         private async void OnSearched(object sender, SearchEventArgs e)
         {
-            await TaskHelper.Run(() => HighlightSearchables(e.Results));
+            await TaskHelper.Run(() => HighlightSearchables(e.Results), true);
         }
         #endregion
     } 

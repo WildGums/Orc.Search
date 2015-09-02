@@ -68,7 +68,7 @@ namespace Orc.Search
 
         private async void OnSearchServiceSearched(object sender, SearchEventArgs e)
         {
-            await TaskHelper.Run(() => AddSearchFilterToHistory(e.Filter, e.Results));
+            await TaskHelper.Run(() => AddSearchFilterToHistory(e.Filter, e.Results), true);
         }
 
         private void AddSearchFilterToHistory(string filter, IEnumerable<object> results)

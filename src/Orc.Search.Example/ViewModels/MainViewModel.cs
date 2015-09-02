@@ -74,12 +74,12 @@ namespace Orc.Search.Example.ViewModels
 
             using (AllObjects.SuspendChangeNotifications())
             {
-                var generatedSearchables = (await TaskHelper.Run(() => _dataGenerationService.GenerateSearchables())).ToList();
+                var generatedSearchables = (await TaskHelper.Run(() => _dataGenerationService.GenerateSearchables(), true)).ToList();
 
                 AllObjects.ReplaceRange(generatedSearchables.Select(x => x.Instance));
                 AllObjectCount = AllObjects.Count;
 
-                await TaskHelper.Run(() => _searchService.AddObjects(generatedSearchables));
+                await TaskHelper.Run(() => _searchService.AddObjects(generatedSearchables), true);
             }
         }
 
