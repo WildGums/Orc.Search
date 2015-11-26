@@ -1,5 +1,6 @@
 ﻿using Catel.IoC;
 using Catel.Services;
+using Catel.Services.Models;
 using Orc.Search;
 
 /// <summary>
@@ -12,5 +13,9 @@ public static class ModuleInitializer
     /// </summary>
     public static void Initialize()
     {
+        var serviceLocator = ServiceLocator.Default;
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.Search.Xaml", "Orc.Search.Properties", "Resources"));
     }
 }
