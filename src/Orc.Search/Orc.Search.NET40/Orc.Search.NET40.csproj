@@ -71,7 +71,7 @@
     </Reference>
     <Reference Include="Orc.Metadata, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Orc.Metadata.1.1.0-unstable0003\lib\net40\Orc.Metadata.dll</HintPath>
+      <HintPath>..\..\..\lib\Orc.Metadata.1.1.0\lib\net40\Orc.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
