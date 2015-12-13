@@ -1,4 +1,6 @@
 ﻿using Catel.IoC;
+using Catel.Services;
+using Catel.Services.Models;
 using Orc.Metadata;
 using Orc.Search;
 
@@ -19,5 +21,8 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ISearchHighlightService, SearchHighlightService>();
         serviceLocator.RegisterType<ISearchNavigationService, DummySearchNavigationService>();
         serviceLocator.RegisterType<ISearchQueryService, SearchQueryService>();
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.Search", "Orc.Search.Properties", "Resources"));
     }
 }
