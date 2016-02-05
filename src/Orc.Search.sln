@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.NET40", "Orc.Search\Orc.Search.NET40\Orc.Search.NET40.csproj", "{589A582A-9995-4293-B5DF-5B95F10CB1FB}"
 EndProject
@@ -12,11 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F6EAB599-0
 		nuget.config = nuget.config
 		Orc.Search.sln.DotSettings = Orc.Search.sln.DotSettings
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{7112AD6A-3AF8-4F3C-B31E-3AA3CC29763F}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\repositories.config = ..\lib\repositories.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Tests.NET40", "Orc.Search.Tests\Orc.Search.Tests.NET40\Orc.Search.Tests.NET40.csproj", "{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}"
