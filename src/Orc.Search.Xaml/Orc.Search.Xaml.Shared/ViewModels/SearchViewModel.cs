@@ -60,7 +60,7 @@ namespace Orc.Search
 
         private void OnBuildFilterExecute()
         {
-            var vm = _viewModelFactory.CreateViewModel<SearchFilterBuilderViewModel>(null);
+            var vm = _viewModelFactory.CreateViewModel<SearchFilterBuilderViewModel>(null, null);
             if (_uiVisualizerService.ShowDialog(vm) ?? false)
             {
                 Filter = vm.Filter;
