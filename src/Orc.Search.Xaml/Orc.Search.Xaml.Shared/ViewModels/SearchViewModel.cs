@@ -8,6 +8,7 @@
 namespace Orc.Search
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Threading;
     using Catel;
@@ -103,7 +104,7 @@ namespace Orc.Search
 
             using (FilterHistory.SuspendChangeNotifications())
             {
-                FilterHistory.ReplaceRange(_searchHistoryService.GetLastSearchQueries(filter));
+                ((ICollection<string>)FilterHistory).ReplaceRange(_searchHistoryService.GetLastSearchQueries(filter));
             }
         }
 

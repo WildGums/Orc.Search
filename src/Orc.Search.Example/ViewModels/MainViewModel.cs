@@ -8,6 +8,7 @@
 namespace Orc.Search.Example.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
@@ -76,7 +77,7 @@ namespace Orc.Search.Example.ViewModels
             {
                 var generatedSearchables = (await TaskHelper.Run(() => _dataGenerationService.GenerateSearchables(), true)).ToList();
 
-                AllObjects.ReplaceRange(generatedSearchables.Select(x => x.Instance));
+                ((ICollection<object>)AllObjects).ReplaceRange(generatedSearchables.Select(x => x.Instance));
                 AllObjectCount = AllObjects.Count;
 
                 await TaskHelper.Run(() => _searchService.AddObjects(generatedSearchables), true);
@@ -122,7 +123,7 @@ namespace Orc.Search.Example.ViewModels
 
             using (filteredObjects.SuspendChangeNotifications())
             {
-                filteredObjects.ReplaceRange(e.Results.Select(x => x.Instance));
+                ((ICollection<object>)filteredObjects).ReplaceRange(e.Results.Select(x => x.Instance));
                 FilteredObjectCount = filteredObjects.Count;
             }
 
