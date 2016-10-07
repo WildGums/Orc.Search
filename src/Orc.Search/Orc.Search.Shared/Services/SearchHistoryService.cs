@@ -128,7 +128,7 @@ namespace Orc.Search
 
                     using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
                     {
-                        _xmlSerializer.Deserialize(_searchHistory, fileStream);
+                        _xmlSerializer.Deserialize(_searchHistory, fileStream, null);
                     }
 
                     Log.Debug("Loaded search history");
@@ -150,7 +150,7 @@ namespace Orc.Search
 
                     using (var fileStream = new FileStream(_fileName, FileMode.Create))
                     {
-                        _xmlSerializer.Serialize(_searchHistory, fileStream);
+                        _xmlSerializer.Serialize(_searchHistory, fileStream, null);
                     }
 
                     Log.Debug("Saved search history");
