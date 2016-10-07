@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchViewModel.cs" company="Wild Gums">
-//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// <copyright file="SearchViewModel.cs" company="WildGums">
+//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,6 +8,7 @@
 namespace Orc.Search
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Threading;
     using Catel;
@@ -60,7 +61,7 @@ namespace Orc.Search
 
         private void OnBuildFilterExecute()
         {
-            var vm = _viewModelFactory.CreateViewModel<SearchFilterBuilderViewModel>(null);
+            var vm = _viewModelFactory.CreateViewModel<SearchFilterBuilderViewModel>(null, null);
             if (_uiVisualizerService.ShowDialog(vm) ?? false)
             {
                 Filter = vm.Filter;
@@ -103,7 +104,7 @@ namespace Orc.Search
 
             using (FilterHistory.SuspendChangeNotifications())
             {
-                FilterHistory.ReplaceRange(_searchHistoryService.GetLastSearchQueries(filter));
+                ((ICollection<string>)FilterHistory).ReplaceRange(_searchHistoryService.GetLastSearchQueries(filter));
             }
         }
 
