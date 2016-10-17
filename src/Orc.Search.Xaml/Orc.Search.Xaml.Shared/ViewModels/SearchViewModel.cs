@@ -85,11 +85,13 @@ namespace Orc.Search
             await base.CloseAsync();
         }
 
-        private async void OnDispatcherTimerTick(object sender, EventArgs e)
+        private void OnDispatcherTimerTick(object sender, EventArgs e)
         {
             _dispatcherTimer.Stop();
 
-            await SearchAsync();
+#pragma warning disable 4014
+            SearchAsync();
+#pragma warning restore 4014
         }
 
         private void OnFilterChanged()
@@ -108,9 +110,9 @@ namespace Orc.Search
             }
         }
 
-        private async Task SearchAsync()
+        private Task SearchAsync()
         {
-            await Task.Factory.StartNew(() => _searchService.Search(Filter));
+            return Task.Factory.StartNew(() => _searchService.Search(Filter));
         }
         #endregion
     }

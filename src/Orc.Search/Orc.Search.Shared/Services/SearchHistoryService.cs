@@ -66,9 +66,11 @@ namespace Orc.Search
             return elements;
         }
 
-        private async void OnSearchServiceSearched(object sender, SearchEventArgs e)
+        private void OnSearchServiceSearched(object sender, SearchEventArgs e)
         {
-            await TaskHelper.Run(() => AddSearchFilterToHistory(e.Filter, e.Results), true);
+#pragma warning disable 4014
+            TaskHelper.Run(() => AddSearchFilterToHistory(e.Filter, e.Results), true);
+#pragma warning restore 4014
         }
 
         private void AddSearchFilterToHistory(string filter, IEnumerable<object> results)
