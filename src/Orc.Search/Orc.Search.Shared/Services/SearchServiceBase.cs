@@ -137,27 +137,33 @@ namespace Orc.Search
             Initialize();
 
             throw new NotImplementedException("Not yet implemented");
+        }
 
-            //lock (_lockObject)
-            //{
-            //    Updating.SafeInvoke(this);
+        public void ClearAllObjects()
+        {
+            Initialize();
 
-            //    using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
-            //    {
-            //        using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
-            //        {
-            //            foreach (var searchable in searchables)
-            //            {
-            //                //writer.DeleteDocuments();
-            //            }
+            lock (_lockObject)
+            {
+                Updating.SafeInvoke(this);
 
-            //            writer.Optimize();
-            //            writer.Commit();
-            //        }
-            //    }
+                using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
+                {
+                    using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+                    {
+                        _indexedObjects.Clear();
+                        _searchableMetadata.Clear();
 
-            //    Updated.SafeInvoke(this);
-            //}
+                        writer.DeleteAll();
+
+
+                        writer.Optimize();
+                        writer.Commit();
+                    }
+                }
+
+                Updated.SafeInvoke(this);
+            }
         }
 
         public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
