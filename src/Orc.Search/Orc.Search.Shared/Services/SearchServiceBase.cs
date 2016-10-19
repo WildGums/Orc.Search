@@ -86,10 +86,10 @@ namespace Orc.Search
         {
             Initialize();
 
+            Updating.SafeInvoke(this);
+
             lock (_lockObject)
             {
-                Updating.SafeInvoke(this);
-
                 using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                 {
                     using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
@@ -127,9 +127,9 @@ namespace Orc.Search
                         writer.Commit();
                     }
                 }
-
-                Updated.SafeInvoke(this);
             }
+
+            Updated.SafeInvoke(this);
         }
 
         public virtual void RemoveObjects(IEnumerable<ISearchable> searchables)
@@ -143,10 +143,10 @@ namespace Orc.Search
         {
             Initialize();
 
+            Updating.SafeInvoke(this);
+
             lock (_lockObject)
             {
-                Updating.SafeInvoke(this);
-
                 using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                 {
                     using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
@@ -160,9 +160,9 @@ namespace Orc.Search
                         writer.Commit();
                     }
                 }
-
-                Updated.SafeInvoke(this);
             }
+
+            Updated.SafeInvoke(this);
         }
 
         public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
