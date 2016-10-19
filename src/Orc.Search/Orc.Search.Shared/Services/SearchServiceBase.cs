@@ -156,7 +156,6 @@ namespace Orc.Search
 
                         writer.DeleteAll();
 
-
                         writer.Optimize();
                         writer.Commit();
                     }
