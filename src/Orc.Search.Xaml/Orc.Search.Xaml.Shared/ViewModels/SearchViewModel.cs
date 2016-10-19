@@ -53,6 +53,8 @@ namespace Orc.Search
         #region Properties
         public string Filter { get; set; }
 
+        public int MaxResultsCount { get; set; }
+
         public FastObservableCollection<string> FilterHistory { get; private set; }
         #endregion
 
@@ -65,6 +67,7 @@ namespace Orc.Search
             if (_uiVisualizerService.ShowDialog(vm) ?? false)
             {
                 Filter = vm.Filter;
+                MaxResultsCount = vm.MaxResultsCount;
             }
         }
         #endregion
@@ -110,7 +113,7 @@ namespace Orc.Search
 
         private async Task SearchAsync()
         {
-            await Task.Factory.StartNew(() => _searchService.Search(Filter));
+            await Task.Factory.StartNew(() => _searchService.Search(Filter, MaxResultsCount));
         }
         #endregion
     }

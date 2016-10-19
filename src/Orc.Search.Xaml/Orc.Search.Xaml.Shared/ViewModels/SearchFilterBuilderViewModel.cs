@@ -19,6 +19,7 @@ namespace Orc.Search
 
         #region Properties
         public string Filter { get; set; }
+        public int MaxResultsCount { get; set; }
         #endregion
 
         #region Methods

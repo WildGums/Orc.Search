@@ -8,6 +8,7 @@
     <catel:StackGrid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -19,7 +20,11 @@
         </Grid.ColumnDefinitions>
 
         <Label Content="Filter: " />
-        <search:SearchView Filter="{Binding Filter}" />
+        <search:SearchView Filter="{Binding Filter}"
+                           MaxResultsCount="{Binding MaxResultsCount, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Label Content="Maximum result count: " />
+        <TextBox Text="{Binding MaxResultsCount}"/>
 
         <GroupBox Grid.ColumnSpan="2" Header="Source objects">
             <catel:StackGrid>

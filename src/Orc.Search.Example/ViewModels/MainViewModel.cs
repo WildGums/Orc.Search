@@ -45,6 +45,8 @@ namespace Orc.Search.Example.ViewModels
             get { return "Orc.Search example"; }
         }
 
+        public int MaxResultsCount { get; set; } = 51;
+
         public int IndexedObjectCount { get; private set; }
 
         public bool IsUpdatingSearch { get; private set; }
