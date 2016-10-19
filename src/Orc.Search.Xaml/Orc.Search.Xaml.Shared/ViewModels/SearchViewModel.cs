@@ -67,7 +67,6 @@ namespace Orc.Search
             if (_uiVisualizerService.ShowDialog(vm) ?? false)
             {
                 Filter = vm.Filter;
-                MaxResultsCount = vm.MaxResultsCount;
             }
         }
         #endregion
