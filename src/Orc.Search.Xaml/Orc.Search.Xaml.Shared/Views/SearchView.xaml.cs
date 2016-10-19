@@ -7,6 +7,7 @@
 
 namespace Orc.Search
 {
+    using System.Data;
     using System.Windows;
     using Catel.MVVM.Views;
 
@@ -39,7 +40,7 @@ namespace Orc.Search
         public static readonly DependencyProperty FilterProperty = DependencyProperty.Register("Filter", typeof(string), 
             typeof(SearchView), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        [ViewToViewModel]
+        [ViewToViewModel(MappingType=ViewToViewModelMappingType.ViewToViewModel)]
         public int MaxResultsCount
         {
             get { return (int)GetValue(MaxResultsCountProperty); }
@@ -47,7 +48,7 @@ namespace Orc.Search
         }
 
         public static readonly DependencyProperty MaxResultsCountProperty = DependencyProperty.Register("MaxResultsCount", typeof(int),
-            typeof(SearchView), new FrameworkPropertyMetadata(SearchDefaults.DefaultResults, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            typeof(SearchView), new FrameworkPropertyMetadata(SearchDefaults.DefaultResults));
         #endregion
     }
 }

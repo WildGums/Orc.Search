@@ -53,7 +53,7 @@ namespace Orc.Search
         #region Properties
         public string Filter { get; set; }
 
-        public int MaxResultsCount { get; set; } = SearchDefaults.DefaultResults;
+        public int MaxResultsCount { get; set; }
 
         public FastObservableCollection<string> FilterHistory { get; private set; }
         #endregion
