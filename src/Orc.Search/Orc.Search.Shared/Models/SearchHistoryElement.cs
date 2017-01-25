@@ -11,15 +11,10 @@ namespace Orc.Search
 
     public class SearchHistoryElement : ModelBase
     {
-        private string _filterLowerCase;
-
         #region Properties
         public string Filter { get; set; }
 
-        public string FilterLowerCase
-        {
-            get { return _filterLowerCase; }
-        }
+        public string FilterLowerCase { get; private set; }
 
         public bool EverFoundResults { get; set; }
         public int Count { get; set; }
@@ -30,11 +25,11 @@ namespace Orc.Search
 
             if (string.IsNullOrWhiteSpace(filter))
             {
-                _filterLowerCase = filter;
+                FilterLowerCase = filter;
             }
             else
             {
-                _filterLowerCase = filter.ToLower();
+                FilterLowerCase = filter.ToLower();
             }
         }
 
