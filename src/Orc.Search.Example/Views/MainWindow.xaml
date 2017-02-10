@@ -38,6 +38,7 @@
                 <Label Content="{Binding AllObjects.Count}" />
 
                 <DataGrid Grid.ColumnSpan="2" 
+                          SelectedValue="{Binding SelectedObject}"
                           ItemsSource="{Binding AllObjects}" 
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
@@ -50,7 +51,12 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <Button Content="Add person" Command="{Binding AddPersion}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Content="Add person" Command="{Binding AddPerson}"/>
+                    <Button Content="Remove person" Command="{Binding RemovePerson}"/>
+                </StackPanel>
+
+                
             </catel:StackGrid>
         </GroupBox>
 
