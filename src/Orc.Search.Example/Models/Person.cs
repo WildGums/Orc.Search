@@ -7,6 +7,8 @@
 
 namespace Orc.Search.Example.Models
 {
+    using System;
+
     public class Person
     {
         [SearchableProperty(SearchName = "firstname")]

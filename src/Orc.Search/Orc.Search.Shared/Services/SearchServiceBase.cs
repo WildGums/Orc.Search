@@ -33,6 +33,7 @@ namespace Orc.Search
         private readonly ISearchQueryService _searchQueryService;
 
         private readonly Dictionary<int, ISearchable> _indexedObjects = new Dictionary<int, ISearchable>();
+        private readonly Dictionary<ISearchable, int> _searchableIndexes = new Dictionary<ISearchable, int>(); 
         private readonly Dictionary<string, ISearchableMetadata> _searchableMetadata = new Dictionary<string, ISearchableMetadata>();
 
         private bool _initialized;
@@ -98,9 +99,10 @@ namespace Orc.Search
                         {
                             var index = _indexedObjects.Count;
                             _indexedObjects.Add(index, searchable);
+                            _searchableIndexes.Add(searchable, index);
 
                             var document = new Document();
-                            document.Add(new Field(IndexId, index.ToString(), Field.Store.YES, Field.Index.NO));
+                            document.Add(new Field(IndexId, index.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
                             var metadata = searchable.MetadataCollection;
                             var searchableMetadatas = metadata.All.OfType<ISearchableMetadata>();
@@ -136,28 +138,39 @@ namespace Orc.Search
         {
             Initialize();
 
-            throw new NotImplementedException("Not yet implemented");
+            lock (_lockObject)
+            {
+                Updating.SafeInvoke(this);
 
-            //lock (_lockObject)
-            //{
-            //    Updating.SafeInvoke(this);
+                using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
+                {
+                    using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+                    {
+                        foreach (var searchable in searchables)
+                        {
+                            int index;
+                            if (!_searchableIndexes.TryGetValue(searchable, out index))
+                            {
+                                continue;
+                            }
 
-            //    using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
-            //    {
-            //        using (var writer = new IndexWriter(_indexDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
-            //        {
-            //            foreach (var searchable in searchables)
-            //            {
-            //                //writer.DeleteDocuments();
-            //            }
+                            var queryAsText = $"{IndexId}:{index}";
+                            var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
+                            var query = parser.Parse(queryAsText);
 
-            //            writer.Optimize();
-            //            writer.Commit();
-            //        }
-            //    }
+                            writer.DeleteDocuments(query);
 
-            //    Updated.SafeInvoke(this);
-            //}
+                            _searchableIndexes.Remove(searchable);
+                            _indexedObjects.Remove(index);
+                        }
+                        
+                        writer.Optimize();
+                        writer.Commit();
+                    }
+                }
+
+                Updated.SafeInvoke(this);
+            }
         }
 
         public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)

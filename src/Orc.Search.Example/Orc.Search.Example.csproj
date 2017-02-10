@@ -103,6 +103,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\AddPersonWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,7 +127,11 @@
     <Compile Include="Services\DataGenerationService.cs" />
     <Compile Include="Services\Extensions\IDataGenerationServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\IDataGenerationService.cs" />
+    <Compile Include="ViewModels\AddPersonViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\AddPersonWindow.xaml.cs">
+      <DependentUpon>AddPersonWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

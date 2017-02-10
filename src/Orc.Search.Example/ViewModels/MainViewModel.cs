@@ -9,12 +9,14 @@ namespace Orc.Search.Example.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
     using Catel.MVVM;
+    using Catel.Services;
     using Catel.Threading;
     using Services;
 
@@ -22,22 +24,42 @@ namespace Orc.Search.Example.ViewModels
     {
         private readonly IDataGenerationService _dataGenerationService;
         private readonly ISearchService _searchService;
+        private readonly IUIVisualizerService _uiVisualizerService;
 
         private readonly Stopwatch _searchStopwatch = new Stopwatch();
 
         #region Constructors
-        public MainViewModel(IDataGenerationService dataGenerationService, ISearchService searchService)
+        public MainViewModel(IDataGenerationService dataGenerationService, ISearchService searchService, IUIVisualizerService uiVisualizerService)
         {
             Argument.IsNotNull(() => dataGenerationService);
             Argument.IsNotNull(() => searchService);
+            Argument.IsNotNull(() => uiVisualizerService);
 
             _dataGenerationService = dataGenerationService;
             _searchService = searchService;
+            _uiVisualizerService = uiVisualizerService;
 
             AllObjects = new FastObservableCollection<object>();
             FilteredObjects = new FastObservableCollection<object>();
+
+            AddPersion = new Command(OnAddPerson);
+        }
+
+        private void OnAddPerson()
+        {
+            var addPersonViewModel = new AddPersonViewModel();
+            if (_uiVisualizerService.ShowDialog(addPersonViewModel) ?? false)
+            {
+                var person = addPersonViewModel.Person;
+                var searchable = _dataGenerationService.GenerateSearchable(person);
+
+                _searchService.AddObjects(new[] { searchable });
+                AllObjects.Add(searchable);
+            }  
         }
         #endregion
+
+        public Command AddPersion { get; private set; }
 
         #region Properties
         public override string Title
@@ -52,8 +74,6 @@ namespace Orc.Search.Example.ViewModels
         public bool IsSearching { get; private set; }
 
         public FastObservableCollection<object> AllObjects { get; private set; }
-
-        public int AllObjectCount { get; private set; }
 
         public FastObservableCollection<object> FilteredObjects { get; private set; }
 
@@ -77,10 +97,19 @@ namespace Orc.Search.Example.ViewModels
             {
                 var generatedSearchables = (await TaskHelper.Run(() => _dataGenerationService.GenerateSearchables(), true)).ToList();
 
-                ((ICollection<object>)AllObjects).ReplaceRange(generatedSearchables.Select(x => x.Instance));
-                AllObjectCount = AllObjects.Count;
+                ((ICollection<object>)AllObjects).ReplaceRange(generatedSearchables);
+                AllObjects.CollectionChanged += AllObjectsOnCollectionChanged;
 
                 await TaskHelper.Run(() => _searchService.AddObjects(generatedSearchables), true);
+            }
+        }
+
+        private void AllObjectsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (args.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var oldItems = args.OldItems;
+                _searchService.RemoveObjects(oldItems.OfType<ISearchable>());
             }
         }
 
@@ -123,7 +152,7 @@ namespace Orc.Search.Example.ViewModels
 
             using (filteredObjects.SuspendChangeNotifications())
             {
-                ((ICollection<object>)filteredObjects).ReplaceRange(e.Results.Select(x => x.Instance));
+                ((ICollection<object>)filteredObjects).ReplaceRange(e.Results);
                 FilteredObjectCount = filteredObjects.Count;
             }
 

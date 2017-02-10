@@ -26,6 +26,7 @@
                 <catel:StackGrid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </catel:StackGrid.RowDefinitions>
 
                 <catel:StackGrid.ColumnDefinitions>
@@ -34,71 +35,22 @@
                 </catel:StackGrid.ColumnDefinitions>
 
                 <Label Content="No. of objects:" />
-                <Label Content="{Binding AllObjectCount}" />
+                <Label Content="{Binding AllObjects.Count}" />
 
-                <ListView Grid.ColumnSpan="2" ItemsSource="{Binding AllObjects}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                            <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
-                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}" />
+                <DataGrid Grid.ColumnSpan="2" 
+                          ItemsSource="{Binding AllObjects}" 
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="True"
+                          EnableRowVirtualization="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="First Name" Binding="{Binding Instance.FirstName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Last Name" Binding="{Binding Instance.LastName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Age" Binding="{Binding Instance.Age}" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-                            <!--<GridViewColumn Header="First Name">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FirstName}">
-                                            <i:Interaction.Behaviors>
-                                                <search:SearchHighlight Searchable="{Binding }">
-                                                    <search:SearchHighlight.HighlightStyle>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Setter Property="Background" Value="Red" />
-                                                        </Style>
-                                                    </search:SearchHighlight.HighlightStyle>
-                                                </search:SearchHighlight>
-                                            </i:Interaction.Behaviors>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            
-                            <GridViewColumn Header="Last Name">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding LastName}">
-                                            <i:Interaction.Behaviors>
-                                                <search:SearchHighlight Searchable="{Binding }">
-                                                    <search:SearchHighlight.HighlightStyle>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Setter Property="Background" Value="Red" />
-                                                        </Style>
-                                                    </search:SearchHighlight.HighlightStyle>
-                                                </search:SearchHighlight>
-                                            </i:Interaction.Behaviors>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>                                
-                            
-                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Age}">
-                                            <i:Interaction.Behaviors>
-                                                <search:SearchHighlight Searchable="{Binding }">
-                                                    <search:SearchHighlight.HighlightStyle>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Setter Property="Background" Value="Red" />
-                                                        </Style>
-                                                    </search:SearchHighlight.HighlightStyle>
-                                                </search:SearchHighlight>
-                                            </i:Interaction.Behaviors>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>                                
-                            </GridViewColumn>-->
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <Button Content="Add person" Command="{Binding AddPersion}"/>
             </catel:StackGrid>
         </GroupBox>
 
@@ -120,9 +72,9 @@
                 <ListView Grid.ColumnSpan="2" ItemsSource="{Binding FilteredObjects}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                            <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding LastName}" />
-                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding Instance.FirstName}" />
+                            <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding Instance.LastName}" />
+                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Instance.Age}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
