@@ -23,6 +23,7 @@ namespace Orc.Search
     {
         #region Constants
         private const string IndexId = "__index_id";
+        private static int _currentIndex = 0;
         #endregion
 
         #region Fields
@@ -97,7 +98,7 @@ namespace Orc.Search
                     {
                         foreach (var searchable in searchables)
                         {
-                            var index = _indexedObjects.Count;
+                            var index = _currentIndex++;
                             _indexedObjects.Add(index, searchable);
                             _searchableIndexes.Add(searchable, index);
 
