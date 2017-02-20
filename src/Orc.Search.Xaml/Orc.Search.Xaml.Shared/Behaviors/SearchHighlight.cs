@@ -77,7 +77,7 @@ namespace Orc.Search
             {
                 _isHighlighted = false;
 
-                AssociatedObject.SetValue(_styleDependencyProperty, _defaultStyle);
+                AssociatedObject.SetCurrentValue(_styleDependencyProperty, _defaultStyle);
                 _defaultStyle = null;
             });
         }
@@ -100,7 +100,7 @@ namespace Orc.Search
 
                 _isHighlighted = true;
 
-                AssociatedObject.SetValue(_styleDependencyProperty, HighlightStyle);
+                AssociatedObject.SetCurrentValue(_styleDependencyProperty, HighlightStyle);
             });
         }
 

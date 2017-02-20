@@ -8,12 +8,14 @@
 namespace Orc.Search.Example.Services
 {
     using System.Collections.Generic;
+    using Models;
 
     public interface IDataGenerationService
     {
         #region Methods
         IEnumerable<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount);
         ISearchable GenerateSearchable();
+        ISearchable GenerateSearchable(Person person);
         #endregion
     }
 }

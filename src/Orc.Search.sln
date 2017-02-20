@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.NET40", "Orc.Search\Orc.Search.NET40\Orc.Search.NET40.csproj", "{589A582A-9995-4293-B5DF-5B95F10CB1FB}"
 EndProject
@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A335AA39-10A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F6EAB599-01E6-45F4-96AC-717DF1E5D1BF}"
 	ProjectSection(SolutionItems) = preProject
+		GlobalSuppressions.cs = GlobalSuppressions.cs
 		nuget.config = nuget.config
 		Orc.Search.sln.DotSettings = Orc.Search.sln.DotSettings
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
@@ -48,18 +49,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Tests.NET46", "O
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Orc.Search\Orc.Search.Shared\Orc.Search.Shared.projitems*{589a582a-9995-4293-b5df-5b95f10cb1fb}*SharedItemsImports = 4
 		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{1c7e13a8-e796-45c4-9b1f-5f7b3658f4d2}*SharedItemsImports = 4
-		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{ef6e078f-656b-429a-9547-2cd805b007a3}*SharedItemsImports = 4
 		Orc.Search\Orc.Search.Shared\Orc.Search.Shared.projitems*{20f3deda-9d46-4f7c-b6f4-4d97e2ac8d06}*SharedItemsImports = 4
-		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{9cfbe291-fc55-4391-bf4b-4b312ad48810}*SharedItemsImports = 13
-		Orc.Search\Orc.Search.Shared\Orc.Search.Shared.projitems*{63216fbd-3bcf-49f5-b38d-1198bf0b0710}*SharedItemsImports = 13
-		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{fdcf476f-5992-44f4-aee8-f0ce204ddf7d}*SharedItemsImports = 4
-		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{64ae2b5e-3ea3-4d33-9cf0-3a7d9e298adc}*SharedItemsImports = 4
-		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{c69ed18e-7c3b-404e-895b-db65f2016e59}*SharedItemsImports = 13
-		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{f73577f6-2d73-41df-b177-b950974bd386}*SharedItemsImports = 4
-		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{e7d4c787-4fa3-4470-9485-c746751e12fd}*SharedItemsImports = 4
 		Orc.Search\Orc.Search.Shared\Orc.Search.Shared.projitems*{3607713a-8587-4e95-8c91-c10adb6e20f4}*SharedItemsImports = 4
+		Orc.Search\Orc.Search.Shared\Orc.Search.Shared.projitems*{589a582a-9995-4293-b5df-5b95f10cb1fb}*SharedItemsImports = 4
+		Orc.Search\Orc.Search.Shared\Orc.Search.Shared.projitems*{63216fbd-3bcf-49f5-b38d-1198bf0b0710}*SharedItemsImports = 13
+		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{64ae2b5e-3ea3-4d33-9cf0-3a7d9e298adc}*SharedItemsImports = 4
+		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{9cfbe291-fc55-4391-bf4b-4b312ad48810}*SharedItemsImports = 13
+		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{c69ed18e-7c3b-404e-895b-db65f2016e59}*SharedItemsImports = 13
+		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{e7d4c787-4fa3-4470-9485-c746751e12fd}*SharedItemsImports = 4
+		Orc.Search.Xaml\Orc.Search.Xaml.Shared\Orc.Search.Xaml.Shared.projitems*{ef6e078f-656b-429a-9547-2cd805b007a3}*SharedItemsImports = 4
+		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{f73577f6-2d73-41df-b177-b950974bd386}*SharedItemsImports = 4
+		Orc.Search.Tests\Orc.Search.Tests.Shared\Orc.Search.Tests.Shared.projitems*{fdcf476f-5992-44f4-aee8-f0ce204ddf7d}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

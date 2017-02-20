@@ -36,6 +36,11 @@ namespace Orc.Search.Example.Services
             person.LastName = NameGenerator.GenerateLastName();
             person.Age = _random.Next(18, 65);
 
+            return GenerateSearchable(person);
+        }
+
+        public ISearchable GenerateSearchable(Person person)
+        {
             return new ReflectionSearchable(person);
         }
     }

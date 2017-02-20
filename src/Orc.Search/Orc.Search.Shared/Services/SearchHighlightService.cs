@@ -92,9 +92,11 @@ namespace Orc.Search
             }
         }
 
-        private async void OnSearched(object sender, SearchEventArgs e)
+        private void OnSearched(object sender, SearchEventArgs e)
         {
-            await TaskHelper.Run(() => HighlightSearchables(e.Results), true);
+#pragma warning disable 4014
+            TaskHelper.Run(() => HighlightSearchables(e.Results), true);
+#pragma warning restore 4014
         }
         #endregion
     } 
