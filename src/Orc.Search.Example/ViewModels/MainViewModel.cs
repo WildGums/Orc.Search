@@ -46,6 +46,8 @@ namespace Orc.Search.Example.ViewModels
 
             AddPerson = new Command(OnAddPerson);
             RemovePerson = new Command(OnRemovePerson);
+
+            Title = "Orc.Search example";
         }
 
         #endregion
