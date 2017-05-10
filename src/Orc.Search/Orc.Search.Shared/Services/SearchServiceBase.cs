@@ -12,6 +12,7 @@ namespace Orc.Search
     using System.Linq;
     using Catel;
     using Catel.Logging;
+    using Contrib.Regex;
     using Lucene.Net.Analysis.Standard;
     using Lucene.Net.Documents;
     using Lucene.Net.Index;
@@ -212,34 +213,59 @@ namespace Orc.Search
                 {
                     Searching.SafeInvoke(this, new SearchEventArgs(filter, results));
 
-                    if (filter.IsValidOrcSearchFilter())
+                    Query finalQuery = null;
+
+                    var regexString = filter.ExtractRegexString();
+                    if (!string.IsNullOrWhiteSpace(regexString))
+                    {
+                        var searchableMetadatas = GetSearchableMetadata();
+
+                        var booleanQuery = new BooleanQuery();
+                        foreach (var searchableMetadata in searchableMetadatas)
+                        {
+                            var query = new RegexQuery(new Term(searchableMetadata.SearchName, regexString));
+                            var booleanClause = new BooleanClause(query, Occur.SHOULD);
+
+                            booleanQuery.Add(booleanClause);
+                        }
+
+                        if (booleanQuery.Any())
+                        {
+                            finalQuery = booleanQuery;
+                        }
+                    }
+
+                    if (finalQuery == null && filter.IsValidOrcSearchFilter())
                     {
                         using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                         {
                             var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableMetadata());
 
                             var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
-                            var query = parser.Parse(queryAsText);
+                            finalQuery = parser.Parse(queryAsText);                            
+                        }
+                    }
 
-                            using (var searcher = new IndexSearcher(_indexDirectory))
+                    if (finalQuery != null)
+                    {
+                        using (var searcher = new IndexSearcher(_indexDirectory))
+                        {
+                            var search = searcher.Search(finalQuery, maxResults);
+                            foreach (var scoreDoc in search.ScoreDocs)
                             {
-                                var search = searcher.Search(query, maxResults);
-                                foreach (var scoreDoc in search.ScoreDocs)
-                                {
-                                    var score = scoreDoc.Score;
-                                    var docId = scoreDoc.Doc;
-                                    var doc = searcher.Doc(docId);
+                                var score = scoreDoc.Score;
+                                var docId = scoreDoc.Doc;
+                                var doc = searcher.Doc(docId);
 
-                                    var index = int.Parse(doc.Get(IndexId));
-                                    results.Add(_indexedObjects[index]);
-                                }
+                                var index = int.Parse(doc.Get(IndexId));
+                                results.Add(_indexedObjects[index]);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "An error occurred while searching, returning default reuslts");
+                    Log.Error(ex, "An error occurred while searching, returning default results");
                 }
                 finally
                 {
