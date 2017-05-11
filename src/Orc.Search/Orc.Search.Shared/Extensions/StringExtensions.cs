@@ -7,6 +7,8 @@
 
 namespace Orc.Search
 {
+    using System.Text.RegularExpressions;
+
     public static class StringExtensions
     {
         public static string PrepareOrcSearchFilter(this string filter)
@@ -37,6 +39,38 @@ namespace Orc.Search
             }
 
             return true;
+        }
+
+        public static string ExtractRegexString(this string filter)
+        {
+            if (!filter.StartsWith("/") || !filter.EndsWith("/"))
+            {
+                return string.Empty;
+            }
+
+            filter = filter.Substring(1, filter.Length - 2);
+            if (!filter.IsValidRegexPattern())
+            {
+                return string.Empty;
+            }
+
+            return filter;
+        }
+
+        public static bool IsValidRegexPattern(this string pattern)
+        {
+            try
+            {
+                // ReSharper disable once ObjectCreationAsStatement
+                new Regex(pattern);
+                return true;
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return false;
         }
     }
 }

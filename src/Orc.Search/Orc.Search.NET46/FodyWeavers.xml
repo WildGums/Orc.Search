@@ -5,6 +5,7 @@
     <IncludeAssemblies>
       ICSharpCode.SharpZipLib
       Lucene.Net
+      Lucene.Net.Contrib.Regex
       RestSharp
     </IncludeAssemblies>
   </Costura>
