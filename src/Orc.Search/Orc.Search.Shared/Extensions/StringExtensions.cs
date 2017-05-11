@@ -43,12 +43,12 @@ namespace Orc.Search
 
         public static string ExtractRegexString(this string filter)
         {
-            if (!filter.StartsWith("/"))
+            if (!filter.StartsWith("/") || !filter.EndsWith("/"))
             {
                 return string.Empty;
             }
 
-            filter = filter.Substring(1);
+            filter = filter.Substring(1, filter.Length - 2);
             if (!filter.IsValidRegexPattern())
             {
                 return string.Empty;
