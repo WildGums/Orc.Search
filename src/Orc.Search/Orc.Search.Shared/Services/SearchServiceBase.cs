@@ -215,26 +215,34 @@ namespace Orc.Search
 
                     Query finalQuery = null;
 
-                    var regexString = filter.ExtractRegexString();
-                    if (!string.IsNullOrWhiteSpace(regexString))
-                    {
-                        var searchableMetadatas = GetSearchableMetadata();
+                    // Note: There are two issues with using regex here
+                    //       1. Lucene uses lower case interpretation of each string for indexing.
+                    //          That means in regular expression we can use only lower case characters
+                    //       2. escape sequences do not work. Not sure why
+                    //      
+                    //       In order to fix (1), we have to force Lucene to index differently. Probably we need to have two 
+                    //       versions if indeces. One for regular search and another for regex
+                    //var regexString = filter.ExtractRegexString();
+                    //if (!string.IsNullOrWhiteSpace(regexString))
+                    //{
+                    //    var searchableMetadatas = GetSearchableMetadata();
 
-                        var booleanQuery = new BooleanQuery();
-                        foreach (var searchableMetadata in searchableMetadatas)
-                        {
-                            var query = new RegexQuery(new Term(searchableMetadata.SearchName, regexString));
-                            var booleanClause = new BooleanClause(query, Occur.SHOULD);
+                    //    var booleanQuery = new BooleanQuery();
+                    //    foreach (var searchableMetadata in searchableMetadatas)
+                    //    {
+                    //        var query = new RegexQuery(new Term(searchableMetadata.SearchName, regexString));
+                    //        var booleanClause = new BooleanClause(query, Occur.SHOULD);
 
-                            booleanQuery.Add(booleanClause);
-                        }
+                    //        booleanQuery.Add(booleanClause);
+                    //    }
 
-                        if (booleanQuery.Any())
-                        {
-                            finalQuery = booleanQuery;
-                        }
-                    }
+                    //    if (booleanQuery.Any())
+                    //    {
+                    //        finalQuery = booleanQuery;
+                    //    }
+                    //}
 
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                     if (finalQuery == null && filter.IsValidOrcSearchFilter())
                     {
                         using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
