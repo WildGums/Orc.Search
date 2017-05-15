@@ -13,6 +13,13 @@ namespace Orc.Search
     {
         public static string PrepareOrcSearchFilter(this string filter)
         {
+            if (filter.StartsWith("\"") && filter.EndsWith("\""))
+            {
+                return filter.Length == 2 
+                    ? string.Empty
+                    : filter;
+            }
+
             if (!filter.Contains("*") &&
                 !filter.Contains(":") &&
                 !filter.Contains(" ") &&

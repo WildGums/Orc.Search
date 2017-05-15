@@ -250,7 +250,7 @@ namespace Orc.Search
                             var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableMetadata());
 
                             var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
-                            finalQuery = parser.Parse(queryAsText);                            
+                            finalQuery = parser.Parse(queryAsText);
                         }
                     }
 
@@ -270,6 +270,10 @@ namespace Orc.Search
                             }
                         }
                     }
+                }
+                catch (ParseException ex)
+                {
+                    Log.Warning(ex, "Failed to parse search pattern");
                 }
                 catch (Exception ex)
                 {
