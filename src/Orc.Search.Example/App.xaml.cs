@@ -15,6 +15,7 @@ namespace Orc.Search.Example
     using Catel.Logging;
     using Catel.Services;
     using Catel.Windows;
+    using Orchestra;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -42,7 +43,7 @@ namespace Orc.Search.Example
 
             Log.Info("Starting application");
 
-            StyleHelper.CreateStyleForwardersForDefaultStyles();
+            this.ApplyTheme();
 
             Log.Info("Calling base.OnStartup");
 
