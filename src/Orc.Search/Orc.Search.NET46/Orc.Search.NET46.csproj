@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Core, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Catel.Core.5.0.0-beta0003\lib\net46\Catel.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Core.5.0.0-beta0006\lib\net46\Catel.Core.dll</HintPath>
     </Reference>
     <Reference Include="Catel.Fody.Attributes, Version=2.17.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Catel.Fody.2.17.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
@@ -85,7 +85,7 @@
       <HintPath>..\..\..\lib\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
     </Reference>
     <Reference Include="Orc.Metadata, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Orc.Metadata.2.0.0-unstable0011\lib\net46\Orc.Metadata.dll</HintPath>
+      <HintPath>..\..\..\lib\Orc.Metadata.2.0.0-unstable0012\lib\net46\Orc.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
