@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.NET40", "Orc.Search\Orc.Search.NET40\Orc.Search.NET40.csproj", "{589A582A-9995-4293-B5DF-5B95F10CB1FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.NET47", "Orc.Search\Orc.Search.NET47\Orc.Search.NET47.csproj", "{589A582A-9995-4293-B5DF-5B95F10CB1FB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A335AA39-10A9-4269-ADDC-780022AE1C16}"
 EndProject
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{F6EAB599-0
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Tests.NET40", "Orc.Search.Tests\Orc.Search.Tests.NET40\Orc.Search.Tests.NET40.csproj", "{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Tests.NET47", "Orc.Search.Tests\Orc.Search.Tests.NET47\Orc.Search.Tests.NET47.csproj", "{1C7E13A8-E796-45C4-9B1F-5F7B3658F4D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C1EFC2A4-3BCE-4980-B281-612B5713EB0D}"
 EndProject
@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{0A58
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7F965F8-AFAF-41A3-8244-F5B99E6CA2E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Xaml.NET40", "Orc.Search.Xaml\Orc.Search.Xaml.NET40\Orc.Search.Xaml.NET40.csproj", "{E7D4C787-4FA3-4470-9485-C746751E12FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Xaml.NET47", "Orc.Search.Xaml\Orc.Search.Xaml.NET47\Orc.Search.Xaml.NET47.csproj", "{E7D4C787-4FA3-4470-9485-C746751E12FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Search.Example", "Orc.Search.Example\Orc.Search.Example.csproj", "{D13BE89D-77F2-4295-A721-BC4163C40D4B}"
 EndProject

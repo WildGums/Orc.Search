@@ -44,7 +44,7 @@ namespace Orc.Search.Example.ViewModels
             AllObjects = new FastObservableCollection<object>();
             FilteredObjects = new FastObservableCollection<object>();
 
-            AddPerson = new Command(OnAddPerson);
+            AddPerson = new TaskCommand(OnAddPersonAsync);
             RemovePerson = new Command(OnRemovePerson);
 
             Title = "Orc.Search example";
@@ -53,7 +53,7 @@ namespace Orc.Search.Example.ViewModels
         #endregion
 
         #region Properties
-        public Command AddPerson { get; private set; }
+        public TaskCommand AddPerson { get; private set; }
 
         public Command RemovePerson { get; private set; }
 
@@ -103,10 +103,10 @@ namespace Orc.Search.Example.ViewModels
             }
         }
 
-        private void OnAddPerson()
+        private async Task OnAddPersonAsync()
         {
             var addPersonViewModel = new AddPersonViewModel();
-            if (_uiVisualizerService.ShowDialog(addPersonViewModel) ?? false)
+            if (await _uiVisualizerService.ShowDialogAsync(addPersonViewModel) ?? false)
             {
                 var person = addPersonViewModel.Person;
                 var searchable = _dataGenerationService.GenerateSearchable(person);

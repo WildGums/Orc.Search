@@ -46,7 +46,7 @@ namespace Orc.Search
 
             FilterHistory = new FastObservableCollection<string>();
 
-            BuildFilter = new Command(OnBuildFilterExecute);
+            BuildFilter = new TaskCommand(OnBuildFilterExecuteAsync);
         }
         #endregion
 
@@ -59,12 +59,12 @@ namespace Orc.Search
         #endregion
 
         #region Commands
-        public Command BuildFilter { get; private set; }
+        public TaskCommand BuildFilter { get; private set; }
 
-        private void OnBuildFilterExecute()
+        private async Task OnBuildFilterExecuteAsync()
         {
             var vm = _viewModelFactory.CreateViewModel<SearchFilterBuilderViewModel>(null, null);
-            if (_uiVisualizerService.ShowDialog(vm) ?? false)
+            if (await _uiVisualizerService.ShowDialogAsync(vm) ?? false)
             {
                 Filter = vm.Filter;
             }
