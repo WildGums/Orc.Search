@@ -5,11 +5,17 @@
     <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
   -->
 
+  <!-- Explicit additional project properties that require stuff set before -->
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs;Resources\**\*.cs" />
     <Page Remove="Platforms\**\*.xaml" />
     <!-- This is here so that the conditionally included files below are all visible in VS -->
     <None Include="Platforms\**\*.*;Resources\**\*.*" />
+    <Resource Include="Resources\Fonts\*.ttf" />
     <Resource Include="Resources\Images\*.png" />
   </ItemGroup>
 
