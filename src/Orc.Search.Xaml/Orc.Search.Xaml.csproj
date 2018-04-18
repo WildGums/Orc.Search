@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net46;net47</TargetFrameworks>
     <AssemblyName>Orc.Search.Xaml</AssemblyName>
-    <RootNamespace>Orc.Search.Xaml</RootNamespace>
+    <RootNamespace>Orc.Search</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Orc.Search.Xaml</PackageId>
     <PackageVersion>1.0.0-alpha0001</PackageVersion>

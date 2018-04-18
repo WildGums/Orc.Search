@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Orc.Search.Xaml.Properties {
+namespace Orc.Search.Properties {
     using System;
     using Catel.Reflection;
 
