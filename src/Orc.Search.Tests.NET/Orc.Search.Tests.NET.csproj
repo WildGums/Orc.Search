@@ -56,8 +56,8 @@
     <Reference Include="Lucene.Net, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Lucene.Net.4.8.0-beta00005\lib\net45\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="ModuleInit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=409b3227471b0f0d, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\ModuleInit.Fody.1.7.1\lib\net452\ModuleInit.dll</HintPath>
+    <Reference Include="ModuleInit, Version=1.8.0.0, Culture=neutral, PublicKeyToken=409b3227471b0f0d, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\ModuleInit.Fody.1.8.0\lib\net452\ModuleInit.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Mono.Cecil.0.10.0\lib\net40\Mono.Cecil.dll</HintPath>
