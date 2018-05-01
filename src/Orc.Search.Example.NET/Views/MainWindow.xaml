@@ -4,9 +4,9 @@
               xmlns:catel="http://schemas.catelproject.com"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:search="clr-namespace:Orc.Search;assembly=Orc.Search.Xaml"
-              xmlns:orc="http://www.wildgums.net.au/orc">
+              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls">
 
-    <orc:StackGrid>
+    <orccontrols:StackGrid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -27,17 +27,17 @@
         <TextBox Text="{Binding ElementName=SearchView, Path=MaxResultsCount, Mode=TwoWay}"/>
 
         <GroupBox Grid.ColumnSpan="2" Header="Source objects">
-            <orc:StackGrid>
-                <orc:StackGrid.RowDefinitions>
+            <orccontrols:StackGrid>
+                <orccontrols:StackGrid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
-                </orc:StackGrid.RowDefinitions>
+                </orccontrols:StackGrid.RowDefinitions>
 
-                <orc:StackGrid.ColumnDefinitions>
+                <orccontrols:StackGrid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                </orc:StackGrid.ColumnDefinitions>
+                </orccontrols:StackGrid.ColumnDefinitions>
 
                 <Label Content="No. of objects:" />
                 <Label Content="{Binding AllObjects.Count}" />
@@ -62,20 +62,20 @@
                 </StackPanel>
 
                 
-            </orc:StackGrid>
+            </orccontrols:StackGrid>
         </GroupBox>
 
         <GroupBox Grid.ColumnSpan="2" Header="Filtered results">
-            <orc:StackGrid>
-                <orc:StackGrid.RowDefinitions>
+            <orccontrols:StackGrid>
+                <orccontrols:StackGrid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                </orc:StackGrid.RowDefinitions>
+                </orccontrols:StackGrid.RowDefinitions>
 
-                <orc:StackGrid.ColumnDefinitions>
+                <orccontrols:StackGrid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                </orc:StackGrid.ColumnDefinitions>
+                </orccontrols:StackGrid.ColumnDefinitions>
 
                 <Label Content="No. of filtered objects:" />
                 <Label Content="{Binding FilteredObjectCount}" />
@@ -89,7 +89,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-            </orc:StackGrid>
+            </orccontrols:StackGrid>
         </GroupBox>
 
         <GroupBox Grid.ColumnSpan="2" Header="Details / status">
@@ -104,7 +104,7 @@
                 <Label Content="Searching..." Visibility="{Binding IsSearching, Converter={catel:BooleanToHidingVisibilityConverter}}" />
             </StackPanel>
         </GroupBox>
-    </orc:StackGrid>
+    </orccontrols:StackGrid>
 
 </catel:Window>
 

@@ -2,20 +2,20 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"
-                  xmlns:orc="http://www.wildgums.net.au/orc"
+                  xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
                   WindowStyle="ToolWindow">
 
-    <orc:StackGrid>
-        <orc:StackGrid.RowDefinitions>
+    <orccontrols:StackGrid>
+        <orccontrols:StackGrid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-        </orc:StackGrid.RowDefinitions>
+        </orccontrols:StackGrid.RowDefinitions>
 
-        <orc:StackGrid.ColumnDefinitions>
+        <orccontrols:StackGrid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-        </orc:StackGrid.ColumnDefinitions>
+        </orccontrols:StackGrid.ColumnDefinitions>
 
         
         <TextBlock Text="First name"/>
@@ -27,7 +27,7 @@
         <TextBlock Text="Age"/>
         <TextBox Text="{Binding Person.Age}"/>
 
-    </orc:StackGrid>
+    </orccontrols:StackGrid>
     
 </catel:DataWindow>
 

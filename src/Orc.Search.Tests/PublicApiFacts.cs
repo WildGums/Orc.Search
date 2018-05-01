@@ -7,13 +7,14 @@
 
 namespace Orc.Search.Tests
 {
+    using System.Runtime.CompilerServices;
     using ApiApprover;
     using NUnit.Framework;
 
     [TestFixture]
     public class PublicApiFacts
     {
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_Search_HasNoBreakingChanges()
         {
             var assembly = typeof(SearchServiceBase).Assembly;
@@ -21,7 +22,7 @@ namespace Orc.Search.Tests
             PublicApiApprover.ApprovePublicApi(assembly);
         }
 
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_Search_Xaml_HasNoBreakingChanges()
         {
             var assembly = typeof(SearchView).Assembly;
