@@ -4,6 +4,7 @@
     <AssemblyName>Orc.Search.Example.NET</AssemblyName>
     <RootNamespace>Orc.Search.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
   <PropertyGroup>

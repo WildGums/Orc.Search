@@ -10,6 +10,11 @@
     <PackageTags>orc;search;lucene;xaml;wpf;uwp;</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- SonarQube requires a project guid -->
+    <ProjectGuid>C0F595E1-B7DA-4358-96DC-A49C63CAC724</ProjectGuid>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Catel.MVVM" Version="5.5.0-beta0000" />
     <PackageReference Include="MethodTimer.Fody" Version="2.1.0" PrivateAssets="all" />
