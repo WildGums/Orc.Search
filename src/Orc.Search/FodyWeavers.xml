@@ -3,4 +3,13 @@
   <ModuleInit />
   <Catel />
   <Obsolete />
+  <Costura>
+    <IncludeAssemblies>
+      Lucene.Net
+      Lucene.Net.Analysis.Common
+      Lucene.Net.Queries
+      Lucene.Net.Sandbox
+      Lucene.Net.QueryParser
+    </IncludeAssemblies>
+  </Costura>
 </Weavers>
