@@ -15,11 +15,7 @@ namespace Orc.Search
 
     public class SearchHighlightService : ISearchHighlightService
     {
-        private readonly ISearchService _searchService;
-
         #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly List<ISearchHighlightProvider> _providers = new List<ISearchHighlightProvider>();
         #endregion
 
@@ -28,8 +24,7 @@ namespace Orc.Search
         {
             Argument.IsNotNull(() => searchService);
 
-            _searchService = searchService;
-            _searchService.Searched += OnSearched;
+            searchService.Searched += OnSearched;
         }
         #endregion
 

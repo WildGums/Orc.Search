@@ -21,7 +21,6 @@ namespace Orc.Search
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ISearchService _searchService;
         private readonly IXmlSerializer _xmlSerializer;
 
         private readonly object _lock = new object();
@@ -35,9 +34,9 @@ namespace Orc.Search
             Argument.IsNotNull(() => searchService);
             Argument.IsNotNull(() => xmlSerializer);
 
-            _searchService = searchService;
             _xmlSerializer = xmlSerializer;
-            _searchService.Searched += OnSearchServiceSearched;
+
+            searchService.Searched += OnSearchServiceSearched;
 
             _fileName = Path.Combine(PathHelper.GetRootDirectory(), "history.xml");
 

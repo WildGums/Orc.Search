@@ -25,7 +25,6 @@ namespace Orc.Search
     {
         #region Constants
         private const string IndexId = "__index_id";
-        private static int _currentIndex = 0;
         #endregion
 
         #region Fields
@@ -35,6 +34,7 @@ namespace Orc.Search
 
         private readonly ISearchQueryService _searchQueryService;
 
+        private int _currentIndex = 0;
         private readonly Dictionary<int, ISearchable> _indexedObjects = new Dictionary<int, ISearchable>();
         private readonly Dictionary<ISearchable, int> _searchableIndexes = new Dictionary<ISearchable, int>();
         private readonly Dictionary<string, ISearchableMetadata> _searchableMetadata = new Dictionary<string, ISearchableMetadata>();
@@ -106,7 +106,6 @@ namespace Orc.Search
 
                             var document = new Document();
 
-                            //var indexField = new Field(IndexId, index.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
                             var indexField = new StringField(IndexId, index.ToString(), Field.Store.YES);
 
                             document.Add(indexField);
@@ -118,8 +117,6 @@ namespace Orc.Search
                             {
                                 var searchableMetadataValue = searchableMetadata.GetValue(searchable.Instance);
                                 var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
-
-                                //var field = new Field(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES, searchableMetadata.Analyze ? Field.Index.ANALYZED : Field.Index.NOT_ANALYZED, Field.TermVector.NO);
 
                                 var field = new TextField(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES);
                                 document.Add(field);
@@ -228,28 +225,9 @@ namespace Orc.Search
                     //      
                     //       In order to fix (1), we have to force Lucene to index differently. Probably we need to have two 
                     //       versions if indeces. One for regular search and another for regex
-                    //var regexString = filter.ExtractRegexString();
-                    //if (!string.IsNullOrWhiteSpace(regexString))
-                    //{
-                    //    var searchableMetadatas = GetSearchableMetadata();
-
-                    //    var booleanQuery = new BooleanQuery();
-                    //    foreach (var searchableMetadata in searchableMetadatas)
-                    //    {
-                    //        var query = new RegexQuery(new Term(searchableMetadata.SearchName, regexString));
-                    //        var booleanClause = new BooleanClause(query, Occur.SHOULD);
-
-                    //        booleanQuery.Add(booleanClause);
-                    //    }
-
-                    //    if (booleanQuery.Any())
-                    //    {
-                    //        finalQuery = booleanQuery;
-                    //    }
-                    //}
 
                     // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                    if (finalQuery == null && filter.IsValidOrcSearchFilter())
+                    if (filter.IsValidOrcSearchFilter())
                     {
                         using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                         {
@@ -269,7 +247,6 @@ namespace Orc.Search
                             var search = searcher.Search(finalQuery, maxResults);
                             foreach (var scoreDoc in search.ScoreDocs)
                             {
-                                var score = scoreDoc.Score;
                                 var docId = scoreDoc.Doc;
                                 var doc = searcher.Doc(docId);
 

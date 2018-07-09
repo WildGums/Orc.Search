@@ -39,7 +39,7 @@ namespace Orc.Search
         #region Properties
         public object Searchable
         {
-            get { return (object)GetValue(SearchableProperty); }
+            get { return GetValue(SearchableProperty); }
             set { SetValue(SearchableProperty, value); }
         }
 

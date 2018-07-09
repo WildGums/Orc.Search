@@ -87,13 +87,13 @@ namespace Orc.Search
             await base.CloseAsync();
         }
 
-        private void OnDispatcherTimerTick(object sender, EventArgs e)
+#pragma warning disable AvoidAsyncVoid
+        private async void OnDispatcherTimerTick(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid
         {
             _dispatcherTimer.Stop();
 
-#pragma warning disable 4014
-            SearchAsync();
-#pragma warning restore 4014
+            await SearchAsync();
         }
 
         private void OnFilterChanged()
