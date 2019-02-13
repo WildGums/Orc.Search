@@ -90,7 +90,7 @@ namespace Orc.Search
         {
             Initialize();
 
-            Updating.SafeInvoke(this);
+            Updating?.Invoke(this, EventArgs.Empty);
 
             lock (_lockObject)
             {
@@ -136,7 +136,7 @@ namespace Orc.Search
                 }
             }
 
-            Updated.SafeInvoke(this);
+            Updated?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void RemoveObjects(IEnumerable<ISearchable> searchables)
@@ -145,7 +145,7 @@ namespace Orc.Search
 
             lock (_lockObject)
             {
-                Updating.SafeInvoke(this);
+                Updating?.Invoke(this, EventArgs.Empty);
 
                 using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                 {
@@ -174,7 +174,7 @@ namespace Orc.Search
                     }
                 }
 
-                Updated.SafeInvoke(this);
+                Updated?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -182,7 +182,7 @@ namespace Orc.Search
         {
             Initialize();
 
-            Updating.SafeInvoke(this);
+            Updating?.Invoke(this, EventArgs.Empty);
 
             lock (_lockObject)
             {
@@ -201,7 +201,7 @@ namespace Orc.Search
                 }
             }
 
-            Updated.SafeInvoke(this);
+            Updated?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
@@ -214,7 +214,7 @@ namespace Orc.Search
             {
                 try
                 {
-                    Searching.SafeInvoke(this, new SearchEventArgs(filter, results));
+                    Searching?.Invoke(this, new SearchEventArgs(filter, results));
 
                     Query finalQuery = null;
 
@@ -266,7 +266,7 @@ namespace Orc.Search
                 }
                 finally
                 {
-                    Searched.SafeInvoke(this, new SearchEventArgs(filter, results));
+                    Searched?.Invoke(this, new SearchEventArgs(filter, results));
                 }
             }
 
