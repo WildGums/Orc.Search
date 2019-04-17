@@ -53,7 +53,7 @@ namespace Orc.Search
         }
 
         public static readonly DependencyProperty StylePropertyNameProperty = DependencyProperty.Register("StylePropertyName", typeof(string),
-            typeof(SearchHighlight), new PropertyMetadata("Style", (sender, e) => ((SearchHighlight)sender).GetStyleDependencyProperty()));
+            typeof(SearchHighlight), new PropertyMetadata("Style", (sender, e) => ((SearchHighlight)sender).OnStylePropertyNameChanged()));
 
         public Style HighlightStyle
         {
@@ -122,7 +122,7 @@ namespace Orc.Search
             _searchable = Searchable;
         }
 
-        private void GetStyleDependencyProperty()
+        private void OnStylePropertyNameChanged()
         {
             _styleDependencyProperty = AssociatedObject.GetDependencyPropertyByName(StylePropertyName);
         }
@@ -131,7 +131,7 @@ namespace Orc.Search
         {
             base.OnAssociatedObjectLoaded();
 
-            GetStyleDependencyProperty();
+            OnStylePropertyNameChanged();
 
             _searchHighlightService.AddProvider(this);
         }

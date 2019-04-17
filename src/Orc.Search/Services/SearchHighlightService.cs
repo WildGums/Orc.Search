@@ -58,14 +58,14 @@ namespace Orc.Search
         {
             lock (_providers)
             {
-                Highlighting.SafeInvoke(this);
+                Highlighting?.Invoke(this, EventArgs.Empty);
 
                 foreach (var provider in _providers)
                 {
                     provider.ResetHighlight();
                 }
 
-                Highlighted.SafeInvoke(this);
+                Highlighted?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Orc.Search
         {
             lock (_providers)
             {
-                Highlighting.SafeInvoke(this);
+                Highlighting?.Invoke(this, EventArgs.Empty);
 
                 foreach (var searchable in searchables)
                 {
@@ -83,7 +83,7 @@ namespace Orc.Search
                     }
                 }
 
-                Highlighted.SafeInvoke(this);
+                Highlighted?.Invoke(this, EventArgs.Empty);
             }
         }
 
