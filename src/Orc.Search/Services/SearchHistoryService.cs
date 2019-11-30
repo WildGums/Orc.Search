@@ -14,7 +14,9 @@ namespace Orc.Search
     using Catel;
     using Catel.Logging;
     using Catel.Runtime.Serialization.Xml;
+    using Catel.Services;
     using Catel.Threading;
+    using Orc.FileSystem;
 
     public class SearchHistoryService : ISearchHistoryService
     {
@@ -22,23 +24,31 @@ namespace Orc.Search
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IXmlSerializer _xmlSerializer;
-
+        private readonly IAppDataService _appDataService;
+        private readonly IDirectoryService _directoryService;
         private readonly object _lock = new object();
         private readonly string _fileName;
         private readonly SearchHistory _searchHistory = new SearchHistory();
         #endregion
 
         #region Constructors
-        public SearchHistoryService(ISearchService searchService, IXmlSerializer xmlSerializer)
+        public SearchHistoryService(ISearchService searchService, IXmlSerializer xmlSerializer,
+            IAppDataService appDataService, IDirectoryService directoryService)
         {
             Argument.IsNotNull(() => searchService);
             Argument.IsNotNull(() => xmlSerializer);
+            Argument.IsNotNull(() => appDataService);
+            Argument.IsNotNull(() => directoryService);
 
             _xmlSerializer = xmlSerializer;
-
+            _appDataService = appDataService;
+            _directoryService = directoryService;
             searchService.Searched += OnSearchServiceSearched;
 
-            _fileName = Path.Combine(PathHelper.GetRootDirectory(), "history.xml");
+            var directory = Path.Combine(_appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "search");
+            _directoryService.Create(directory);
+
+            _fileName = Path.Combine(directory, "history.xml");
 
             LoadSearchHistory();
         }

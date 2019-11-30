@@ -74,10 +74,6 @@ namespace Orc.Search
         System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string filter, int maxResults = 50);
     }
     public class static ISearchServiceExtensions { }
-    public class static PathHelper
-    {
-        public static string GetRootDirectory() { }
-    }
     public class ReflectionSearchable : Orc.Search.Searchable
     {
         public ReflectionSearchable(object instance) { }
@@ -152,7 +148,7 @@ namespace Orc.Search
     }
     public class SearchHistoryService : Orc.Search.ISearchHistoryService
     {
-        public SearchHistoryService(Orc.Search.ISearchService searchService, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer) { }
+        public SearchHistoryService(Orc.Search.ISearchService searchService, Catel.Runtime.Serialization.Xml.IXmlSerializer xmlSerializer, Catel.Services.IAppDataService appDataService, Orc.FileSystem.IDirectoryService directoryService) { }
         public System.Collections.Generic.IEnumerable<string> GetLastSearchQueries(string prefix, int count = 5) { }
     }
     public class SearchQueryService : Orc.Search.ISearchQueryService
