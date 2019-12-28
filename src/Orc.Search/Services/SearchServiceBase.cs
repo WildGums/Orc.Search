@@ -20,6 +20,7 @@ namespace Orc.Search
     using Lucene.Net.QueryParsers.Classic;
     using Lucene.Net.Search;
     using Lucene.Net.Store;
+    using Orc.Metadata;
 
     public abstract class SearchServiceBase : ISearchService
     {
@@ -115,15 +116,17 @@ namespace Orc.Search
 
                             foreach (var searchableMetadata in searchableMetadatas)
                             {
-                                var searchableMetadataValue = searchableMetadata.GetValue(searchable.Instance);
-                                var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
-
-                                var field = new TextField(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES);
-                                document.Add(field);
-
-                                if (!_searchableMetadata.ContainsKey(searchableMetadata.SearchName))
+                                if (searchableMetadata.GetValue<object>(searchable.Instance, out var searchableMetadataValue))
                                 {
-                                    _searchableMetadata.Add(searchableMetadata.SearchName, searchableMetadata);
+                                    var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
+
+                                    var field = new TextField(searchableMetadata.SearchName, searchableMetadataValueAsString, Field.Store.YES);
+                                    document.Add(field);
+
+                                    if (!_searchableMetadata.ContainsKey(searchableMetadata.SearchName))
+                                    {
+                                        _searchableMetadata.Add(searchableMetadata.SearchName, searchableMetadata);
+                                    }
                                 }
                             }
 
