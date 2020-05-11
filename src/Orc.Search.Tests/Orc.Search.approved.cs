@@ -1,6 +1,6 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
@@ -16,11 +16,48 @@ namespace Orc.Search
         public DummySearchNavigationService() { }
         public void Navigate(object searchable) { }
     }
-    public class InMemorySearchService : Orc.Search.SearchServiceBase
+    public interface ISearchHighlightProvider
     {
-        public InMemorySearchService(Orc.Search.ISearchQueryService searchQueryService) { }
-        protected override Lucene.Net.Store.Directory GetDirectory() { }
+        void HighlightSearchable(object searchable);
+        void ResetHighlight();
     }
+    public interface ISearchHighlightService
+    {
+        event System.EventHandler<System.EventArgs> Highlighted;
+        event System.EventHandler<System.EventArgs> Highlighting;
+        void AddProvider(Orc.Search.ISearchHighlightProvider provider);
+        void HighlightSearchables(System.Collections.Generic.IEnumerable<object> searchables);
+        void RemoveProvider(Orc.Search.ISearchHighlightProvider provider);
+        void ResetHighlights();
+    }
+    public static class ISearchHighlightServiceExtensions { }
+    public interface ISearchHistoryService
+    {
+        System.Collections.Generic.IEnumerable<string> GetLastSearchQueries(string prefix, int count = 5);
+    }
+    public interface ISearchNavigationService
+    {
+        void Navigate(object searchable);
+    }
+    public interface ISearchQueryService
+    {
+        string GetSearchQuery(params Orc.Search.ISearchableMetadataValue[] searchableMetadataValues);
+        string GetSearchQuery(string filter, System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> searchableMetadatas);
+    }
+    public interface ISearchService
+    {
+        int IndexedObjectCount { get; }
+        event System.EventHandler<Orc.Search.SearchEventArgs> Searched;
+        event System.EventHandler<Orc.Search.SearchEventArgs> Searching;
+        event System.EventHandler<System.EventArgs> Updated;
+        event System.EventHandler<System.EventArgs> Updating;
+        void AddObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables);
+        void ClearAllObjects();
+        System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> GetSearchableMetadata();
+        void RemoveObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables);
+        System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string filter, int maxResults = 50);
+    }
+    public static class ISearchServiceExtensions { }
     public interface ISearchable : Orc.Metadata.IObjectWithMetadata { }
     public interface ISearchableMetadata : Orc.Metadata.IMetadata
     {
@@ -32,76 +69,16 @@ namespace Orc.Search
         Orc.Search.ISearchableMetadata Metadata { get; }
         string Value { get; }
     }
-    public interface ISearchHighlightProvider
+    public class InMemorySearchService : Orc.Search.SearchServiceBase
     {
-        void HighlightSearchable(object searchable);
-        void ResetHighlight();
+        public InMemorySearchService(Orc.Search.ISearchQueryService searchQueryService) { }
+        protected override Lucene.Net.Store.Directory GetDirectory() { }
     }
-    public interface ISearchHighlightService
-    {
-        public event System.EventHandler<System.EventArgs> Highlighted;
-        public event System.EventHandler<System.EventArgs> Highlighting;
-        void AddProvider(Orc.Search.ISearchHighlightProvider provider);
-        void HighlightSearchables(System.Collections.Generic.IEnumerable<object> searchables);
-        void RemoveProvider(Orc.Search.ISearchHighlightProvider provider);
-        void ResetHighlights();
-    }
-    public class static ISearchHighlightServiceExtensions { }
-    public interface ISearchHistoryService
-    {
-        System.Collections.Generic.IEnumerable<string> GetLastSearchQueries(string prefix, int count = 5);
-    }
-    public interface ISearchNavigationService
-    {
-        void Navigate(object searchable);
-    }
-    public interface ISearchQueryService
-    {
-        string GetSearchQuery(string filter, System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> searchableMetadatas);
-        string GetSearchQuery(params Orc.Search.ISearchableMetadataValue[] searchableMetadataValues);
-    }
-    public interface ISearchService
-    {
-        int IndexedObjectCount { get; }
-        public event System.EventHandler<Orc.Search.SearchEventArgs> Searched;
-        public event System.EventHandler<Orc.Search.SearchEventArgs> Searching;
-        public event System.EventHandler<System.EventArgs> Updated;
-        public event System.EventHandler<System.EventArgs> Updating;
-        void AddObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables);
-        void ClearAllObjects();
-        System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> GetSearchableMetadata();
-        void RemoveObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables);
-        System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string filter, int maxResults = 50);
-    }
-    public class static ISearchServiceExtensions { }
     public class ReflectionSearchable : Orc.Search.Searchable
     {
         public ReflectionSearchable(object instance) { }
     }
-    public class Searchable : Orc.Metadata.ObjectWithMetadata, Orc.Metadata.IObjectWithMetadata, Orc.Search.ISearchable
-    {
-        public Searchable(object instance, Orc.Metadata.IMetadataCollection metadataCollection) { }
-    }
-    public class SearchableMetadata : Orc.Metadata.ReflectionMetadata, Orc.Metadata.IMetadata, Orc.Search.ISearchableMetadata
-    {
-        public SearchableMetadata(System.Reflection.PropertyInfo propertyInfo) { }
-        public bool Analyze { get; set; }
-        public string SearchName { get; set; }
-    }
-    public class SearchableMetadataValue : Orc.Search.ISearchableMetadataValue
-    {
-        public SearchableMetadataValue(Orc.Search.ISearchableMetadata metadata, string value) { }
-        public Orc.Search.ISearchableMetadata Metadata { get; }
-        public string Value { get; }
-    }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All)]
-    public class SearchablePropertyAttribute : System.Attribute
-    {
-        public SearchablePropertyAttribute() { }
-        public bool Analyze { get; set; }
-        public string SearchName { get; set; }
-    }
-    public class static SearchDefaults
+    public static class SearchDefaults
     {
         public const int DefaultResults = 50;
     }
@@ -154,8 +131,8 @@ namespace Orc.Search
     public class SearchQueryService : Orc.Search.ISearchQueryService
     {
         public SearchQueryService() { }
-        public string GetSearchQuery(string filter, System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> searchableMetadatas) { }
         public string GetSearchQuery(params Orc.Search.ISearchableMetadataValue[] searchableMetadataValues) { }
+        public string GetSearchQuery(string filter, System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> searchableMetadatas) { }
     }
     public abstract class SearchServiceBase : Orc.Search.ISearchService
     {
@@ -173,7 +150,30 @@ namespace Orc.Search
         public virtual void RemoveObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables) { }
         public virtual System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string filter, int maxResults = 50) { }
     }
-    public class static StringExtensions
+    public class Searchable : Orc.Metadata.ObjectWithMetadata, Orc.Metadata.IObjectWithMetadata, Orc.Search.ISearchable
+    {
+        public Searchable(object instance, Orc.Metadata.IMetadataCollection metadataCollection) { }
+    }
+    public class SearchableMetadata : Orc.Metadata.ReflectionMetadata, Orc.Metadata.IMetadata, Orc.Search.ISearchableMetadata
+    {
+        public SearchableMetadata(System.Reflection.PropertyInfo propertyInfo) { }
+        public bool Analyze { get; set; }
+        public string SearchName { get; set; }
+    }
+    public class SearchableMetadataValue : Orc.Search.ISearchableMetadataValue
+    {
+        public SearchableMetadataValue(Orc.Search.ISearchableMetadata metadata, string value) { }
+        public Orc.Search.ISearchableMetadata Metadata { get; }
+        public string Value { get; }
+    }
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All)]
+    public class SearchablePropertyAttribute : System.Attribute
+    {
+        public SearchablePropertyAttribute() { }
+        public bool Analyze { get; set; }
+        public string SearchName { get; set; }
+    }
+    public static class StringExtensions
     {
         public static string ExtractRegexString(this string filter) { }
         public static bool IsValidOrcSearchFilter(this string filter) { }

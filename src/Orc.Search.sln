@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Search", "Orc.Search\Or
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Search.Xaml", "Orc.Search.Xaml\Orc.Search.Xaml.csproj", "{BA798F7D-2BC9-4D0B-A3CD-0A2664888394}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Search.Example.NET", "Orc.Search.Example.NET\Orc.Search.Example.NET.csproj", "{D13BE89D-77F2-4295-A721-BC4163C40D4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Search.Example", "Orc.Search.Example\Orc.Search.Example.csproj", "{D13BE89D-77F2-4295-A721-BC4163C40D4B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Search.Tests", "Orc.Search.Tests\Orc.Search.Tests.csproj", "{CC2DD537-B34F-42D8-B2C3-CD668B2F7DAD}"
 EndProject

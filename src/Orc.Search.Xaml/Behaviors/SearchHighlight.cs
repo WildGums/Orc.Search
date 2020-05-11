@@ -43,7 +43,7 @@ namespace Orc.Search
             set { SetValue(SearchableProperty, value); }
         }
 
-        public static readonly DependencyProperty SearchableProperty = DependencyProperty.Register("Searchable", typeof(object),
+        public static readonly DependencyProperty SearchableProperty = DependencyProperty.Register(nameof(Searchable), typeof(object),
             typeof(SearchHighlight), new PropertyMetadata(null, (sender, e) => ((SearchHighlight)sender).OnSearchableChanged()));
 
         public string StylePropertyName
@@ -52,7 +52,7 @@ namespace Orc.Search
             set { SetValue(StylePropertyNameProperty, value); }
         }
 
-        public static readonly DependencyProperty StylePropertyNameProperty = DependencyProperty.Register("StylePropertyName", typeof(string),
+        public static readonly DependencyProperty StylePropertyNameProperty = DependencyProperty.Register(nameof(StylePropertyName), typeof(string),
             typeof(SearchHighlight), new PropertyMetadata("Style", (sender, e) => ((SearchHighlight)sender).OnStylePropertyNameChanged()));
 
         public Style HighlightStyle
@@ -61,8 +61,10 @@ namespace Orc.Search
             set { SetValue(HighlightStyleProperty, value); }
         }
 
-        public static readonly DependencyProperty HighlightStyleProperty =
-            DependencyProperty.Register("HighlightStyle", typeof(Style), typeof(SearchHighlight), new PropertyMetadata(null));
+#pragma warning disable WPF0176 // StyleTypedProperty is missing.
+        public static readonly DependencyProperty HighlightStyleProperty = DependencyProperty.Register(nameof(HighlightStyle), typeof(Style),
+#pragma warning restore WPF0176 // StyleTypedProperty is missing.
+            typeof(SearchHighlight), new PropertyMetadata(null));
         #endregion
 
         #region Methods
