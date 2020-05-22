@@ -5,6 +5,7 @@
   <Obsolete />
   <Costura>
     <IncludeAssemblies>
+      J2N
       Lucene.Net
       Lucene.Net.Analysis.Common
       Lucene.Net.Queries

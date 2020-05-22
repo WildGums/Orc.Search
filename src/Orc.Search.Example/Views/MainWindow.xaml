@@ -2,12 +2,13 @@
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:catel="http://schemas.catelproject.com"
-              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:search="clr-namespace:Orc.Search;assembly=Orc.Search.Xaml"
-              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls">
+              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
+              xmlns:orctheming="http://schemas.wildgums.com/orc/theming">
 
     <orccontrols:StackGrid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -19,6 +20,8 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
+        <orctheming:ThemeSwitcherView Grid.ColumnSpan="2" />
 
         <Label Content="Filter: " />
         <search:SearchView x:Name="SearchView"/>
@@ -42,7 +45,19 @@
                 <Label Content="No. of objects:" />
                 <Label Content="{Binding AllObjects.Count}" />
 
-                <DataGrid Grid.ColumnSpan="2" 
+                <ListView Grid.ColumnSpan="2" 
+                          ItemsSource="{Binding AllObjects}"
+                          SelectedValue="{Binding SelectedObject}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding Instance.FirstName}" />
+                            <GridViewColumn Header="Last Name"  DisplayMemberBinding="{Binding Instance.LastName}" />
+                            <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Instance.Age}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                
+                <!--<DataGrid Grid.ColumnSpan="2" 
                           SelectedValue="{Binding SelectedObject}"
                           ItemsSource="{Binding AllObjects}" 
                           AutoGenerateColumns="False"
@@ -54,7 +69,7 @@
                         <DataGridTextColumn Header="Last Name" Binding="{Binding Instance.LastName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Age" Binding="{Binding Instance.Age}" IsReadOnly="True"/>
                     </DataGrid.Columns>
-                </DataGrid>
+                </DataGrid>-->
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Content="Add person" Command="{Binding AddPerson}"/>
