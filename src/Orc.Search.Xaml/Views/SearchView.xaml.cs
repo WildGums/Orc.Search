@@ -37,7 +37,7 @@ namespace Orc.Search
             set { SetValue(FilterProperty, value); }
         }
 
-        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register("Filter", typeof(string), 
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(Filter), typeof(string), 
             typeof(SearchView), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         [ViewToViewModel(MappingType=ViewToViewModelMappingType.ViewToViewModel)]
@@ -47,7 +47,7 @@ namespace Orc.Search
             set { SetValue(MaxResultsCountProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxResultsCountProperty = DependencyProperty.Register("MaxResultsCount", typeof(int),
+        public static readonly DependencyProperty MaxResultsCountProperty = DependencyProperty.Register(nameof(MaxResultsCount), typeof(int),
             typeof(SearchView), new FrameworkPropertyMetadata(SearchDefaults.DefaultResults));
         #endregion
     }

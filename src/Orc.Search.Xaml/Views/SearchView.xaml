@@ -4,7 +4,7 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:catel="http://schemas.catelproject.com"
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:xamlbheaviors="http://schemas.microsoft.com/xaml/behaviors"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid>
@@ -14,10 +14,10 @@
         </Grid.ColumnDefinitions>
         
         <TextBox Grid.Column="0" Text="{Binding Filter}" >
-            <i:Interaction.Behaviors>
+            <xamlbheaviors:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged UpdateDelay="200" />
                 <catel:AutoCompletion ItemsSource="{Binding FilterHistory}" PropertyName="Text" UseAutoCompletionService="false" />
-            </i:Interaction.Behaviors>
+            </xamlbheaviors:Interaction.Behaviors>
         </TextBox>
     </Grid>
 
