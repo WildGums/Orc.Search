@@ -104,7 +104,7 @@ namespace Orc.Search
                     }
                 }
 
-                if (searchHistoryElement == null)
+                if (searchHistoryElement is null)
                 {
                     searchHistoryElement = new SearchHistoryElement();
                     searchHistoryElement.Filter = filter;

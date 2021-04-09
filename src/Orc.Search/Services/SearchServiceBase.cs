@@ -241,7 +241,7 @@ namespace Orc.Search
                         }
                     }
 
-                    if (finalQuery != null)
+                    if (finalQuery is not null)
                     {
                         using (var indexReader = DirectoryReader.Open(_indexDirectory))
                         {

@@ -120,7 +120,7 @@ namespace Orc.Search.Example.ViewModels
         private void OnRemovePerson()
         {
             var selectedSearchable = SelectedObject as ISearchable;
-            if (selectedSearchable == null)
+            if (selectedSearchable is null)
             {
                 return;
             }
