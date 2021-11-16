@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers VerifyAssembly="true" VerifyIgnoreCodes="0x80131252,0x80131869" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
-  <ModuleInit />
-  <Catel />
-  <Obsolete />
-  <Costura>
-    <IncludeAssemblies>
-      J2N
-      Lucene.Net
-      Lucene.Net.Analysis.Common
-      Lucene.Net.Queries
-      Lucene.Net.Sandbox
-      Lucene.Net.QueryParser
-    </IncludeAssemblies>
-  </Costura>
+    <ModuleInit />
+    <Catel />
+    <MethodTimer />
+    <Obsolete />
+    <Costura>
+        <IncludeAssemblies>
+            J2N
+            Lucene.Net
+            Lucene.Net.Analysis.Common
+            Lucene.Net.Queries
+            Lucene.Net.Sandbox
+            Lucene.Net.QueryParser
+        </IncludeAssemblies>
+    </Costura>
 </Weavers>
