@@ -166,7 +166,7 @@ namespace Orc.Search
         public Orc.Search.ISearchableMetadata Metadata { get; }
         public string Value { get; }
     }
-    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.Property)]
     public class SearchablePropertyAttribute : System.Attribute
     {
         public SearchablePropertyAttribute() { }
