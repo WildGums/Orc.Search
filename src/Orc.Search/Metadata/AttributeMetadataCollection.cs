@@ -38,7 +38,7 @@ namespace Orc.Search
                     foreach (var property in properties)
                     {
                         var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof(SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
-                        if (searchablePropertyAttribute != null)
+                        if (searchablePropertyAttribute is not null)
                         {
                             var searchableProperty = new SearchableMetadata(property);
                             if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
