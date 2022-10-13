@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISearchService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
@@ -14,17 +7,17 @@ namespace Orc.Search
     {
         int IndexedObjectCount { get; }
 
-        event EventHandler<EventArgs> Updating;
-        event EventHandler<EventArgs> Updated;
+        event EventHandler<EventArgs>? Updating;
+        event EventHandler<EventArgs>? Updated;
 
-        event EventHandler<SearchEventArgs> Searching;
-        event EventHandler<SearchEventArgs> Searched;
+        event EventHandler<SearchEventArgs>? Searching;
+        event EventHandler<SearchEventArgs>? Searched;
 
         void AddObjects(IEnumerable<ISearchable> searchables);
         void RemoveObjects(IEnumerable<ISearchable> searchables);
         void ClearAllObjects();
 
-        IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults);
+        IEnumerable<ISearchable> Search(string? filter, int maxResults = SearchDefaults.DefaultResults);
         IEnumerable<ISearchableMetadata> GetSearchableMetadata();
     }
 }

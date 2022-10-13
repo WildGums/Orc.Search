@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchEventArgs.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
@@ -14,6 +7,9 @@ namespace Orc.Search
     {
         public SearchEventArgs(string filter, IEnumerable<ISearchable> results)
         {
+            ArgumentNullException.ThrowIfNull(filter);
+            ArgumentNullException.ThrowIfNull(results);
+
             Filter = filter;
             Results = results;
         }

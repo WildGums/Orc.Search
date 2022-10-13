@@ -1,17 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchHistoryElement.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using Catel.Data;
 
     public class SearchHistoryElement : ModelBase
     {
-        #region Properties
+        public SearchHistoryElement()
+        {
+            Filter = string.Empty;
+            FilterLowerCase = string.Empty;
+        }
+
         public string Filter { get; set; }
 
         public string FilterLowerCase { get; private set; }
@@ -39,6 +37,5 @@ namespace Orc.Search
 
             OnFilterChanged();
         }
-        #endregion
     }
 }

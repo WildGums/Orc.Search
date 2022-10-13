@@ -23,8 +23,8 @@ namespace Orc.Search
     }
     public interface ISearchHighlightService
     {
-        event System.EventHandler<System.EventArgs> Highlighted;
-        event System.EventHandler<System.EventArgs> Highlighting;
+        event System.EventHandler<System.EventArgs>? Highlighted;
+        event System.EventHandler<System.EventArgs>? Highlighting;
         void AddProvider(Orc.Search.ISearchHighlightProvider provider);
         void HighlightSearchables(System.Collections.Generic.IEnumerable<object> searchables);
         void RemoveProvider(Orc.Search.ISearchHighlightProvider provider);
@@ -47,15 +47,15 @@ namespace Orc.Search
     public interface ISearchService
     {
         int IndexedObjectCount { get; }
-        event System.EventHandler<Orc.Search.SearchEventArgs> Searched;
-        event System.EventHandler<Orc.Search.SearchEventArgs> Searching;
-        event System.EventHandler<System.EventArgs> Updated;
-        event System.EventHandler<System.EventArgs> Updating;
+        event System.EventHandler<Orc.Search.SearchEventArgs>? Searched;
+        event System.EventHandler<Orc.Search.SearchEventArgs>? Searching;
+        event System.EventHandler<System.EventArgs>? Updated;
+        event System.EventHandler<System.EventArgs>? Updating;
         void AddObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables);
         void ClearAllObjects();
         System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> GetSearchableMetadata();
         void RemoveObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables);
-        System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string filter, int maxResults = 50);
+        System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string? filter, int maxResults = 50);
     }
     public static class ISearchServiceExtensions { }
     public interface ISearchable : Orc.Metadata.IObjectWithMetadata { }
@@ -97,8 +97,8 @@ namespace Orc.Search
     public class SearchHighlightService : Orc.Search.ISearchHighlightService
     {
         public SearchHighlightService(Orc.Search.ISearchService searchService) { }
-        public event System.EventHandler<System.EventArgs> Highlighted;
-        public event System.EventHandler<System.EventArgs> Highlighting;
+        public event System.EventHandler<System.EventArgs>? Highlighted;
+        public event System.EventHandler<System.EventArgs>? Highlighting;
         public void AddProvider(Orc.Search.ISearchHighlightProvider provider) { }
         public void HighlightSearchables(System.Collections.Generic.IEnumerable<object> searchables) { }
         public void RemoveProvider(Orc.Search.ISearchHighlightProvider provider) { }
@@ -106,16 +106,16 @@ namespace Orc.Search
     }
     public class SearchHistory : Catel.Data.ModelBase
     {
-        public static readonly Catel.Data.PropertyData SearchHistoryElementsProperty;
+        public static readonly Catel.Data.IPropertyData SearchHistoryElementsProperty;
         public SearchHistory() { }
         public System.Collections.Generic.List<Orc.Search.SearchHistoryElement> SearchHistoryElements { get; }
     }
     public class SearchHistoryElement : Catel.Data.ModelBase
     {
-        public static readonly Catel.Data.PropertyData CountProperty;
-        public static readonly Catel.Data.PropertyData EverFoundResultsProperty;
-        public static readonly Catel.Data.PropertyData FilterLowerCaseProperty;
-        public static readonly Catel.Data.PropertyData FilterProperty;
+        public static readonly Catel.Data.IPropertyData CountProperty;
+        public static readonly Catel.Data.IPropertyData EverFoundResultsProperty;
+        public static readonly Catel.Data.IPropertyData FilterLowerCaseProperty;
+        public static readonly Catel.Data.IPropertyData FilterProperty;
         public SearchHistoryElement() { }
         public int Count { get; set; }
         public bool EverFoundResults { get; set; }
@@ -138,17 +138,17 @@ namespace Orc.Search
     {
         protected SearchServiceBase(Orc.Search.ISearchQueryService searchQueryService) { }
         public int IndexedObjectCount { get; }
-        public event System.EventHandler<Orc.Search.SearchEventArgs> Searched;
-        public event System.EventHandler<Orc.Search.SearchEventArgs> Searching;
-        public event System.EventHandler<System.EventArgs> Updated;
-        public event System.EventHandler<System.EventArgs> Updating;
+        public event System.EventHandler<Orc.Search.SearchEventArgs>? Searched;
+        public event System.EventHandler<Orc.Search.SearchEventArgs>? Searching;
+        public event System.EventHandler<System.EventArgs>? Updated;
+        public event System.EventHandler<System.EventArgs>? Updating;
         public virtual void AddObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables) { }
         public void ClearAllObjects() { }
         protected virtual Lucene.Net.Index.IndexWriterConfig CreateIndexWriterConfig(Lucene.Net.Analysis.Analyzer analyzer) { }
         protected abstract Lucene.Net.Store.Directory GetDirectory();
         public virtual System.Collections.Generic.IEnumerable<Orc.Search.ISearchableMetadata> GetSearchableMetadata() { }
         public virtual void RemoveObjects(System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> searchables) { }
-        public virtual System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string filter, int maxResults = 50) { }
+        public virtual System.Collections.Generic.IEnumerable<Orc.Search.ISearchable> Search(string? filter, int maxResults = 50) { }
     }
     public class Searchable : Orc.Metadata.ObjectWithMetadata, Orc.Metadata.IObjectWithMetadata, Orc.Search.ISearchable
     {

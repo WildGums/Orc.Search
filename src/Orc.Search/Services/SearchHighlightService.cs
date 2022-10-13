@@ -1,42 +1,29 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchHighlightService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
     using Catel.Threading;
 
     public class SearchHighlightService : ISearchHighlightService
     {
-        #region Fields
         private readonly List<ISearchHighlightProvider> _providers = new List<ISearchHighlightProvider>();
-        #endregion
 
-        #region Constructors
         public SearchHighlightService(ISearchService searchService)
         {
-            Argument.IsNotNull(() => searchService);
+            ArgumentNullException.ThrowIfNull(searchService);
 
             searchService.Searched += OnSearched;
         }
-        #endregion
 
-        #region Events
-        public event EventHandler<EventArgs> Highlighting;
-        public event EventHandler<EventArgs> Highlighted;
-        #endregion
+        public event EventHandler<EventArgs>? Highlighting;
+        public event EventHandler<EventArgs>? Highlighted;
 
-        #region Methods
         public void AddProvider(ISearchHighlightProvider provider)
         {
-            Argument.IsNotNull(() => provider);
+            ArgumentNullException.ThrowIfNull(provider);
 
             lock (_providers)
             {
@@ -46,7 +33,7 @@ namespace Orc.Search
 
         public void RemoveProvider(ISearchHighlightProvider provider)
         {
-            Argument.IsNotNull(() => provider);
+            ArgumentNullException.ThrowIfNull(provider);
 
             lock (_providers)
             {
@@ -87,12 +74,11 @@ namespace Orc.Search
             }
         }
 
-        private void OnSearched(object sender, SearchEventArgs e)
+        private void OnSearched(object? sender, SearchEventArgs e)
         {
 #pragma warning disable 4014
-            TaskHelper.Run(() => HighlightSearchables(e.Results), true);
+            Task.Run(() => HighlightSearchables(e.Results));
 #pragma warning restore 4014
         }
-        #endregion
     } 
 }

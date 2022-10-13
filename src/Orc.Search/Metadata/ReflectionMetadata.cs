@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchableMetadata.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System.Reflection;
     using Metadata;
@@ -15,6 +8,7 @@ namespace Orc.Search
         public SearchableMetadata(PropertyInfo propertyInfo)
             : base(propertyInfo)
         {
+            SearchName = string.Empty;
         }
 
         public string SearchName { get; set; }

@@ -10,14 +10,14 @@ namespace Orc.Search
 {
     public class SearchFilterBuilderViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.PropertyData FilterProperty;
+        public static readonly Catel.Data.IPropertyData? FilterProperty;
         public SearchFilterBuilderViewModel() { }
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
     }
     public class SearchFilterBuilderWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public SearchFilterBuilderWindow() { }
-        public SearchFilterBuilderWindow(Orc.Search.SearchFilterBuilderViewModel viewModel) { }
+        public SearchFilterBuilderWindow(Orc.Search.SearchFilterBuilderViewModel? viewModel) { }
         public void InitializeComponent() { }
     }
     public class SearchHighlight : Catel.Windows.Interactivity.BehaviorBase<System.Windows.FrameworkElement>, Orc.Search.ISearchHighlightProvider
@@ -26,9 +26,9 @@ namespace Orc.Search
         public static readonly System.Windows.DependencyProperty SearchableProperty;
         public static readonly System.Windows.DependencyProperty StylePropertyNameProperty;
         public SearchHighlight() { }
-        public System.Windows.Style HighlightStyle { get; set; }
-        public object Searchable { get; set; }
-        public string StylePropertyName { get; set; }
+        public System.Windows.Style? HighlightStyle { get; set; }
+        public object? Searchable { get; set; }
+        public string? StylePropertyName { get; set; }
         public void HighlightSearchable(object searchable) { }
         protected override void OnAssociatedObjectLoaded() { }
         protected override void OnAssociatedObjectUnloaded() { }
@@ -40,19 +40,19 @@ namespace Orc.Search
         public static readonly System.Windows.DependencyProperty MaxResultsCountProperty;
         public SearchView() { }
         [Catel.MVVM.Views.ViewToViewModel("")]
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
         [Catel.MVVM.Views.ViewToViewModel("", MappingType=Catel.MVVM.Views.ViewToViewModelMappingType.ViewToViewModel)]
         public int MaxResultsCount { get; set; }
         public void InitializeComponent() { }
     }
     public class SearchViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.PropertyData FilterHistoryProperty;
-        public static readonly Catel.Data.PropertyData FilterProperty;
-        public static readonly Catel.Data.PropertyData MaxResultsCountProperty;
+        public static readonly Catel.Data.IPropertyData FilterHistoryProperty;
+        public static readonly Catel.Data.IPropertyData FilterProperty;
+        public static readonly Catel.Data.IPropertyData MaxResultsCountProperty;
         public SearchViewModel(Orc.Search.ISearchService searchService, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.MVVM.IViewModelFactory viewModelFactory, Orc.Search.ISearchHistoryService searchHistoryService) { }
         public Catel.MVVM.TaskCommand BuildFilter { get; }
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
         public Catel.Collections.FastObservableCollection<string> FilterHistory { get; }
         public int MaxResultsCount { get; set; }
         protected override System.Threading.Tasks.Task CloseAsync() { }
@@ -61,7 +61,7 @@ namespace Orc.Search
     public class SearchWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public SearchWindow() { }
-        public SearchWindow(Orc.Search.SearchViewModel viewModel) { }
+        public SearchWindow(Orc.Search.SearchViewModel? viewModel) { }
         public void InitializeComponent() { }
     }
 }

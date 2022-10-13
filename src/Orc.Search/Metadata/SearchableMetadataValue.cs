@@ -1,16 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchableMetadataValue.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
+    using System;
+
     public class SearchableMetadataValue : ISearchableMetadataValue
     {
         public SearchableMetadataValue(ISearchableMetadata metadata, string value)
         {
+            ArgumentNullException.ThrowIfNull(metadata);
+            ArgumentNullException.ThrowIfNull(value);
+
             Metadata = metadata;
             Value = value;
         }
