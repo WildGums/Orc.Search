@@ -69,7 +69,7 @@
             try
             {
                 // ReSharper disable once ObjectCreationAsStatement
-                new Regex(pattern);
+                _ = new Regex(pattern, RegexOptions.None, TimeSpan.FromSeconds(1));
                 return true;
             }
             catch
