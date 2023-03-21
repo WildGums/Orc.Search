@@ -6,7 +6,6 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-    using Catel.Collections;
     using Catel.MVVM;
     using Catel.Services;
     using Services;
@@ -34,18 +33,13 @@
 
             AddPerson = new TaskCommand(OnAddPersonAsync);
             RemovePerson = new Command(OnRemovePerson);
-
-            Title = "Orc.Search example";
         }
 
-        public TaskCommand AddPerson { get; private set; }
+        public TaskCommand AddPerson { get; }
 
-        public Command RemovePerson { get; private set; }
+        public Command RemovePerson { get; }
 
-        public override string Title
-        {
-            get { return "Orc.Search example"; }
-        }
+        public override string Title => "Orc.Search example";
 
         public object SelectedObject { get; set; }
 
@@ -98,8 +92,7 @@
         }
         private void OnRemovePerson()
         {
-            var selectedSearchable = SelectedObject as ISearchable;
-            if (selectedSearchable is null)
+            if (SelectedObject is not ISearchable selectedSearchable)
             {
                 return;
             }
@@ -107,7 +100,7 @@
             AllObjects.Remove(selectedSearchable);
         }
 
-        private void OnAllObjectsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        private void OnAllObjectsChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Remove)
             {
