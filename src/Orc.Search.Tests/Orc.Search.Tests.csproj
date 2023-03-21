@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Orc.Search\Orc.Search.csproj" />
     <ProjectReference Include="..\Orc.Search.Xaml\Orc.Search.Xaml.csproj" />
   </ItemGroup>
 
