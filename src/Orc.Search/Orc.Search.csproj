@@ -24,12 +24,19 @@
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00016" PrivateAssets="all" />
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00016" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
     <PackageReference Include="Orc.FileSystem" Version="5.0.0-alpha0356" />
     <PackageReference Include="Orc.Metadata" Version="5.0.0-alpha0291" />
   </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.*" />
+  </ItemGroup>  
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.*" />
+  </ItemGroup>  
   
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.nullable.props')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
