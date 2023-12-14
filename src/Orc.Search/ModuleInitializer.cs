@@ -21,7 +21,7 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ISearchNavigationService, DummySearchNavigationService>();
         serviceLocator.RegisterType<ISearchQueryService, SearchQueryService>();
 
-        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        var languageService = serviceLocator.ResolveRequiredType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.Search", "Orc.Search.Properties", "Resources"));
     }
 }

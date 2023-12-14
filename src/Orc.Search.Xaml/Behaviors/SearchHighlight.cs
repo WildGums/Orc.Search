@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchableBehavior.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System;
     using System.Windows;
@@ -19,25 +12,24 @@ namespace Orc.Search
         private readonly IDispatcherService _dispatcherService;
         private readonly ISearchHighlightService _searchHighlightService;
 
-        private Style _defaultStyle;
+        private Style? _defaultStyle;
         private bool _isHighlighted;
         private bool _wasHighlightedBetweenEvents;
-        private object _searchable;
-        private DependencyProperty _styleDependencyProperty;
+        private object? _searchable;
+        private DependencyProperty? _styleDependencyProperty;
 
         public SearchHighlight()
         {
             var dependencyResolver = this.GetDependencyResolver();
 
-            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
-            _searchHighlightService = dependencyResolver.Resolve<ISearchHighlightService>();
+            _dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
+            _searchHighlightService = dependencyResolver.ResolveRequired<ISearchHighlightService>();
 
             _searchHighlightService.Highlighting += OnSearchHighlightServiceHighlighting;
             _searchHighlightService.Highlighted += OnSearchHighlightServiceHighlighted;
         }
 
-        #region Properties
-        public object Searchable
+        public object? Searchable
         {
             get { return GetValue(SearchableProperty); }
             set { SetValue(SearchableProperty, value); }
@@ -46,18 +38,18 @@ namespace Orc.Search
         public static readonly DependencyProperty SearchableProperty = DependencyProperty.Register(nameof(Searchable), typeof(object),
             typeof(SearchHighlight), new PropertyMetadata(null, (sender, e) => ((SearchHighlight)sender).OnSearchableChanged()));
 
-        public string StylePropertyName
+        public string? StylePropertyName
         {
-            get { return (string)GetValue(StylePropertyNameProperty); }
+            get { return (string?)GetValue(StylePropertyNameProperty); }
             set { SetValue(StylePropertyNameProperty, value); }
         }
 
         public static readonly DependencyProperty StylePropertyNameProperty = DependencyProperty.Register(nameof(StylePropertyName), typeof(string),
             typeof(SearchHighlight), new PropertyMetadata("Style", (sender, e) => ((SearchHighlight)sender).OnStylePropertyNameChanged()));
 
-        public Style HighlightStyle
+        public Style? HighlightStyle
         {
-            get { return (Style)GetValue(HighlightStyleProperty); }
+            get { return (Style?)GetValue(HighlightStyleProperty); }
             set { SetValue(HighlightStyleProperty, value); }
         }
 
@@ -65,9 +57,7 @@ namespace Orc.Search
         public static readonly DependencyProperty HighlightStyleProperty = DependencyProperty.Register(nameof(HighlightStyle), typeof(Style),
 #pragma warning restore WPF0176 // StyleTypedProperty is missing.
             typeof(SearchHighlight), new PropertyMetadata(null));
-        #endregion
 
-        #region Methods
         public void ResetHighlight()
         {
             if (!_isHighlighted)
@@ -106,12 +96,12 @@ namespace Orc.Search
             });
         }
 
-        private void OnSearchHighlightServiceHighlighting(object sender, EventArgs e)
+        private void OnSearchHighlightServiceHighlighting(object? sender, EventArgs e)
         {
             _wasHighlightedBetweenEvents = false;
         }
 
-        private void OnSearchHighlightServiceHighlighted(object sender, EventArgs e)
+        private void OnSearchHighlightServiceHighlighted(object? sender, EventArgs e)
         {
             if (!_wasHighlightedBetweenEvents)
             {
@@ -126,7 +116,14 @@ namespace Orc.Search
 
         private void OnStylePropertyNameChanged()
         {
-            _styleDependencyProperty = AssociatedObject.GetDependencyPropertyByName(StylePropertyName);
+            var stylePropertyName = StylePropertyName;
+            if (stylePropertyName is null)
+            {
+                _styleDependencyProperty = null;
+                return;
+            }
+
+            _styleDependencyProperty = AssociatedObject.GetDependencyPropertyByName(stylePropertyName);
         }
 
         protected override void OnAssociatedObjectLoaded()
@@ -146,6 +143,5 @@ namespace Orc.Search
 
             base.OnAssociatedObjectUnloaded();
         }
-        #endregion
     }
 }

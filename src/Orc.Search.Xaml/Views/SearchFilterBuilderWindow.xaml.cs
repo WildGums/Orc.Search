@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchFilterBuilderWindow.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
-    /// <summary>
-    /// Interaction logic for SearchFilterBuilderWindow.xaml.
-    /// </summary>
     public partial class SearchFilterBuilderWindow
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchFilterBuilderWindow"/> class.
         /// </summary>
@@ -28,11 +17,10 @@ namespace Orc.Search
         /// <remarks>
         /// This constructor can be used to use view-model injection.
         /// </remarks>
-        public SearchFilterBuilderWindow(SearchFilterBuilderViewModel viewModel)
+        public SearchFilterBuilderWindow(SearchFilterBuilderViewModel? viewModel)
             : base(viewModel)
         {
             InitializeComponent();
         }
-        #endregion
     }
 }

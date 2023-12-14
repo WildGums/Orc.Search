@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchQueryService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
+    using System;
     using System.Collections.Generic;
     using Lucene.Net.Analysis.Standard;
     using Lucene.Net.Index;
-    using Lucene.Net.QueryParsers;
     using Lucene.Net.QueryParsers.Classic;
     using Lucene.Net.Search;
 
@@ -18,6 +11,9 @@ namespace Orc.Search
     {
         public string GetSearchQuery(string filter, IEnumerable<ISearchableMetadata> searchableMetadatas)
         {
+            ArgumentNullException.ThrowIfNull(filter);
+            ArgumentNullException.ThrowIfNull(searchableMetadatas);
+
             if (!filter.Contains(":"))
             {
                 filter = filter.PrepareOrcSearchFilter();
@@ -31,7 +27,7 @@ namespace Orc.Search
                     }
 
                     var parser = new MultiFieldQueryParser(LuceneDefaults.Version, fields.ToArray(), analyzer);
-                    var query  = parser.Parse(filter);
+                    var query = parser.Parse(filter);
                     filter = query.ToString();
                 }
             }
@@ -41,6 +37,8 @@ namespace Orc.Search
 
         public string GetSearchQuery(params ISearchableMetadataValue[] searchableMetadataValues)
         {
+            ArgumentNullException.ThrowIfNull(searchableMetadataValues);
+
             var query = new PhraseQuery();
 
             foreach (var searchableMetadataValue in searchableMetadataValues)

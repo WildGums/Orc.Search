@@ -1,26 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchHistoryService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Catel;
+    using System.Threading.Tasks;
     using Catel.Logging;
     using Catel.Runtime.Serialization.Xml;
     using Catel.Services;
-    using Catel.Threading;
     using Orc.FileSystem;
 
     public class SearchHistoryService : ISearchHistoryService
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IXmlSerializer _xmlSerializer;
@@ -29,16 +20,14 @@ namespace Orc.Search
         private readonly object _lock = new object();
         private readonly string _fileName;
         private readonly SearchHistory _searchHistory = new SearchHistory();
-        #endregion
 
-        #region Constructors
         public SearchHistoryService(ISearchService searchService, IXmlSerializer xmlSerializer,
             IAppDataService appDataService, IDirectoryService directoryService)
         {
-            Argument.IsNotNull(() => searchService);
-            Argument.IsNotNull(() => xmlSerializer);
-            Argument.IsNotNull(() => appDataService);
-            Argument.IsNotNull(() => directoryService);
+            ArgumentNullException.ThrowIfNull(searchService);
+            ArgumentNullException.ThrowIfNull(xmlSerializer);
+            ArgumentNullException.ThrowIfNull(appDataService);
+            ArgumentNullException.ThrowIfNull(directoryService);
 
             _xmlSerializer = xmlSerializer;
             _appDataService = appDataService;
@@ -52,12 +41,7 @@ namespace Orc.Search
 
             LoadSearchHistory();
         }
-        #endregion
 
-        #region Properties
-        #endregion
-
-        #region Methods
         public IEnumerable<string> GetLastSearchQueries(string prefix, int count = 5)
         {
             var elements = new List<string>();
@@ -75,10 +59,10 @@ namespace Orc.Search
             return elements;
         }
 
-        private void OnSearchServiceSearched(object sender, SearchEventArgs e)
+        private void OnSearchServiceSearched(object? sender, SearchEventArgs e)
         {
 #pragma warning disable 4014
-            TaskHelper.Run(() => AddSearchFilterToHistory(e.Filter, e.Results), true);
+            Task.Run(() => AddSearchFilterToHistory(e.Filter, e.Results));
 #pragma warning restore 4014
         }
 
@@ -93,7 +77,7 @@ namespace Orc.Search
 
             lock (_lock)
             {
-                SearchHistoryElement searchHistoryElement = null;
+                SearchHistoryElement? searchHistoryElement = null;
 
                 foreach (var searchHistory in _searchHistory.SearchHistoryElements)
                 {
@@ -172,6 +156,5 @@ namespace Orc.Search
                 Log.Error(ex, "Failed to save search history");
             }
         }
-        #endregion
     }
 }

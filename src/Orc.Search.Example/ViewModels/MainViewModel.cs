@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search.Example.ViewModels
+﻿namespace Orc.Search.Example.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -13,54 +6,40 @@ namespace Orc.Search.Example.ViewModels
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-    using Catel;
-    using Catel.Collections;
     using Catel.MVVM;
     using Catel.Services;
-    using Catel.Threading;
     using Services;
 
     public class MainViewModel : ViewModelBase
     {
-        #region Fields
         private readonly IDataGenerationService _dataGenerationService;
         private readonly ISearchService _searchService;
 
         private readonly Stopwatch _searchStopwatch = new Stopwatch();
         private readonly IUIVisualizerService _uiVisualizerService;
-        #endregion
 
-        #region Constructors
         public MainViewModel(IDataGenerationService dataGenerationService, ISearchService searchService, IUIVisualizerService uiVisualizerService)
         {
-            Argument.IsNotNull(() => dataGenerationService);
-            Argument.IsNotNull(() => searchService);
-            Argument.IsNotNull(() => uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(dataGenerationService);
+            ArgumentNullException.ThrowIfNull(searchService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
 
             _dataGenerationService = dataGenerationService;
             _searchService = searchService;
             _uiVisualizerService = uiVisualizerService;
 
-            AllObjects = new FastObservableCollection<object>();
-            FilteredObjects = new FastObservableCollection<object>();
+            AllObjects = new List<ISearchable>();
+            FilteredObjects = new List<ISearchable>();
 
             AddPerson = new TaskCommand(OnAddPersonAsync);
             RemovePerson = new Command(OnRemovePerson);
-
-            Title = "Orc.Search example";
         }
 
-        #endregion
+        public TaskCommand AddPerson { get; }
 
-        #region Properties
-        public TaskCommand AddPerson { get; private set; }
+        public Command RemovePerson { get; }
 
-        public Command RemovePerson { get; private set; }
-
-        public override string Title
-        {
-            get { return "Orc.Search example"; }
-        }
+        public override string Title => "Orc.Search example";
 
         public object SelectedObject { get; set; }
 
@@ -72,16 +51,14 @@ namespace Orc.Search.Example.ViewModels
 
         public string Filter { get; set; }
 
-        public FastObservableCollection<object> AllObjects { get; private set; }
+        public List<ISearchable> AllObjects { get; private set; }
 
-        public FastObservableCollection<object> FilteredObjects { get; private set; }
+        public List<ISearchable> FilteredObjects { get; private set; }
 
         public int FilteredObjectCount { get; private set; }
 
         public TimeSpan LastSearchDuration { get; private set; }
-        #endregion
 
-        #region Methods
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -92,26 +69,22 @@ namespace Orc.Search.Example.ViewModels
             _searchService.Searching += OnSearchServiceSearching;
             _searchService.Searched += OnSearchServiceSearched;
 
-            using (AllObjects.SuspendChangeNotifications())
-            {
-                var generatedSearchables = (await TaskHelper.Run(() => _dataGenerationService.GenerateSearchables(), true)).ToList();
+            var generatedSearchables = (await Task.Run(() => _dataGenerationService.GenerateSearchables())).ToList();
 
-                ((ICollection<object>)AllObjects).ReplaceRange(generatedSearchables);
-                AllObjects.CollectionChanged += OnAllObjectsOnCollectionChanged;
-
-                await TaskHelper.Run(() => _searchService.AddObjects(generatedSearchables), true);
-            }
+            AllObjects = generatedSearchables.ToList();
+            await Task.Run(() => _searchService.AddObjects(generatedSearchables));
         }
 
         private async Task OnAddPersonAsync()
         {
             var addPersonViewModel = new AddPersonViewModel();
-            if (await _uiVisualizerService.ShowDialogAsync(addPersonViewModel) ?? false)
+            var result = await _uiVisualizerService.ShowDialogAsync(addPersonViewModel);
+            if (result.DialogResult ?? false)
             {
                 var person = addPersonViewModel.Person;
                 var searchable = _dataGenerationService.GenerateSearchable(person);
 
-                _searchService.AddObjects(new[] {searchable});
+                _searchService.AddObjects(new[] { searchable });
                 AllObjects.Add(searchable);
 
                 _searchService.Search(Filter);
@@ -119,8 +92,7 @@ namespace Orc.Search.Example.ViewModels
         }
         private void OnRemovePerson()
         {
-            var selectedSearchable = SelectedObject as ISearchable;
-            if (selectedSearchable is null)
+            if (SelectedObject is not ISearchable selectedSearchable)
             {
                 return;
             }
@@ -128,7 +100,7 @@ namespace Orc.Search.Example.ViewModels
             AllObjects.Remove(selectedSearchable);
         }
 
-        private void OnAllObjectsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        private void OnAllObjectsChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Remove)
             {
@@ -150,40 +122,34 @@ namespace Orc.Search.Example.ViewModels
             await base.CloseAsync();
         }
 
-        private void OnSearchServiceUpdating(object sender, EventArgs e)
+        private void OnSearchServiceUpdating(object? sender, EventArgs e)
         {
             IsUpdatingSearch = true;
         }
 
-        private void OnSearchServiceUpdated(object sender, EventArgs e)
+        private void OnSearchServiceUpdated(object? sender, EventArgs e)
         {
             IsUpdatingSearch = false;
 
             IndexedObjectCount = _searchService.IndexedObjectCount;
         }
 
-        private void OnSearchServiceSearching(object sender, EventArgs e)
+        private void OnSearchServiceSearching(object? sender, EventArgs e)
         {
             IsSearching = true;
 
             _searchStopwatch.Restart();
         }
 
-        private void OnSearchServiceSearched(object sender, SearchEventArgs e)
+        private void OnSearchServiceSearched(object? sender, SearchEventArgs e)
         {
             _searchStopwatch.Stop();
+
             LastSearchDuration = _searchStopwatch.Elapsed;
-
-            var filteredObjects = FilteredObjects;
-
-            using (filteredObjects.SuspendChangeNotifications())
-            {
-                ((ICollection<object>) filteredObjects).ReplaceRange(e.Results);
-                FilteredObjectCount = filteredObjects.Count;
-            }
+            FilteredObjects = e.Results.ToList();
+            FilteredObjectCount = FilteredObjects.Count;
 
             IsSearching = false;
         }
-        #endregion
     }
 }

@@ -1,18 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
+    using System;
     using System.Text.RegularExpressions;
 
     public static class StringExtensions
     {
         public static string PrepareOrcSearchFilter(this string filter)
         {
+            ArgumentNullException.ThrowIfNull(filter);
+
             if (filter.StartsWith("\"") && filter.EndsWith("\""))
             {
                 return filter.Length == 2 
@@ -50,6 +46,8 @@ namespace Orc.Search
 
         public static string ExtractRegexString(this string filter)
         {
+            ArgumentNullException.ThrowIfNull(filter);
+
             if (!filter.StartsWith("/") || !filter.EndsWith("/"))
             {
                 return string.Empty;
@@ -66,10 +64,12 @@ namespace Orc.Search
 
         public static bool IsValidRegexPattern(this string pattern)
         {
+            ArgumentNullException.ThrowIfNull(pattern);
+
             try
             {
                 // ReSharper disable once ObjectCreationAsStatement
-                new Regex(pattern);
+                _ = new Regex(pattern, RegexOptions.None, TimeSpan.FromSeconds(1));
                 return true;
             }
             catch

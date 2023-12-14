@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Search
+﻿namespace Orc.Search
 {
     using System;
     using System.Collections.Generic;
@@ -16,19 +9,14 @@ namespace Orc.Search
     using Lucene.Net.Analysis.Standard;
     using Lucene.Net.Documents;
     using Lucene.Net.Index;
-    using Lucene.Net.QueryParsers;
     using Lucene.Net.QueryParsers.Classic;
     using Lucene.Net.Search;
     using Lucene.Net.Store;
-    using Orc.Metadata;
 
     public abstract class SearchServiceBase : ISearchService
     {
-        #region Constants
         private const string IndexId = "__index_id";
-        #endregion
 
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly object _lockObject = new object();
@@ -42,19 +30,15 @@ namespace Orc.Search
 
         private bool _initialized;
 
-        private Directory _indexDirectory;
-        #endregion
+        private Directory? _indexDirectory;
 
-        #region Constructors
         protected SearchServiceBase(ISearchQueryService searchQueryService)
         {
-            Argument.IsNotNull(() => searchQueryService);
+            ArgumentNullException.ThrowIfNull(searchQueryService);
 
             _searchQueryService = searchQueryService;
         }
-        #endregion
 
-        #region Properties
         public int IndexedObjectCount
         {
             get
@@ -65,19 +49,15 @@ namespace Orc.Search
                 }
             }
         }
-        #endregion
 
-        #region Events
-        public event EventHandler<EventArgs> Updating;
+        public event EventHandler<EventArgs>? Updating;
 
-        public event EventHandler<EventArgs> Updated;
+        public event EventHandler<EventArgs>? Updated;
 
-        public event EventHandler<SearchEventArgs> Searching;
+        public event EventHandler<SearchEventArgs>? Searching;
 
-        public event EventHandler<SearchEventArgs> Searched;
-        #endregion
+        public event EventHandler<SearchEventArgs>? Searched;
 
-        #region Methods
         public virtual IEnumerable<ISearchableMetadata> GetSearchableMetadata()
         {
             lock (_lockObject)
@@ -89,7 +69,14 @@ namespace Orc.Search
 
         public virtual void AddObjects(IEnumerable<ISearchable> searchables)
         {
+            ArgumentNullException.ThrowIfNull(searchables);
+
             Initialize();
+
+            if (_indexDirectory is null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+            }
 
             Updating?.Invoke(this, EventArgs.Empty);
 
@@ -116,7 +103,7 @@ namespace Orc.Search
 
                             foreach (var searchableMetadata in searchableMetadatas)
                             {
-                                if (searchableMetadata.GetValue<object>(searchable.Instance, out var searchableMetadataValue))
+                                if (searchableMetadata.TryGetValue<object>(searchable.Instance, out var searchableMetadataValue))
                                 {
                                     var searchableMetadataValueAsString = ObjectToStringHelper.ToString(searchableMetadataValue);
 
@@ -144,7 +131,14 @@ namespace Orc.Search
 
         public virtual void RemoveObjects(IEnumerable<ISearchable> searchables)
         {
+            ArgumentNullException.ThrowIfNull(searchables);
+
             Initialize();
+
+            if (_indexDirectory is null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+            }
 
             lock (_lockObject)
             {
@@ -185,6 +179,11 @@ namespace Orc.Search
         {
             Initialize();
 
+            if (_indexDirectory is null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+            }
+
             Updating?.Invoke(this, EventArgs.Empty);
 
             lock (_lockObject)
@@ -207,9 +206,16 @@ namespace Orc.Search
             Updated?.Invoke(this, EventArgs.Empty);
         }
 
-        public virtual IEnumerable<ISearchable> Search(string filter, int maxResults = SearchDefaults.DefaultResults)
+        public virtual IEnumerable<ISearchable> Search(string? filter, int maxResults = SearchDefaults.DefaultResults)
         {
+            var finalFilter = filter ?? string.Empty;
+
             Initialize();
+
+            if (_indexDirectory is null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+            }
 
             var results = new List<ISearchable>();
 
@@ -217,9 +223,9 @@ namespace Orc.Search
             {
                 try
                 {
-                    Searching?.Invoke(this, new SearchEventArgs(filter, results));
+                    Searching?.Invoke(this, new SearchEventArgs(finalFilter, results));
 
-                    Query finalQuery = null;
+                    Query? finalQuery = null;
 
                     // Note: There are two issues with using regex here
                     //       1. Lucene uses lower case interpretation of each string for indexing.
@@ -230,11 +236,11 @@ namespace Orc.Search
                     //       versions if indeces. One for regular search and another for regex
 
                     // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                    if (filter.IsValidOrcSearchFilter())
+                    if (finalFilter.IsValidOrcSearchFilter())
                     {
                         using (var analyzer = new StandardAnalyzer(LuceneDefaults.Version))
                         {
-                            var queryAsText = _searchQueryService.GetSearchQuery(filter, GetSearchableMetadata());
+                            var queryAsText = _searchQueryService.GetSearchQuery(finalFilter, GetSearchableMetadata());
 
                             var parser = new QueryParser(LuceneDefaults.Version, string.Empty, analyzer);
                             finalQuery = parser.Parse(queryAsText);
@@ -269,7 +275,7 @@ namespace Orc.Search
                 }
                 finally
                 {
-                    Searched?.Invoke(this, new SearchEventArgs(filter, results));
+                    Searched?.Invoke(this, new SearchEventArgs(finalFilter, results));
                 }
             }
 
@@ -299,6 +305,8 @@ namespace Orc.Search
 
         protected virtual IndexWriterConfig CreateIndexWriterConfig(Analyzer analyzer)
         {
+            ArgumentNullException.ThrowIfNull(analyzer);
+
             var config = new IndexWriterConfig(LuceneDefaults.Version, analyzer)
             {
 
@@ -308,6 +316,5 @@ namespace Orc.Search
         }
 
         protected abstract Directory GetDirectory();
-        #endregion
     }
 }
