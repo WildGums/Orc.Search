@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Catel.Fody" Version="4.9.0" PrivateAssets="all" />
     <PackageReference Include="Costura.Fody" Version="5.7.0" PrivateAssets="all" /> 
-    <PackageReference Include="Fody" Version="6.8.1" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="6.8.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00016" PrivateAssets="all" />
@@ -31,7 +31,7 @@
   </ItemGroup>
   
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net6.0')) ">
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
   </ItemGroup>  
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
