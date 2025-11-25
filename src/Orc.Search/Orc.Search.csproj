@@ -24,7 +24,6 @@
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00017" PrivateAssets="all" />
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00017" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all" />
-    <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.1" PrivateAssets="all" />
     <PackageReference Include="Orc.FileSystem" Version="5.1.0-alpha0848" />
     <PackageReference Include="Orc.Metadata" Version="5.1.0-alpha0685" />
