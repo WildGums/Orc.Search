@@ -90,6 +90,7 @@
                 _searchService.Search(Filter);
             }
         }
+
         private void OnRemovePerson()
         {
             if (SelectedObject is not ISearchable selectedSearchable)
@@ -98,17 +99,6 @@
             }
 
             AllObjects.Remove(selectedSearchable);
-        }
-
-        private void OnAllObjectsChanged(object? sender, NotifyCollectionChangedEventArgs args)
-        {
-            if (args.Action == NotifyCollectionChangedAction.Remove)
-            {
-                var oldItems = args.OldItems;
-                _searchService.RemoveObjects(oldItems.OfType<ISearchable>());
-            }
-
-            _searchService.Search(Filter);
         }
 
         protected override async Task CloseAsync()
