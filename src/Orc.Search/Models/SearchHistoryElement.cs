@@ -15,6 +15,7 @@
         public string FilterLowerCase { get; private set; }
 
         public bool EverFoundResults { get; set; }
+
         public int Count { get; set; }
 
         private void OnFilterChanged()
@@ -29,13 +30,6 @@
             {
                 FilterLowerCase = filter.ToLower();
             }
-        }
-
-        protected override void OnDeserialized()
-        {
-            base.OnDeserialized();
-
-            OnFilterChanged();
         }
     }
 }

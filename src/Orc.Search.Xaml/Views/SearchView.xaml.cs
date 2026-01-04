@@ -1,18 +1,21 @@
 ﻿namespace Orc.Search
 {
     using System.Windows;
+    using Catel;
+    using Catel.IoC;
     using Catel.MVVM.Views;
+    using Microsoft.Extensions.DependencyInjection;
 
     public partial class SearchView
     {
         static SearchView()
         {
-            typeof(SearchView).AutoDetectViewPropertiesToSubscribe();
-        }
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
 
-        public SearchView()
-        {
-            InitializeComponent();
+            typeof(SearchView).AutoDetectViewPropertiesToSubscribe(IoCContainer.ServiceProvider.GetRequiredService<IViewPropertySelector>());
         }
 
 
@@ -23,11 +26,11 @@
             set { SetValue(FilterProperty, value); }
         }
 
-        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(Filter), typeof(string), 
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(Filter), typeof(string),
             typeof(SearchView), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 
-        [ViewToViewModel(MappingType=ViewToViewModelMappingType.ViewToViewModel)]
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
         public int MaxResultsCount
         {
             get { return (int)GetValue(MaxResultsCountProperty); }

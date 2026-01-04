@@ -6,38 +6,38 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Catel.Logging;
-    using Catel.Runtime.Serialization.Xml;
     using Catel.Services;
+    using Microsoft.Extensions.Logging;
     using Orc.FileSystem;
+    using Orc.Serialization.Json;
 
     public class SearchHistoryService : ISearchHistoryService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(SearchHistoryService));
 
-        private readonly IXmlSerializer _xmlSerializer;
+        private readonly IJsonSerializerFactory _jsonSerializerFactory;
         private readonly IAppDataService _appDataService;
         private readonly IDirectoryService _directoryService;
+        private readonly IFileService _fileService;
         private readonly object _lock = new object();
         private readonly string _fileName;
-        private readonly SearchHistory _searchHistory = new SearchHistory();
 
-        public SearchHistoryService(ISearchService searchService, IXmlSerializer xmlSerializer,
-            IAppDataService appDataService, IDirectoryService directoryService)
+        private SearchHistory _searchHistory = new SearchHistory();
+
+        public SearchHistoryService(ISearchService searchService, IJsonSerializerFactory jsonSerializerFactory,
+            IAppDataService appDataService, IDirectoryService directoryService, IFileService fileService)
         {
-            ArgumentNullException.ThrowIfNull(searchService);
-            ArgumentNullException.ThrowIfNull(xmlSerializer);
-            ArgumentNullException.ThrowIfNull(appDataService);
-            ArgumentNullException.ThrowIfNull(directoryService);
-
-            _xmlSerializer = xmlSerializer;
+            _jsonSerializerFactory = jsonSerializerFactory;
             _appDataService = appDataService;
             _directoryService = directoryService;
+            _fileService = fileService;
+
             searchService.Searched += OnSearchServiceSearched;
 
             var directory = Path.Combine(_appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "search");
             _directoryService.Create(directory);
 
-            _fileName = Path.Combine(directory, "history.xml");
+            _fileName = Path.Combine(directory, "history.json");
 
             LoadSearchHistory();
         }
@@ -113,25 +113,27 @@
             {
                 lock (_lock)
                 {
-                    Log.Debug("Loading search history");
+                    Logger.LogDebug("Loading search history");
 
-                    if (!File.Exists(_fileName))
+                    if (!_fileService.Exists(_fileName))
                     {
-                        Log.Debug("History file does not exist, skipping loading");
+                        Logger.LogDebug("History file does not exist, skipping loading");
                         return;
                     }
 
-                    using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
+                    var serializer = _jsonSerializerFactory.CreateSerializer();
+
+                    using (var fileStream = _fileService.OpenRead(_fileName))
                     {
-                        _xmlSerializer.Deserialize(_searchHistory, fileStream, null);
+                        _searchHistory = serializer.Deserialize<SearchHistory>(fileStream) ?? new SearchHistory();
                     }
 
-                    Log.Debug("Loaded search history");
+                    Logger.LogDebug("Loaded search history");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to load search history");
+                Logger.LogError(ex, "Failed to load search history");
             }
         }
 
@@ -141,19 +143,21 @@
             {
                 lock (_lock)
                 {
-                    Log.Debug("Saving search history");
+                    Logger.LogDebug("Saving search history");
 
-                    using (var fileStream = new FileStream(_fileName, FileMode.Create))
+                    var serializer = _jsonSerializerFactory.CreateSerializer();
+
+                    using (var fileStream = _fileService.Create(_fileName))
                     {
-                        _xmlSerializer.Serialize(_searchHistory, fileStream, null);
+                        serializer.Serialize(fileStream, _searchHistory);
                     }
 
-                    Log.Debug("Saved search history");
+                    Logger.LogDebug("Saved search history");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to save search history");
+                Logger.LogError(ex, "Failed to save search history");
             }
         }
     }

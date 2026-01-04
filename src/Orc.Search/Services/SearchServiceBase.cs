@@ -12,15 +12,15 @@
     using Lucene.Net.QueryParsers.Classic;
     using Lucene.Net.Search;
     using Lucene.Net.Store;
+    using Microsoft.Extensions.Logging;
 
     public abstract class SearchServiceBase : ISearchService
     {
         private const string IndexId = "__index_id";
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly object _lockObject = new object();
 
+        private readonly ILogger _logger;
         private readonly ISearchQueryService _searchQueryService;
 
         private int _currentIndex = 0;
@@ -32,10 +32,10 @@
 
         private Directory? _indexDirectory;
 
-        protected SearchServiceBase(ISearchQueryService searchQueryService)
+        protected SearchServiceBase(ILogger logger, ISearchQueryService searchQueryService)
         {
             ArgumentNullException.ThrowIfNull(searchQueryService);
-
+            _logger = logger;
             _searchQueryService = searchQueryService;
         }
 
@@ -75,7 +75,7 @@
 
             if (_indexDirectory is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>("No index directory available");
             }
 
             Updating?.Invoke(this, EventArgs.Empty);
@@ -137,7 +137,7 @@
 
             if (_indexDirectory is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>("No index directory available");
             }
 
             lock (_lockObject)
@@ -181,7 +181,7 @@
 
             if (_indexDirectory is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>("No index directory available");
             }
 
             Updating?.Invoke(this, EventArgs.Empty);
@@ -214,7 +214,7 @@
 
             if (_indexDirectory is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("No index directory available");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>("No index directory available");
             }
 
             var results = new List<ISearchable>();
@@ -267,11 +267,11 @@
                 }
                 catch (ParseException ex)
                 {
-                    Log.Warning(ex, "Failed to parse search pattern");
+                    _logger.LogWarning(ex, "Failed to parse search pattern");
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "An error occurred while searching, returning default results");
+                    _logger.LogError(ex, "An error occurred while searching, returning default results");
                 }
                 finally
                 {

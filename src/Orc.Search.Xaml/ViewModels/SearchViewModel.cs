@@ -1,10 +1,8 @@
 ﻿namespace Orc.Search
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Threading;
-    using Catel;
     using Catel.Collections;
     using Catel.MVVM;
     using Catel.Services;
@@ -18,14 +16,11 @@
 
         private readonly DispatcherTimer _dispatcherTimer;
 
-        public SearchViewModel(ISearchService searchService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory,
-            ISearchHistoryService searchHistoryService)
+        public SearchViewModel(IServiceProvider serviceProvider, ISearchService searchService, 
+            IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory,
+            ISearchHistoryService searchHistoryService, IDispatcherService dispatcherService)
+            : base(serviceProvider)
         {
-            ArgumentNullException.ThrowIfNull(searchService);
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-            ArgumentNullException.ThrowIfNull(viewModelFactory);
-            ArgumentNullException.ThrowIfNull(searchHistoryService);
-
             _searchService = searchService;
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
@@ -34,9 +29,9 @@
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
 
-            FilterHistory = new FastObservableCollection<string>();
+            FilterHistory = new FastObservableCollection<string>(dispatcherService);
 
-            BuildFilter = new TaskCommand(OnBuildFilterExecuteAsync);
+            BuildFilter = new TaskCommand(serviceProvider, OnBuildFilterExecuteAsync);
         }
 
         public string? Filter { get; set; }
@@ -49,7 +44,7 @@
 
         private async Task OnBuildFilterExecuteAsync()
         {
-            var vm = _viewModelFactory.CreateRequiredViewModel<SearchFilterBuilderViewModel>(null, null);
+            var vm = _viewModelFactory.CreateRequiredViewModel<SearchFilterBuilderViewModel>(null);
             var result = await _uiVisualizerService.ShowDialogAsync(vm);
             if (result.DialogResult ?? false)
             {

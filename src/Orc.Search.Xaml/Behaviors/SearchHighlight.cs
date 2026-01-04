@@ -18,15 +18,10 @@
         private object? _searchable;
         private DependencyProperty? _styleDependencyProperty;
 
-        public SearchHighlight()
+        public SearchHighlight(IDispatcherService dispatcherService, ISearchHighlightService searchHighlightService)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-
-            _dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
-            _searchHighlightService = dependencyResolver.ResolveRequired<ISearchHighlightService>();
-
-            _searchHighlightService.Highlighting += OnSearchHighlightServiceHighlighting;
-            _searchHighlightService.Highlighted += OnSearchHighlightServiceHighlighted;
+            _dispatcherService = dispatcherService;
+            _searchHighlightService = searchHighlightService;
         }
 
         public object? Searchable
@@ -132,11 +127,17 @@
 
             OnStylePropertyNameChanged();
 
+            _searchHighlightService.Highlighting += OnSearchHighlightServiceHighlighting;
+            _searchHighlightService.Highlighted += OnSearchHighlightServiceHighlighted;
+
             _searchHighlightService.AddProvider(this);
         }
 
         protected override void OnAssociatedObjectUnloaded()
         {
+            _searchHighlightService.Highlighting -= OnSearchHighlightServiceHighlighting;
+            _searchHighlightService.Highlighted -= OnSearchHighlightServiceHighlighted;
+
             _searchHighlightService.RemoveProvider(this);
 
             _searchable = null;

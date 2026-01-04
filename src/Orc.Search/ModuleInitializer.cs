@@ -1,8 +1,4 @@
-using System.Runtime.CompilerServices;
-using Catel.IoC;
-using Catel.Services;
-using Orc.Metadata;
-using Orc.Search;
+﻿using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -15,15 +11,5 @@ public static class ModuleInitializer
     [ModuleInitializer]
     public static void Initialize()
     {
-        var serviceLocator = ServiceLocator.Default;
-
-        serviceLocator.RegisterType<ISearchService, InMemorySearchService>();
-        serviceLocator.RegisterType<ISearchHistoryService, SearchHistoryService>();
-        serviceLocator.RegisterType<ISearchHighlightService, SearchHighlightService>();
-        serviceLocator.RegisterType<ISearchNavigationService, DummySearchNavigationService>();
-        serviceLocator.RegisterType<ISearchQueryService, SearchQueryService>();
-
-        var languageService = serviceLocator.ResolveRequiredType<ILanguageService>();
-        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.Search", "Orc.Search.Properties", "Resources"));
     }
 }
