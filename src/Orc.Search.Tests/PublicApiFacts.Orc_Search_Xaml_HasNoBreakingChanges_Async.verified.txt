@@ -7,12 +7,15 @@ public static class ModuleInitializer
     [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
-namespace Orc.Search
+namespace Orc
 {
     public static class OrcSearchXamlModule
     {
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcSearchXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
+}
+namespace Orc.Search
+{
     public class SearchFilterBuilderViewModel : Catel.MVVM.ViewModelBase
     {
         public static readonly Catel.Data.IPropertyData? FilterProperty;

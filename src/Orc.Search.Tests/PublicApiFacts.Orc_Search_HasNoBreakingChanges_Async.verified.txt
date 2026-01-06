@@ -5,6 +5,13 @@ public static class ModuleInitializer
     [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
+namespace Orc
+{
+    public static class OrcSearchModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcSearch(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+    }
+}
 namespace Orc.Search
 {
     public class AttributeMetadataCollection : Orc.Metadata.ReflectionMetadataCollection
@@ -74,10 +81,6 @@ namespace Orc.Search
     {
         public InMemorySearchService(Microsoft.Extensions.Logging.ILogger<Orc.Search.InMemorySearchService> logger, Orc.Search.ISearchQueryService searchQueryService) { }
         protected override Lucene.Net.Store.Directory GetDirectory() { }
-    }
-    public static class OrcSearchModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcSearch(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public class ReflectionSearchable : Orc.Search.Searchable
     {
