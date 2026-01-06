@@ -8,17 +8,6 @@
 
     public partial class SearchView
     {
-        static SearchView()
-        {
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                return;
-            }
-
-            typeof(SearchView).AutoDetectViewPropertiesToSubscribe(IoCContainer.ServiceProvider.GetRequiredService<IViewPropertySelector>());
-        }
-
-
         [ViewToViewModel]
         public string? Filter
         {
