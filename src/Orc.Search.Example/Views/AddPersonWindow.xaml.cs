@@ -2,9 +2,9 @@
 {
     public partial class AddPersonWindow
     {
-        public AddPersonWindow()
+        partial void OnInitializingComponent()
         {
-            InitializeComponent();
+            Mode = Catel.Windows.DataWindowMode.OkCancel;
         }
     }
 }

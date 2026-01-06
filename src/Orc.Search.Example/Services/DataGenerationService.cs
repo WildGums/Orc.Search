@@ -22,7 +22,7 @@
            
         });
 
-        public IEnumerable<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount)
+        public IReadOnlyList<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount)
         {
             var objects = new List<ISearchable>();
 

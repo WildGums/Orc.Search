@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
@@ -18,12 +17,10 @@
         private readonly Stopwatch _searchStopwatch = new Stopwatch();
         private readonly IUIVisualizerService _uiVisualizerService;
 
-        public MainViewModel(IDataGenerationService dataGenerationService, ISearchService searchService, IUIVisualizerService uiVisualizerService)
+        public MainViewModel(IDataGenerationService dataGenerationService, ISearchService searchService,
+            IUIVisualizerService uiVisualizerService, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
-            ArgumentNullException.ThrowIfNull(dataGenerationService);
-            ArgumentNullException.ThrowIfNull(searchService);
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-
             _dataGenerationService = dataGenerationService;
             _searchService = searchService;
             _uiVisualizerService = uiVisualizerService;
@@ -31,8 +28,8 @@
             AllObjects = new List<ISearchable>();
             FilteredObjects = new List<ISearchable>();
 
-            AddPerson = new TaskCommand(OnAddPersonAsync);
-            RemovePerson = new Command(OnRemovePerson);
+            AddPerson = new TaskCommand(serviceProvider, OnAddPersonAsync);
+            RemovePerson = new Command(serviceProvider, OnRemovePerson);
         }
 
         public TaskCommand AddPerson { get; }
@@ -77,11 +74,10 @@
 
         private async Task OnAddPersonAsync()
         {
-            var addPersonViewModel = new AddPersonViewModel();
-            var result = await _uiVisualizerService.ShowDialogAsync(addPersonViewModel);
+            var result = await _uiVisualizerService.ShowDialogAsync<AddPersonViewModel>();
             if (result.DialogResult ?? false)
             {
-                var person = addPersonViewModel.Person;
+                var person = result.GetViewModel<AddPersonViewModel>().Person;
                 var searchable = _dataGenerationService.GenerateSearchable(person);
 
                 _searchService.AddObjects(new[] { searchable });

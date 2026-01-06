@@ -5,7 +5,7 @@
 
     public interface IDataGenerationService
     {
-        IEnumerable<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount);
+        IReadOnlyList<ISearchable> GenerateSearchables(int objectCount = ExampleDefaults.GeneratedObjectCount);
         ISearchable GenerateSearchable();
         ISearchable GenerateSearchable(Person person);
     }

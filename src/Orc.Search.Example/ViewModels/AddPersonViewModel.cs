@@ -1,11 +1,13 @@
 ﻿namespace Orc.Search.Example.ViewModels
 {
+    using System;
     using Catel.MVVM;
     using Models;
 
     public class AddPersonViewModel : ViewModelBase
     {
-        public AddPersonViewModel()
+        public AddPersonViewModel(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             Person = new Person
             {
