@@ -44,7 +44,7 @@
 
         private async Task OnBuildFilterExecuteAsync()
         {
-            var vm = _viewModelFactory.CreateRequiredViewModel<SearchFilterBuilderViewModel>(null);
+            var vm = _viewModelFactory.CreateRequiredViewModel<SearchFilterBuilderViewModel>();
             var result = await _uiVisualizerService.ShowDialogAsync(vm);
             if (result.DialogResult ?? false)
             {
