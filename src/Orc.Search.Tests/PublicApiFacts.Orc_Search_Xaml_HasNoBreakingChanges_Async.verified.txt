@@ -25,7 +25,6 @@ namespace Orc.Search
     public class SearchFilterBuilderWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public SearchFilterBuilderWindow() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public SearchFilterBuilderWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public SearchFilterBuilderWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
@@ -49,7 +48,6 @@ namespace Orc.Search
         public static readonly System.Windows.DependencyProperty FilterProperty;
         public static readonly System.Windows.DependencyProperty MaxResultsCountProperty;
         public SearchView() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public SearchView(System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public SearchView(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         [Catel.MVVM.Views.ViewToViewModel("")]
@@ -74,7 +72,6 @@ namespace Orc.Search
     public class SearchWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public SearchWindow() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public SearchWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public SearchWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
