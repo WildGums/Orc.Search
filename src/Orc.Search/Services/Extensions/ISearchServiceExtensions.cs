@@ -1,6 +1,5 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+public static class ISearchServiceExtensions
 {
-    public static class ISearchServiceExtensions
-    {
-    }
 }

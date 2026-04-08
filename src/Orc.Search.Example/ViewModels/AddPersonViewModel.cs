@@ -1,22 +1,21 @@
-﻿namespace Orc.Search.Example.ViewModels
+﻿namespace Orc.Search.Example.ViewModels;
+
+using System;
+using Catel.MVVM;
+using Models;
+
+public class AddPersonViewModel : ViewModelBase
 {
-    using System;
-    using Catel.MVVM;
-    using Models;
-
-    public class AddPersonViewModel : ViewModelBase
+    public AddPersonViewModel(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        public AddPersonViewModel(IServiceProvider serviceProvider)
-            : base(serviceProvider)
+        Person = new Person
         {
-            Person = new Person
-            {
-                Age = 20
-            };
-        }
-
-        public override string Title => "Add person";
-
-        public Person Person { get; private set; }
+            Age = 20
+        };
     }
+
+    public override string Title => "Add person";
+
+    public Person Person { get; private set; }
 }

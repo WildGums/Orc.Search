@@ -1,18 +1,17 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+using Lucene.Net.Store;
+using Microsoft.Extensions.Logging;
+
+public class InMemorySearchService : SearchServiceBase
 {
-    using Lucene.Net.Store;
-    using Microsoft.Extensions.Logging;
-
-    public class InMemorySearchService : SearchServiceBase
+    public InMemorySearchService(ILogger<InMemorySearchService> logger, ISearchQueryService searchQueryService)
+        : base(logger, searchQueryService)
     {
-        public InMemorySearchService(ILogger<InMemorySearchService> logger, ISearchQueryService searchQueryService)
-            : base(logger, searchQueryService)
-        {
-        }
+    }
 
-        protected override Directory GetDirectory()
-        {
-            return new RAMDirectory();
-        }
+    protected override Directory GetDirectory()
+    {
+        return new RAMDirectory();
     }
 }

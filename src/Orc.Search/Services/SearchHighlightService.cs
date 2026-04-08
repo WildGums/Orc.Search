@@ -1,84 +1,83 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Catel;
+using Catel.Logging;
+using Catel.Threading;
+
+public class SearchHighlightService : ISearchHighlightService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Logging;
-    using Catel.Threading;
+    private readonly List<ISearchHighlightProvider> _providers = new List<ISearchHighlightProvider>();
 
-    public class SearchHighlightService : ISearchHighlightService
+    public SearchHighlightService(ISearchService searchService)
     {
-        private readonly List<ISearchHighlightProvider> _providers = new List<ISearchHighlightProvider>();
+        ArgumentNullException.ThrowIfNull(searchService);
 
-        public SearchHighlightService(ISearchService searchService)
+        searchService.Searched += OnSearched;
+    }
+
+    public event EventHandler<EventArgs>? Highlighting;
+    public event EventHandler<EventArgs>? Highlighted;
+
+    public void AddProvider(ISearchHighlightProvider provider)
+    {
+        ArgumentNullException.ThrowIfNull(provider);
+
+        lock (_providers)
         {
-            ArgumentNullException.ThrowIfNull(searchService);
-
-            searchService.Searched += OnSearched;
+            _providers.Add(provider);
         }
+    }
 
-        public event EventHandler<EventArgs>? Highlighting;
-        public event EventHandler<EventArgs>? Highlighted;
+    public void RemoveProvider(ISearchHighlightProvider provider)
+    {
+        ArgumentNullException.ThrowIfNull(provider);
 
-        public void AddProvider(ISearchHighlightProvider provider)
+        lock (_providers)
         {
-            ArgumentNullException.ThrowIfNull(provider);
+            _providers.Remove(provider);
+        }
+    }
 
-            lock (_providers)
+    public void ResetHighlights()
+    {
+        lock (_providers)
+        {
+            Highlighting?.Invoke(this, EventArgs.Empty);
+
+            foreach (var provider in _providers)
             {
-                _providers.Add(provider);
+                provider.ResetHighlight();
             }
+
+            Highlighted?.Invoke(this, EventArgs.Empty);
         }
+    }
 
-        public void RemoveProvider(ISearchHighlightProvider provider)
+    public void HighlightSearchables(IEnumerable<object> searchables)
+    {
+        lock (_providers)
         {
-            ArgumentNullException.ThrowIfNull(provider);
+            Highlighting?.Invoke(this, EventArgs.Empty);
 
-            lock (_providers)
+            foreach (var searchable in searchables)
             {
-                _providers.Remove(provider);
-            }
-        }
-
-        public void ResetHighlights()
-        {
-            lock (_providers)
-            {
-                Highlighting?.Invoke(this, EventArgs.Empty);
-
                 foreach (var provider in _providers)
                 {
-                    provider.ResetHighlight();
+                    provider.HighlightSearchable(searchable);
                 }
-
-                Highlighted?.Invoke(this, EventArgs.Empty);
             }
+
+            Highlighted?.Invoke(this, EventArgs.Empty);
         }
+    }
 
-        public void HighlightSearchables(IEnumerable<object> searchables)
-        {
-            lock (_providers)
-            {
-                Highlighting?.Invoke(this, EventArgs.Empty);
-
-                foreach (var searchable in searchables)
-                {
-                    foreach (var provider in _providers)
-                    {
-                        provider.HighlightSearchable(searchable);
-                    }
-                }
-
-                Highlighted?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        private void OnSearched(object? sender, SearchEventArgs e)
-        {
+    private void OnSearched(object? sender, SearchEventArgs e)
+    {
 #pragma warning disable 4014
-            Task.Run(() => HighlightSearchables(e.Results));
+        Task.Run(() => HighlightSearchables(e.Results));
 #pragma warning restore 4014
-        }
-    } 
-}
+    }
+} 

@@ -1,12 +1,11 @@
-﻿namespace Orc.Search
-{
-    using Metadata;
+﻿namespace Orc.Search;
 
-    public class Searchable : ObjectWithMetadata, ISearchable
+using Metadata;
+
+public class Searchable : ObjectWithMetadata, ISearchable
+{
+    public Searchable(object instance, IMetadataCollection metadataCollection) 
+        : base(instance, metadataCollection)
     {
-        public Searchable(object instance, IMetadataCollection metadataCollection) 
-            : base(instance, metadataCollection)
-        {
-        }
     }
 }

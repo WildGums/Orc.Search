@@ -1,15 +1,14 @@
-﻿namespace Orc.Search
-{
-    public abstract class SearchHighlightProviderBase : ISearchHighlightProvider
-    {
-        public virtual void ResetHighlight()
-        {
-            
-        }
+﻿namespace Orc.Search;
 
-        public virtual void HighlightSearchable(object searchable)
-        {
-            
-        }
+public abstract class SearchHighlightProviderBase : ISearchHighlightProvider
+{
+    public virtual void ResetHighlight()
+    {
+        
+    }
+
+    public virtual void HighlightSearchable(object searchable)
+    {
+        
     }
 }

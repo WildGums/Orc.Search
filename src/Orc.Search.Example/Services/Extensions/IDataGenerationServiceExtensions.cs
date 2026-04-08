@@ -1,6 +1,5 @@
-﻿namespace Orc.Search.Example.Services
+﻿namespace Orc.Search.Example.Services;
+
+public static class IDataGenerationServiceExtensions
 {
-    public static class IDataGenerationServiceExtensions
-    {
-    }
 }

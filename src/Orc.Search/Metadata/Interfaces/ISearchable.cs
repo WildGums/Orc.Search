@@ -1,8 +1,7 @@
-﻿namespace Orc.Search
-{
-    using Metadata;
+﻿namespace Orc.Search;
 
-    public interface ISearchable : IObjectWithMetadata
-    {
-    }
+using Metadata;
+
+public interface ISearchable : IObjectWithMetadata
+{
 }

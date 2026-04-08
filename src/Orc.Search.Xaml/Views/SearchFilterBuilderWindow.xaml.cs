@@ -1,6 +1,5 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+public partial class SearchFilterBuilderWindow
 {
-    public partial class SearchFilterBuilderWindow
-    {
-    }
 }
