@@ -1,10 +1,9 @@
-﻿namespace Orc.Search.Example.Views
+﻿namespace Orc.Search.Example.Views;
+
+public partial class AddPersonWindow
 {
-    public partial class AddPersonWindow
+    partial void OnInitializingComponent()
     {
-        public AddPersonWindow()
-        {
-            InitializeComponent();
-        }
+        Mode = Catel.Windows.DataWindowMode.OkCancel;
     }
 }

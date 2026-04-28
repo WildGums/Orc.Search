@@ -1,13 +1,12 @@
-﻿namespace Orc.Search.Example.Models
+﻿namespace Orc.Search.Example.Models;
+
+public class Person
 {
-    public class Person
-    {
-        [SearchableProperty(SearchName = "firstname")]
-        public string FirstName { get; set; }
+    [SearchableProperty(SearchName = "firstname")]
+    public string FirstName { get; set; }
 
-        [SearchableProperty(SearchName = "lastname")]
-        public string LastName { get; set; }
+    [SearchableProperty(SearchName = "lastname")]
+    public string LastName { get; set; }
 
-        public int Age { get; set; }
-    }
+    public int Age { get; set; }
 }

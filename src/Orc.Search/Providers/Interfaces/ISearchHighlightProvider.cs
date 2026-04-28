@@ -1,9 +1,8 @@
-﻿namespace Orc.Search
-{
-    public interface ISearchHighlightProvider
-    {
-        void ResetHighlight();
+﻿namespace Orc.Search;
 
-        void HighlightSearchable(object searchable);
-    }
+public interface ISearchHighlightProvider
+{
+    void ResetHighlight();
+
+    void HighlightSearchable(object searchable);
 }

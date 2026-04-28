@@ -1,7 +1,6 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+public interface ISearchNavigationService
 {
-    public interface ISearchNavigationService
-    {
-        void Navigate(object searchable);
-    }
+    void Navigate(object searchable);
 }

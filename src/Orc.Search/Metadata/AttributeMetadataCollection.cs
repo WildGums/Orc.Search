@@ -1,52 +1,51 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+using System.Collections.Generic;
+using Catel.Caching;
+using Metadata;
+using System;
+using Catel;
+using Catel.Reflection;
+
+public class AttributeMetadataCollection : ReflectionMetadataCollection
 {
-    using System.Collections.Generic;
-    using Catel.Caching;
-    using Metadata;
-    using System;
-    using Catel;
-    using Catel.Reflection;
+    private static readonly ICacheStorage<Type, List<SearchableMetadata>> _propertiesCache = new CacheStorage<Type, List<SearchableMetadata>>();
 
-    public class AttributeMetadataCollection : ReflectionMetadataCollection
+    private readonly Type _targetType;
+
+    public AttributeMetadataCollection(Type targetType) 
+        : base(targetType)
     {
-        private static readonly ICacheStorage<Type, List<SearchableMetadata>> _propertiesCache = new CacheStorage<Type, List<SearchableMetadata>>();
+        _targetType = targetType;
+    }
 
-        private readonly Type _targetType;
-
-        public AttributeMetadataCollection(Type targetType) 
-            : base(targetType)
+    public override IEnumerable<IMetadata> All
+    {
+        get
         {
-            _targetType = targetType;
-        }
-
-        public override IEnumerable<IMetadata> All
-        {
-            get
+            return _propertiesCache.GetFromCacheOrFetch(_targetType, () =>
             {
-                return _propertiesCache.GetFromCacheOrFetch(_targetType, () =>
+                var searchableProperties = new List<SearchableMetadata>();
+
+                var properties = _targetType.GetPropertiesEx();
+                foreach (var property in properties)
                 {
-                    var searchableProperties = new List<SearchableMetadata>();
-
-                    var properties = _targetType.GetPropertiesEx();
-                    foreach (var property in properties)
+                    var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof(SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
+                    if (searchablePropertyAttribute is not null)
                     {
-                        var searchablePropertyAttribute = property.GetCustomAttributeEx(typeof(SearchablePropertyAttribute), false) as SearchablePropertyAttribute;
-                        if (searchablePropertyAttribute is not null)
+                        var searchableProperty = new SearchableMetadata(property);
+                        if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
                         {
-                            var searchableProperty = new SearchableMetadata(property);
-                            if (!string.IsNullOrWhiteSpace(searchablePropertyAttribute.SearchName))
-                            {
-                                searchableProperty.SearchName = searchablePropertyAttribute.SearchName;
-                            }
-                            searchableProperty.Analyze = searchablePropertyAttribute.Analyze;
-
-                            searchableProperties.Add(searchableProperty);
+                            searchableProperty.SearchName = searchablePropertyAttribute.SearchName;
                         }
-                    }
+                        searchableProperty.Analyze = searchablePropertyAttribute.Analyze;
 
-                    return searchableProperties;
-                });
-            }
+                        searchableProperties.Add(searchableProperty);
+                    }
+                }
+
+                return searchableProperties;
+            });
         }
     }
 }

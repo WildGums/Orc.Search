@@ -1,10 +1,6 @@
-﻿namespace Orc.Search.Example.Views
+﻿namespace Orc.Search.Example.Views;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-    }
+
 }

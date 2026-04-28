@@ -1,147 +1,147 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+using System;
+using System.Windows;
+using Catel.IoC;
+using Catel.Services;
+using Catel.Windows.Data;
+using Catel.Windows.Interactivity;
+
+public class SearchHighlight : BehaviorBase<FrameworkElement>, ISearchHighlightProvider
 {
-    using System;
-    using System.Windows;
-    using Catel.IoC;
-    using Catel.Services;
-    using Catel.Windows.Data;
-    using Catel.Windows.Interactivity;
+    private readonly IDispatcherService _dispatcherService;
+    private readonly ISearchHighlightService _searchHighlightService;
 
-    public class SearchHighlight : BehaviorBase<FrameworkElement>, ISearchHighlightProvider
+    private Style? _defaultStyle;
+    private bool _isHighlighted;
+    private bool _wasHighlightedBetweenEvents;
+    private object? _searchable;
+    private DependencyProperty? _styleDependencyProperty;
+
+    public SearchHighlight(IDispatcherService dispatcherService, ISearchHighlightService searchHighlightService)
     {
-        private readonly IDispatcherService _dispatcherService;
-        private readonly ISearchHighlightService _searchHighlightService;
+        _dispatcherService = dispatcherService;
+        _searchHighlightService = searchHighlightService;
+    }
 
-        private Style? _defaultStyle;
-        private bool _isHighlighted;
-        private bool _wasHighlightedBetweenEvents;
-        private object? _searchable;
-        private DependencyProperty? _styleDependencyProperty;
+    public object? Searchable
+    {
+        get { return GetValue(SearchableProperty); }
+        set { SetValue(SearchableProperty, value); }
+    }
 
-        public SearchHighlight()
-        {
-            var dependencyResolver = this.GetDependencyResolver();
+    public static readonly DependencyProperty SearchableProperty = DependencyProperty.Register(nameof(Searchable), typeof(object),
+        typeof(SearchHighlight), new PropertyMetadata(null, (sender, e) => ((SearchHighlight)sender).OnSearchableChanged()));
 
-            _dispatcherService = dependencyResolver.ResolveRequired<IDispatcherService>();
-            _searchHighlightService = dependencyResolver.ResolveRequired<ISearchHighlightService>();
+    public string? StylePropertyName
+    {
+        get { return (string?)GetValue(StylePropertyNameProperty); }
+        set { SetValue(StylePropertyNameProperty, value); }
+    }
 
-            _searchHighlightService.Highlighting += OnSearchHighlightServiceHighlighting;
-            _searchHighlightService.Highlighted += OnSearchHighlightServiceHighlighted;
-        }
+    public static readonly DependencyProperty StylePropertyNameProperty = DependencyProperty.Register(nameof(StylePropertyName), typeof(string),
+        typeof(SearchHighlight), new PropertyMetadata("Style", (sender, e) => ((SearchHighlight)sender).OnStylePropertyNameChanged()));
 
-        public object? Searchable
-        {
-            get { return GetValue(SearchableProperty); }
-            set { SetValue(SearchableProperty, value); }
-        }
-
-        public static readonly DependencyProperty SearchableProperty = DependencyProperty.Register(nameof(Searchable), typeof(object),
-            typeof(SearchHighlight), new PropertyMetadata(null, (sender, e) => ((SearchHighlight)sender).OnSearchableChanged()));
-
-        public string? StylePropertyName
-        {
-            get { return (string?)GetValue(StylePropertyNameProperty); }
-            set { SetValue(StylePropertyNameProperty, value); }
-        }
-
-        public static readonly DependencyProperty StylePropertyNameProperty = DependencyProperty.Register(nameof(StylePropertyName), typeof(string),
-            typeof(SearchHighlight), new PropertyMetadata("Style", (sender, e) => ((SearchHighlight)sender).OnStylePropertyNameChanged()));
-
-        public Style? HighlightStyle
-        {
-            get { return (Style?)GetValue(HighlightStyleProperty); }
-            set { SetValue(HighlightStyleProperty, value); }
-        }
+    public Style? HighlightStyle
+    {
+        get { return (Style?)GetValue(HighlightStyleProperty); }
+        set { SetValue(HighlightStyleProperty, value); }
+    }
 
 #pragma warning disable WPF0176 // StyleTypedProperty is missing.
-        public static readonly DependencyProperty HighlightStyleProperty = DependencyProperty.Register(nameof(HighlightStyle), typeof(Style),
+    public static readonly DependencyProperty HighlightStyleProperty = DependencyProperty.Register(nameof(HighlightStyle), typeof(Style),
 #pragma warning restore WPF0176 // StyleTypedProperty is missing.
-            typeof(SearchHighlight), new PropertyMetadata(null));
+        typeof(SearchHighlight), new PropertyMetadata(null));
 
-        public void ResetHighlight()
+    public void ResetHighlight()
+    {
+        if (!_isHighlighted)
+        {
+            return;
+        }
+
+        _dispatcherService.BeginInvokeIfRequired(() =>
+        {
+            _isHighlighted = false;
+
+            AssociatedObject.SetCurrentValue(_styleDependencyProperty, _defaultStyle);
+            _defaultStyle = null;
+        });
+    }
+
+    public void HighlightSearchable(object searchable)
+    {
+        if (!ReferenceEquals(searchable, _searchable))
+        {
+            return;
+        }
+
+        _wasHighlightedBetweenEvents = true;
+
+        _dispatcherService.BeginInvokeIfRequired(() =>
         {
             if (!_isHighlighted)
             {
-                return;
+                _defaultStyle = AssociatedObject.GetValue(_styleDependencyProperty) as Style;
             }
 
-            _dispatcherService.BeginInvokeIfRequired(() =>
-            {
-                _isHighlighted = false;
+            _isHighlighted = true;
 
-                AssociatedObject.SetCurrentValue(_styleDependencyProperty, _defaultStyle);
-                _defaultStyle = null;
-            });
-        }
+            AssociatedObject.SetCurrentValue(_styleDependencyProperty, HighlightStyle);
+        });
+    }
 
-        public void HighlightSearchable(object searchable)
+    private void OnSearchHighlightServiceHighlighting(object? sender, EventArgs e)
+    {
+        _wasHighlightedBetweenEvents = false;
+    }
+
+    private void OnSearchHighlightServiceHighlighted(object? sender, EventArgs e)
+    {
+        if (!_wasHighlightedBetweenEvents)
         {
-            if (!ReferenceEquals(searchable, _searchable))
-            {
-                return;
-            }
-
-            _wasHighlightedBetweenEvents = true;
-
-            _dispatcherService.BeginInvokeIfRequired(() =>
-            {
-                if (!_isHighlighted)
-                {
-                    _defaultStyle = AssociatedObject.GetValue(_styleDependencyProperty) as Style;
-                }
-
-                _isHighlighted = true;
-
-                AssociatedObject.SetCurrentValue(_styleDependencyProperty, HighlightStyle);
-            });
+            ResetHighlight();
         }
+    }
 
-        private void OnSearchHighlightServiceHighlighting(object? sender, EventArgs e)
+    private void OnSearchableChanged()
+    {
+        _searchable = Searchable;
+    }
+
+    private void OnStylePropertyNameChanged()
+    {
+        var stylePropertyName = StylePropertyName;
+        if (stylePropertyName is null)
         {
-            _wasHighlightedBetweenEvents = false;
+            _styleDependencyProperty = null;
+            return;
         }
 
-        private void OnSearchHighlightServiceHighlighted(object? sender, EventArgs e)
-        {
-            if (!_wasHighlightedBetweenEvents)
-            {
-                ResetHighlight();
-            }
-        }
+        _styleDependencyProperty = AssociatedObject.GetDependencyPropertyByName(stylePropertyName);
+    }
 
-        private void OnSearchableChanged()
-        {
-            _searchable = Searchable;
-        }
+    protected override void OnAssociatedObjectLoaded()
+    {
+        base.OnAssociatedObjectLoaded();
 
-        private void OnStylePropertyNameChanged()
-        {
-            var stylePropertyName = StylePropertyName;
-            if (stylePropertyName is null)
-            {
-                _styleDependencyProperty = null;
-                return;
-            }
+        OnStylePropertyNameChanged();
 
-            _styleDependencyProperty = AssociatedObject.GetDependencyPropertyByName(stylePropertyName);
-        }
+        _searchHighlightService.Highlighting += OnSearchHighlightServiceHighlighting;
+        _searchHighlightService.Highlighted += OnSearchHighlightServiceHighlighted;
 
-        protected override void OnAssociatedObjectLoaded()
-        {
-            base.OnAssociatedObjectLoaded();
+        _searchHighlightService.AddProvider(this);
+    }
 
-            OnStylePropertyNameChanged();
+    protected override void OnAssociatedObjectUnloaded()
+    {
+        _searchHighlightService.Highlighting -= OnSearchHighlightServiceHighlighting;
+        _searchHighlightService.Highlighted -= OnSearchHighlightServiceHighlighted;
 
-            _searchHighlightService.AddProvider(this);
-        }
+        _searchHighlightService.RemoveProvider(this);
 
-        protected override void OnAssociatedObjectUnloaded()
-        {
-            _searchHighlightService.RemoveProvider(this);
+        _searchable = null;
 
-            _searchable = null;
-
-            base.OnAssociatedObjectUnloaded();
-        }
+        base.OnAssociatedObjectUnloaded();
     }
 }

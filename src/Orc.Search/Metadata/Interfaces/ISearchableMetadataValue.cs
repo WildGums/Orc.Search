@@ -1,8 +1,7 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+public interface ISearchableMetadataValue
 {
-    public interface ISearchableMetadataValue
-    {
-        ISearchableMetadata Metadata { get; }
-        string Value { get; }
-    }
+    ISearchableMetadata Metadata { get; }
+    string Value { get; }
 }

@@ -1,6 +1,5 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+public static class ISearchHighlightServiceExtensions
 {
-    public static class ISearchHighlightServiceExtensions
-    {
-    }
 }

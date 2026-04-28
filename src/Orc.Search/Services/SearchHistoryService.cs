@@ -1,160 +1,163 @@
-﻿namespace Orc.Search
+﻿namespace Orc.Search;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Catel.Logging;
+using Catel.Services;
+using Microsoft.Extensions.Logging;
+using Orc.FileSystem;
+using Orc.Serialization.Json;
+
+public class SearchHistoryService : ISearchHistoryService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Catel.Logging;
-    using Catel.Runtime.Serialization.Xml;
-    using Catel.Services;
-    using Orc.FileSystem;
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(SearchHistoryService));
 
-    public class SearchHistoryService : ISearchHistoryService
+    private readonly IJsonSerializerFactory _jsonSerializerFactory;
+    private readonly IAppDataService _appDataService;
+    private readonly IDirectoryService _directoryService;
+    private readonly IFileService _fileService;
+    private readonly object _lock = new object();
+    private readonly string _fileName;
+
+    private SearchHistory _searchHistory = new SearchHistory();
+
+    public SearchHistoryService(ISearchService searchService, IJsonSerializerFactory jsonSerializerFactory,
+        IAppDataService appDataService, IDirectoryService directoryService, IFileService fileService)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        _jsonSerializerFactory = jsonSerializerFactory;
+        _appDataService = appDataService;
+        _directoryService = directoryService;
+        _fileService = fileService;
 
-        private readonly IXmlSerializer _xmlSerializer;
-        private readonly IAppDataService _appDataService;
-        private readonly IDirectoryService _directoryService;
-        private readonly object _lock = new object();
-        private readonly string _fileName;
-        private readonly SearchHistory _searchHistory = new SearchHistory();
+        searchService.Searched += OnSearchServiceSearched;
 
-        public SearchHistoryService(ISearchService searchService, IXmlSerializer xmlSerializer,
-            IAppDataService appDataService, IDirectoryService directoryService)
+        var directory = Path.Combine(_appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "search");
+        _directoryService.Create(directory);
+
+        _fileName = Path.Combine(directory, "history.json");
+
+        LoadSearchHistory();
+    }
+
+    public IEnumerable<string> GetLastSearchQueries(string prefix, int count = 5)
+    {
+        var elements = new List<string>();
+
+        lock (_lock)
         {
-            ArgumentNullException.ThrowIfNull(searchService);
-            ArgumentNullException.ThrowIfNull(xmlSerializer);
-            ArgumentNullException.ThrowIfNull(appDataService);
-            ArgumentNullException.ThrowIfNull(directoryService);
+            prefix = prefix.ToLower();
 
-            _xmlSerializer = xmlSerializer;
-            _appDataService = appDataService;
-            _directoryService = directoryService;
-            searchService.Searched += OnSearchServiceSearched;
-
-            var directory = Path.Combine(_appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "search");
-            _directoryService.Create(directory);
-
-            _fileName = Path.Combine(directory, "history.xml");
-
-            LoadSearchHistory();
+            elements.AddRange((from element in _searchHistory.SearchHistoryElements
+                               where element.FilterLowerCase.StartsWith(prefix)
+                               orderby element.Count
+                               select element.Filter).Take(count));
         }
 
-        public IEnumerable<string> GetLastSearchQueries(string prefix, int count = 5)
-        {
-            var elements = new List<string>();
+        return elements;
+    }
 
-            lock (_lock)
-            {
-                prefix = prefix.ToLower();
-
-                elements.AddRange((from element in _searchHistory.SearchHistoryElements
-                                   where element.FilterLowerCase.StartsWith(prefix)
-                                   orderby element.Count
-                                   select element.Filter).Take(count));
-            }
-
-            return elements;
-        }
-
-        private void OnSearchServiceSearched(object? sender, SearchEventArgs e)
-        {
+    private void OnSearchServiceSearched(object? sender, SearchEventArgs e)
+    {
 #pragma warning disable 4014
-            Task.Run(() => AddSearchFilterToHistory(e.Filter, e.Results));
+        Task.Run(() => AddSearchFilterToHistory(e.Filter, e.Results));
 #pragma warning restore 4014
+    }
+
+    private void AddSearchFilterToHistory(string filter, IEnumerable<object> results)
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+        {
+            return;
         }
 
-        private void AddSearchFilterToHistory(string filter, IEnumerable<object> results)
+        filter = filter.Trim();
+
+        lock (_lock)
         {
-            if (string.IsNullOrWhiteSpace(filter))
+            SearchHistoryElement? searchHistoryElement = null;
+
+            foreach (var searchHistory in _searchHistory.SearchHistoryElements)
             {
-                return;
+                if (string.Equals(searchHistory.Filter, filter))
+                {
+                    searchHistoryElement = searchHistory;
+                    break;
+                }
             }
 
-            filter = filter.Trim();
+            if (searchHistoryElement is null)
+            {
+                searchHistoryElement = new SearchHistoryElement();
+                searchHistoryElement.Filter = filter;
 
+                _searchHistory.SearchHistoryElements.Add(searchHistoryElement);
+            }
+
+            searchHistoryElement.Count++;
+
+            if (!searchHistoryElement.EverFoundResults && results.Any())
+            {
+                searchHistoryElement.EverFoundResults = true;
+            }
+
+            SaveSearchHistory();
+        }
+    }
+
+    private void LoadSearchHistory()
+    {
+        try
+        {
             lock (_lock)
             {
-                SearchHistoryElement? searchHistoryElement = null;
+                Logger.LogDebug("Loading search history");
 
-                foreach (var searchHistory in _searchHistory.SearchHistoryElements)
+                if (!_fileService.Exists(_fileName))
                 {
-                    if (string.Equals(searchHistory.Filter, filter))
-                    {
-                        searchHistoryElement = searchHistory;
-                        break;
-                    }
+                    Logger.LogDebug("History file does not exist, skipping loading");
+                    return;
                 }
 
-                if (searchHistoryElement is null)
-                {
-                    searchHistoryElement = new SearchHistoryElement();
-                    searchHistoryElement.Filter = filter;
+                var serializer = _jsonSerializerFactory.CreateSerializer();
 
-                    _searchHistory.SearchHistoryElements.Add(searchHistoryElement);
+                using (var fileStream = _fileService.OpenRead(_fileName))
+                {
+                    _searchHistory = serializer.Deserialize<SearchHistory>(fileStream) ?? new SearchHistory();
                 }
 
-                searchHistoryElement.Count++;
-
-                if (!searchHistoryElement.EverFoundResults && results.Any())
-                {
-                    searchHistoryElement.EverFoundResults = true;
-                }
-
-                SaveSearchHistory();
+                Logger.LogDebug("Loaded search history");
             }
         }
-
-        private void LoadSearchHistory()
+        catch (Exception ex)
         {
-            try
+            Logger.LogError(ex, "Failed to load search history");
+        }
+    }
+
+    private void SaveSearchHistory()
+    {
+        try
+        {
+            lock (_lock)
             {
-                lock (_lock)
+                Logger.LogDebug("Saving search history");
+
+                var serializer = _jsonSerializerFactory.CreateSerializer();
+
+                using (var fileStream = _fileService.Create(_fileName))
                 {
-                    Log.Debug("Loading search history");
-
-                    if (!File.Exists(_fileName))
-                    {
-                        Log.Debug("History file does not exist, skipping loading");
-                        return;
-                    }
-
-                    using (var fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
-                    {
-                        _xmlSerializer.Deserialize(_searchHistory, fileStream, null);
-                    }
-
-                    Log.Debug("Loaded search history");
+                    serializer.Serialize(fileStream, _searchHistory);
                 }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load search history");
+
+                Logger.LogDebug("Saved search history");
             }
         }
-
-        private void SaveSearchHistory()
+        catch (Exception ex)
         {
-            try
-            {
-                lock (_lock)
-                {
-                    Log.Debug("Saving search history");
-
-                    using (var fileStream = new FileStream(_fileName, FileMode.Create))
-                    {
-                        _xmlSerializer.Serialize(_searchHistory, fileStream, null);
-                    }
-
-                    Log.Debug("Saved search history");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to save search history");
-            }
+            Logger.LogError(ex, "Failed to save search history");
         }
     }
 }

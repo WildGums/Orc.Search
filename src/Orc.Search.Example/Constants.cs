@@ -1,7 +1,6 @@
-﻿namespace Orc.Search.Example
+﻿namespace Orc.Search.Example;
+
+public static class ExampleDefaults
 {
-    public static class ExampleDefaults
-    {
-        public const int GeneratedObjectCount = 25 * 1000;
-    }
+    public const int GeneratedObjectCount = 25 * 1000;
 }
