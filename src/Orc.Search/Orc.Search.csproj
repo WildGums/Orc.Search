@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net10.0')) ">
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.9" />
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props')" />
