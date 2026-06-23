@@ -23,7 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00018" PrivateAssets="all" />
-    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00017" PrivateAssets="all" />
+    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00018" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.1" PrivateAssets="all" />
     <PackageReference Include="Orc.FileSystem" Version="6.0.0-alpha0123" />
